@@ -1,9 +1,8 @@
 package lms_tests;
 
-import lms_pages.BasePage;
-import lms_pages.HomePage;
 import com.microsoft.playwright.*;
 import io.qameta.allure.Allure;
+import lms_pages.BasePage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
@@ -29,11 +28,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public class TestBase {
-    public boolean ADD_FILES_TO_ALLURE_REPORT = false;
+    public boolean ADD_FILES_TO_ALLURE_REPORT = true; // ! true - добавляются файлы только для упавших тестов
     public final boolean HEADLESS_MODE = false;
     public final boolean DEVTOOLS_MODE = false;
     public int SLOW_DOWN_STEPS = 0; // Milliseconds
-    public boolean ADD_TRACE_ZIP_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT; //Tracing is slowing down the browser and not support WebKit browser
+    public boolean ADD_TRACE_ZIP_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT; // ! Tracing is slowing down the process and not support WebKit browser
     public boolean ADD_SCREENSHOT_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT;
     public boolean ADD_VIDEO_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT;
     public boolean ADD_PAGE_SOURCE_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT;
@@ -60,6 +59,7 @@ public class TestBase {
 
     @BeforeMethod
     public void initContext(Method method) {
+
         Browser.NewContextOptions contextOptions = new Browser.NewContextOptions().setViewportSize(2000, 1000);
 
         if (ADD_VIDEO_TO_REPORT) {
@@ -73,14 +73,10 @@ public class TestBase {
         if (ADD_TRACE_ZIP_TO_REPORT) {
             this.context.tracing().start(new Tracing.StartOptions().setScreenshots(true).setSnapshots(true).setSources(false));
         }
-        page = this.context.newPage();
+
+        page = this.context.newPage(); // * right
         basePage = new BasePage(page);
-        page.navigate(HomePage.homePageURL());
-    }
-
-
-    @BeforeMethod
-    public void logTestStartTime(Method method) {
+        // page.navigate(HomePage.homePageURL());
         TEST_START_TIME = Instant.now();
         logger.info("[===================================[ {} ]===================================]", method.getName());
         logger.info("TEST START;");
@@ -105,7 +101,7 @@ public class TestBase {
         Path screenshotPath = errorDirPath.resolve("Screenshot.png");
         Path videoPath = errorDirPath.resolve("Video.webm");
         try {
-            if (ADD_TRACE_ZIP_TO_REPORT) {
+            if (ADD_TRACE_ZIP_TO_REPORT && !result.isSuccess()) {
                 context.tracing().stop(new Tracing.StopOptions().setPath(tracePath));
                 Allure.addAttachment("Trace.zip", new ByteArrayInputStream(Files.readAllBytes(tracePath)));
                 if (Files.exists(tracePath)) {
@@ -133,7 +129,7 @@ public class TestBase {
             context.close();
             context = null;
         }
-        if (ADD_VIDEO_TO_REPORT) {
+        if (ADD_VIDEO_TO_REPORT && !result.isSuccess()) {
             try {
                 Path videoFileName = page.video().path();
                 Files.move(videoFileName, videoPath);
@@ -145,7 +141,7 @@ public class TestBase {
                 logger.error("Error while renaming and adding video file to report: ", e);
             }
         }
-        if (ADD_PAGE_SOURCE_TO_REPORT) {
+        if (ADD_PAGE_SOURCE_TO_REPORT && !result.isSuccess()) {
             try {
                 Files.write(pageSourcePath, pageSource.getBytes());
                 Allure.addAttachment("Page Source.html", new ByteArrayInputStream(Files.readAllBytes(pageSourcePath)));
@@ -158,7 +154,7 @@ public class TestBase {
         }
 
         try {
-            if (ADD_HAR_TO_REPORT) {
+            if (ADD_HAR_TO_REPORT && !result.isSuccess()) {
                 Path harTempFilePath = Paths.get(LOGS_PATH + "Har_temp.har");
                 Files.move(harTempFilePath, errorDirPath.resolve("Har.har"));
                 byte[] harData = Files.readAllBytes(harFilePath);
@@ -170,12 +166,26 @@ public class TestBase {
         } catch (IOException e) {
             logger.error("Error while adding HAR file to report: ", e);
         }
-        if (result.isSuccess()) {
-            logger.info("TEST PASSED{}, Time taken: [{}] milliseconds",  params, timeElapsed);
-        } else {
-            logger.error("TEST FAILED{}, Time taken: [{}] milliseconds",  params, timeElapsed);
+        if (result.isSuccess() && ADD_FILES_TO_ALLURE_REPORT) {
+            try {
+                Path videoFileName = page.video().path();
+                if (Files.exists(videoFileName)) {
+                    Files.delete(videoFileName);
+                }
+                Path harTempFilePath = Paths.get(LOGS_PATH + "Har_temp.har");
+                if (Files.exists(harTempFilePath)) {
+                    Files.delete(harTempFilePath);
+                }
+            } catch (IOException e) {
+                logger.error("Error while deleting video and HAR files: ", e);
+            }
         }
-        // System.out.println("[~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{ NEXT }~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~]");
+        if (result.isSuccess()) {
+            logger.info("TEST PASSED{}, Time taken: [{}] milliseconds", params, timeElapsed);
+        } else {
+            logger.error("TEST FAILED{}, Time taken: [{}] milliseconds", params, timeElapsed);
+        }
+        page.close();
     }
 
     // Закрывает браузер после выполнения всех тестов в классе

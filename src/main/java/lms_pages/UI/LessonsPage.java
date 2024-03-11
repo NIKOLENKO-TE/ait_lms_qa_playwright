@@ -1,4 +1,4 @@
-package lms_pages;
+package lms_pages.UI;
 
 public class LessonsPage {
     public static String lessonsPageURL() {

@@ -1,6 +1,7 @@
-package lms_tests;
+package lms_tests.Tests_UI;
 
 import com.microsoft.playwright.*;
+import lms_tests.TestBase;
 import org.testng.annotations.Test;
 
 import java.nio.file.Paths;
@@ -9,8 +10,7 @@ import java.util.List;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertTrue;
 
-
-public class TemporaryTests extends TestBase {
+public class TempUITests extends TestBase {
     @Test
     public void fillManyTextBoxes() {
         page.navigate("https://datatables.net/examples/api/form.html");
@@ -36,8 +36,6 @@ public class TemporaryTests extends TestBase {
         video.close();
         playwright.close();
     }
-
-    @Test
     public void textBoxFillTest() {
         page.navigate("http://85.192.34.140:8081/");
         page.getByText("Elements").click();
@@ -47,6 +45,6 @@ public class TemporaryTests extends TestBase {
         page.fill("[id=currentAddress]", "somewhere");
         page.click("[id=submit]");
         assertTrue(page.isVisible("[id=output]"));
-        assertTrue(page.locator("[id=name]").textContent().contains("NOT ThreadQA Test"));
+        assertTrue(page.locator("[id=name]").textContent().contains("ThreadQA Test"));
     }
 }

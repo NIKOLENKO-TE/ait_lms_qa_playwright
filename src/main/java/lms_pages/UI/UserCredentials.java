@@ -1,4 +1,4 @@
-package lms_pages;
+package lms_pages.UI;
 
 public class UserCredentials {
     private final String user_email;
@@ -26,7 +26,7 @@ public class UserCredentials {
     public static final UserCredentials ADMIN_CONFIRMED_WITHOUT_ZOOM_ACCOUNT = new UserCredentials("a01" + DOMAIN, DEFAULT_PASSWORD);
     public static final UserCredentials ADMIN_CONFIRMED_WITH_INVALID_ZOOM_ACCOUNT = new UserCredentials("a05" + DOMAIN, DEFAULT_PASSWORD);
 
-    public static final UserCredentials NON_EXISTENT_ACCOUNT = new UserCredentials("sss" + DOMAIN, DEFAULT_PASSWORD);
+    public static final UserCredentials NON_EXISTENT_ACCOUNT = new UserCredentials("sss" + DOMAIN, "ssSSSs@2012");
 
     public UserCredentials(String username, String password) {
         this.user_email = username;

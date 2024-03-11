@@ -1,4 +1,4 @@
-package lms_pages;
+package lms_pages.UI;
 
 public class StudentCabinet {
     public static String studentCabinetURL() {

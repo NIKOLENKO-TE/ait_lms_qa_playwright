@@ -1,4 +1,4 @@
-package lms_tests.logo_tests;
+package lms_tests.Tests_UI.logo_tests;
 
 import lms_pages.BasePage;
 import lms_tests.TestBase;
