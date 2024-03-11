@@ -28,15 +28,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public class TestBase {
-    public boolean ADD_FILES_TO_ALLURE_REPORT = true; // ! true - добавляются файлы только для упавших тестов
+    public boolean ADD_FILES_TO_ALLURE_REPORT = false; // * true - добавляются файлы только для упавших тестов
     public final boolean HEADLESS_MODE = false;
     public final boolean DEVTOOLS_MODE = false;
     public int SLOW_DOWN_STEPS = 0; // Milliseconds
-    public boolean ADD_TRACE_ZIP_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT; // ! Tracing is slowing down the process and not support WebKit browser
-    public boolean ADD_SCREENSHOT_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT;
-    public boolean ADD_VIDEO_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT;
-    public boolean ADD_PAGE_SOURCE_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT;
-    public boolean ADD_HAR_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT;
+    public boolean ADD_TRACE_ZIP_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT; // ! Добавлять трейс в отчёт, требует больших ресурсов и не поддерживает WebKit браузер
+    public boolean ADD_SCREENSHOT_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT; // ? Добавлять скриншоты в отчёт (скриншот в папке будет всегда)
+    public boolean ADD_VIDEO_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT; // ? Добавлять видео в отчёт
+    public boolean ADD_PAGE_SOURCE_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT; // ? Добавлять исходный код страницы в отчёт
+    public boolean ADD_HAR_TO_REPORT = ADD_FILES_TO_ALLURE_REPORT; // ? Добавлять HAR файл в отчёт
     protected Page page;
     private Browser browser;
     private BrowserContext context;
@@ -168,13 +168,28 @@ public class TestBase {
         }
         if (result.isSuccess() && ADD_FILES_TO_ALLURE_REPORT) {
             try {
-                Path videoFileName = page.video().path();
-                if (Files.exists(videoFileName)) {
-                    Files.delete(videoFileName);
+                if (ADD_VIDEO_TO_REPORT) {
+                    try {
+                        Path videoFileName = page.video().path();
+                        if (Files.exists(videoFileName)) {
+                            Files.delete(videoFileName);
+                        }
+                    } catch (IOException e) {
+                        logger.error("Error while deleting video file: ", e);
+                    }
                 }
-                Path harTempFilePath = Paths.get(LOGS_PATH + "Har_temp.har");
-                if (Files.exists(harTempFilePath)) {
-                    Files.delete(harTempFilePath);
+                if (ADD_HAR_TO_REPORT) {
+                    try {
+                        if (Files.exists(harFilePath)) {
+                            Files.delete(harFilePath);
+                        }
+                    } catch (IOException e) {
+                        logger.error("Error while deleting HAR file: ", e);
+                    }
+                    Path harTempFilePath = Paths.get(LOGS_PATH + "Har_temp.har");
+                    if (Files.exists(harTempFilePath)) {
+                        Files.delete(harTempFilePath);
+                    }
                 }
             } catch (IOException e) {
                 logger.error("Error while deleting video and HAR files: ", e);
