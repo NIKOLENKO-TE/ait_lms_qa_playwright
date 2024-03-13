@@ -9,8 +9,8 @@ public class LogoTests extends BaseTest {
     public BasePage basePage;
 
     @BeforeMethod
-    public void init() {
-        super.setUp();
+    public void INIT() {
+        super.SET_UP();
         basePage = new BasePage(page);
     }
     @Test(invocationCount = 5)
