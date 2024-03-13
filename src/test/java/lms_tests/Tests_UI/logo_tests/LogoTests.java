@@ -1,11 +1,11 @@
 package lms_tests.Tests_UI.logo_tests;
 
 import lms_pages.BasePage;
-import lms_tests.TestBase;
+import lms_tests.BaseTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class LogoTests extends TestBase {
+public class LogoTests extends BaseTest {
     public BasePage basePage;
 
     @BeforeMethod

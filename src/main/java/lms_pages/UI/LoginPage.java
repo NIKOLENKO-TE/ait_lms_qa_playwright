@@ -1,9 +1,10 @@
 package lms_pages.UI;
 
-import com.microsoft.playwright.*;
-import com.microsoft.playwright.options.AriaRole;
-import com.microsoft.playwright.options.WaitForSelectorState;
-import lms_pages.BasePage;
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.TimeoutError;
+import io.qameta.allure.Allure;
+import lms_pages.BaseHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class LoginPage {
 
     private final Page page;
+    BaseHelper baseHelper;
+    HomePage homePage;
 
     public static String loginPageURL() {
         return HomePage.homePageURL() + "auth/login";
@@ -21,7 +24,8 @@ public class LoginPage {
 
     public LoginPage(Page page) {
         this.page = page;
-        new BasePage(page);
+        this.baseHelper = new BaseHelper(page);
+        this.homePage = new HomePage(page);
     }
 
     public void login(String username, String password, boolean expectedLoginStatus) {
@@ -43,96 +47,135 @@ public class LoginPage {
     }
 
     public void loginMethod(String username, String password, boolean expectedLoginStatus) {
-        // œÓ‚ÂÍ‡, Á‡ÎÓ„ËÌÂÌ ÎË ÔÓÎ¸ÁÓ‚‡ÚÂÎ¸
-        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
-        Locator signOutButton = page.locator("button:has-text('SignOut')");
-        boolean userIsLoggedIn = signOutButton.count() > 0;
-        if (userIsLoggedIn) {
-            // ≈ÒÎË ÔÓÎ¸ÁÓ‚‡ÚÂÎ¸ ÛÊÂ Á‡ÎÓ„ËÌÂÌ, Ì‡ÊËÏ‡ÂÏ Ì‡ ÍÌÓÔÍÛ 'SignOut'
-            signOutButton.first().click();
-        }
-        boolean isErrorPresent = false;
-        page.navigate(HomePage.homePageURL());
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
-        page.getByPlaceholder("Email address").click();
-        if (username == null || username.isEmpty()) {
-            isErrorPresent = true;
-            logger.error("[{}]: Email address is empty.", methodName);
-        } else {
-            page.fill("//input[@id='email-login-page']", username);
-        }
-        if (page.locator("text=Invalid email format").count() > 0) {
-            isErrorPresent = true;
-            logger.error("[{}]: Invalid email format error occurred", methodName);
-        }
-        page.waitForSelector("text=Invalid email format", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(500));
-        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Password")).click();
-
-        if (password == null || password.isEmpty()) {
-            isErrorPresent = true;
-            logger.error("[{}]: Password is empty.", methodName);
-        } else {
-            page.fill("input[type='password']", password);
-        }
-        if (page.locator("text=The password must be at least").count() > 0) {
-            isErrorPresent = true;
-            logger.error("[{}]: Invalid password format error occurred", methodName);
-        }
-        page.waitForSelector("text=The password must be at least", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(500));
-        try {
-            ElementHandle signInButton = page.querySelector("button[label='Sign In']");
-            if (signInButton != null && signInButton.isEnabled()) {
-                signInButton.press("Enter");
-            } else {
-                isErrorPresent = true;
-                logger.error("[{}]: Sign In button not found or not enabled.", methodName);
-            }
-        } catch (PlaywrightException e) {
-            logger.error("[{}]: Error occurred: {}", methodName, e.getMessage());
-        }
-
-        try {
-            page.waitForSelector("div:has-text('ErrorInvalid login or password')", new Page.WaitForSelectorOptions().setTimeout(500));
-            Locator errorLocator = page.locator("div").filter(new Locator.FilterOptions().setHasText("ErrorInvalid login or password")).nth(2);
-            if (errorLocator.count() > 0) {
-                isErrorPresent = true;
-                logger.error("[{}]: USER [{}] and PASSWORD [{}] is not logged in because login or password is invalid, user not exist or not confirmed yet.", methodName, username, password);
-            }
-        } catch (TimeoutError e) {
-            // System.out.println("USER [" + credentials.getUser_email() + "] is logged in");
-        }
-        // œÓ‚ÂÍ‡ Ù‡ÍÚË˜ÂÒÍÓ„Ó ÒÚ‡ÚÛÒ‡ ÎÓ„ËÌ‡
-        boolean actualLoginStatus = !isErrorPresent; // ≈ÒÎË Ó¯Ë·Í‡ ÔËÒÛÚÒÚ‚ÛÂÚ, ÁÌ‡˜ËÚ ÎÓ„ËÌ ÌÂ ÔÓ¯ÂÎ
-        // —‡‚ÌÂÌËÂ Ù‡ÍÚË˜ÂÒÍÓ„Ó ÒÚ‡ÚÛÒ‡ Ò ÓÊË‰‡ÂÏ˚Ï Ë „ÂÌÂ‡ˆËˇ ËÒÍÎ˛˜ÂÌËˇ ÔË ÌÂÒÓÓÚ‚ÂÚÒÚ‚ËË
-        if (actualLoginStatus != expectedLoginStatus) {
-            logger.error("[{}]: Login status is not as expected. Expected login status: [{}]. Error is present on Login Page?: [{}]. User [{}]. Password [{}]", methodName, expectedLoginStatus, !actualLoginStatus, username, password);
-            fail("Login status is not as expected.\nExpected login status: [" + expectedLoginStatus + "]\nError is present on Login Page?: [" + !actualLoginStatus + "]\nUser [" + username + "]\nPassword [" + password + "]");
-        }
+        baseHelper.loginVariables();
+        baseHelper.checkIfUserIsLoggedIn(baseHelper.signOutButton);
+        homePage.navigateToHomePage();
+        baseHelper.fillEmail(username, baseHelper.methodName);
+        baseHelper.fillPassword(password, baseHelper.methodName);
+        baseHelper.clickSignInButton(username, password, baseHelper.methodName);
+        baseHelper.checkLoginStatus(baseHelper.errorLocator, baseHelper.isErrorPresent, username, password, expectedLoginStatus, baseHelper.methodName);
     }
+
 
     public void isUserLoggedIn(boolean expectedLoginStatus) {
-        //page.navigate(LessonsPage.lessonsPageURL());
-        Locator loginButton = page.locator("button:has-text('Login')");
-        Locator signOutButton = page.locator("button:has-text('SignOut')");
-        boolean userIsLoggedIn = signOutButton.count() > 0;
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
-        try {
-            if (loginButton.count() > 0) {
-                userIsLoggedIn = false; // ÍÌÓÔÍ‡ "LOGIN" Ì‡È‰ÂÌ‡ ÂÒÎË ÔÓÎ¸ÁÓ‚‡ÚÂÎ¸ ÌÂ Á‡ÎÓ„ËÌÂÌ
+        Allure.step("Check if user is logged in", () -> {
+            Locator loginButton = page.locator("button:has-text('Login')");
+            Locator signOutButton = page.locator("button:has-text('SignOut')");
+            boolean userIsLoggedIn = signOutButton.count() > 0;
+            try {
+                if (loginButton.count() > 0) {
+                    userIsLoggedIn = false; // –∫–Ω–æ–ø–∫–∞ "LOGIN" –Ω–∞–π–¥–µ–Ω–∞ –µ—Å–ª–∏ –ø–æ–ª—å–∑–æ–≤–∞—Ç–µ–ª—å –Ω–µ –∑–∞–ª–æ–≥–∏–Ω–µ–Ω
+                }
+                if (signOutButton.count() > 0) {
+                    userIsLoggedIn = true; // –∫–Ω–æ–ø–∫–∞ "USER" –Ω–∞–π–¥–µ–Ω–∞ –µ—Å–ª–∏ –ø–æ–ª—å–∑–æ–≤–∞—Ç–µ–ª—å –∑–∞–ª–æ–≥–∏–Ω–µ–Ω
+                }
+                logger.error("[{}]: {}", methodName, userIsLoggedIn ? "User is logged in." : "User is not logged in.");
+                if (userIsLoggedIn != expectedLoginStatus) {
+                    fail("\nUser logged in status is not expected.\nExpected logged in status: [" + expectedLoginStatus + "]\nActual logged in status: [" + userIsLoggedIn + "]");
+                }
+            } catch (TimeoutError e) {
+                logger.error("{}: Error occurred: [{}]\nUser is not logged in.", methodName, e.getMessage());
+                throw new RuntimeException(e);
+            } catch (Exception e) {
+                logger.error("[{}]: An unexpected error occurred: {}", methodName, e.getMessage());
+                throw new RuntimeException(e);
             }
-            if (signOutButton.count() > 0) {
-                userIsLoggedIn = true; // ÍÌÓÔÍ‡ "USER" Ì‡È‰ÂÌ‡ ÂÒÎË ÔÓÎ¸ÁÓ‚‡ÚÂÎ¸ Á‡ÎÓ„ËÌÂÌ
-            }
-            logger.error("[{}]: {}", methodName, userIsLoggedIn ? "User is logged in." : "User is not logged in.");
-            if (userIsLoggedIn != expectedLoginStatus) {
-                fail("\nUser logged in status is not expected.\nExpected logged in status: [" + expectedLoginStatus + "]\nActual logged in status: [" + userIsLoggedIn + "]");
-            }
-        } catch (TimeoutError e) {
-            logger.error("{}: Error occurred: [{}]\nUser is not logged in.", methodName, e.getMessage());
-            throw new RuntimeException(e);
-        } catch (Exception e) {
-            logger.error("[{}]: An unexpected error occurred: {}", methodName, e.getMessage());
-            throw new RuntimeException(e);
-        }
+        });
     }
+//    public void loginMethod(String username, String password, boolean expectedLoginStatus) {
+//        // –ü—Ä–æ–≤–µ—Ä–∫–∞, –∑–∞–ª–æ–≥–∏–Ω–µ–Ω –ª–∏ –ø–æ–ª—å–∑–æ–≤–∞—Ç–µ–ª—å
+//        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+//        Locator signOutButton = page.locator("button:has-text('SignOut')");
+//        boolean userIsLoggedIn = signOutButton.count() > 0;
+//        if (userIsLoggedIn) {
+//            // –ï—Å–ª–∏ –ø–æ–ª—å–∑–æ–≤–∞—Ç–µ–ª—å —É–∂–µ –∑–∞–ª–æ–≥–∏–Ω–µ–Ω, –Ω–∞–∂–∏–º–∞–µ–º –Ω–∞ –∫–Ω–æ–ø–∫—É 'SignOut'
+//            signOutButton.first().click();
+//        }
+//        boolean isErrorPresent = false;
+//        if (!page.url().equals(HomePage.homePageURL())) {
+//            page.navigate(HomePage.homePageURL());
+//        }
+//        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
+//        page.getByPlaceholder("Email address").click();
+//        if (username == null || username.isEmpty()) {
+//            isErrorPresent = true;
+//            logger.error("[{}]: Email address is empty.", methodName);
+//        } else {
+//            page.fill("//input[@id='email-login-page']", username);
+//        }
+//        if (page.locator("text=Invalid email format").count() > 0) {
+//            isErrorPresent = true;
+//            logger.error("[{}]: Invalid email format error occurred", methodName);
+//        }
+//        page.waitForSelector("text=Invalid email format", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(500));
+//        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Password")).click();
+//
+//        if (password == null || password.isEmpty()) {
+//            isErrorPresent = true;
+//            logger.error("[{}]: Password is empty.", methodName);
+//        } else {
+//            page.fill("input[type='password']", password);
+//        }
+//        if (page.locator("text=The password must be at least").count() > 0) {
+//            isErrorPresent = true;
+//            logger.error("[{}]: Invalid password format error occurred", methodName);
+//        }
+//        page.waitForSelector("text=The password must be at least", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(500));
+//        try {
+//            ElementHandle signInButton = page.querySelector("button[label='Sign In']");
+//            if (signInButton != null && signInButton.isEnabled()) {
+//                signInButton.press("Enter");
+//            } else {
+//                isErrorPresent = true;
+//                logger.error("[{}]: Sign In button not found or not enabled.", methodName);
+//            }
+//        } catch (PlaywrightException e) {
+//            logger.error("[{}]: Error occurred: {}", methodName, e.getMessage());
+//        }
+//
+//        try {
+//            page.waitForSelector("div:has-text('ErrorInvalid login or password')", new Page.WaitForSelectorOptions().setTimeout(500));
+//            Locator errorLocator = page.locator("div").filter(new Locator.FilterOptions().setHasText("ErrorInvalid login or password")).nth(2);
+//            if (errorLocator.count() > 0) {
+//                isErrorPresent = true;
+//                logger.error("[{}]: USER [{}] and PASSWORD [{}] is not logged in because login or password is invalid, user not exist or not confirmed yet.", methodName, username, password);
+//            }
+//        } catch (TimeoutError e) {
+//            // System.out.println("USER [" + credentials.getUser_email() + "] is logged in");
+//        }
+//        // –ü—Ä–æ–≤–µ—Ä–∫–∞ —Ñ–∞–∫—Ç–∏—á–µ—Å–∫–æ–≥–æ —Å—Ç–∞—Ç—É—Å–∞ –ª–æ–≥–∏–Ω–∞
+//        boolean actualLoginStatus = !isErrorPresent; // –ï—Å–ª–∏ –æ—à–∏–±–∫–∞ –ø—Ä–∏—Å—É—Ç—Å—Ç–≤—É–µ—Ç, –∑–Ω–∞—á–∏—Ç –ª–æ–≥–∏–Ω –Ω–µ –ø—Ä–æ—à–µ–ª
+//        // –°—Ä–∞–≤–Ω–µ–Ω–∏–µ —Ñ–∞–∫—Ç–∏—á–µ—Å–∫–æ–≥–æ —Å—Ç–∞—Ç—É—Å–∞ —Å –æ–∂–∏–¥–∞–µ–º—ã–º –∏ –≥–µ–Ω–µ—Ä–∞—Ü–∏—è –∏—Å–∫–ª—é—á–µ–Ω–∏—è –ø—Ä–∏ –Ω–µ—Å–æ–æ—Ç–≤–µ—Ç—Å—Ç–≤–∏–∏
+//        if (actualLoginStatus != expectedLoginStatus) {
+//            logger.error("[{}]: Login status is not as expected. Expected login status: [{}]. Error is present on Login Page?: [{}]. User [{}]. Password [{}]", methodName, expectedLoginStatus, !actualLoginStatus, username, password);
+//            fail("Login status is not as expected.\nExpected login status: [" + expectedLoginStatus + "]\nError is present on Login Page?: [" + !actualLoginStatus + "]\nUser [" + username + "]\nPassword [" + password + "]");
+//        }
+//    }
+
+//    public void isUserLoggedIn(boolean expectedLoginStatus) {
+//        //page.navigate(LessonsPage.lessonsPageURL());
+//        Locator loginButton = page.locator("button:has-text('Login')");
+//        Locator signOutButton = page.locator("button:has-text('SignOut')");
+//        boolean userIsLoggedIn = signOutButton.count() > 0;
+//        String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+//        try {
+//            if (loginButton.count() > 0) {
+//                userIsLoggedIn = false; // –∫–Ω–æ–ø–∫–∞ "LOGIN" –Ω–∞–π–¥–µ–Ω–∞ –µ—Å–ª–∏ –ø–æ–ª—å–∑–æ–≤–∞—Ç–µ–ª—å –Ω–µ –∑–∞–ª–æ–≥–∏–Ω–µ–Ω
+//            }
+//            if (signOutButton.count() > 0) {
+//                userIsLoggedIn = true; // –∫–Ω–æ–ø–∫–∞ "USER" –Ω–∞–π–¥–µ–Ω–∞ –µ—Å–ª–∏ –ø–æ–ª—å–∑–æ–≤–∞—Ç–µ–ª—å –∑–∞–ª–æ–≥–∏–Ω–µ–Ω
+//            }
+//            logger.error("[{}]: {}", methodName, userIsLoggedIn ? "User is logged in." : "User is not logged in.");
+//            if (userIsLoggedIn != expectedLoginStatus) {
+//                fail("\nUser logged in status is not expected.\nExpected logged in status: [" + expectedLoginStatus + "]\nActual logged in status: [" + userIsLoggedIn + "]");
+//            }
+//        } catch (TimeoutError e) {
+//            logger.error("{}: Error occurred: [{}]\nUser is not logged in.", methodName, e.getMessage());
+//            throw new RuntimeException(e);
+//        } catch (Exception e) {
+//            logger.error("[{}]: An unexpected error occurred: {}", methodName, e.getMessage());
+//            throw new RuntimeException(e);
+//        }
+//    }
 }

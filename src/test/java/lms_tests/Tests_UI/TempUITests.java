@@ -1,7 +1,7 @@
 package lms_tests.Tests_UI;
 
 import com.microsoft.playwright.*;
-import lms_tests.TestBase;
+import lms_tests.BaseTest;
 import org.testng.annotations.Test;
 
 import java.nio.file.Paths;
@@ -10,7 +10,7 @@ import java.util.List;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertTrue;
 
-public class TempUITests extends TestBase {
+public class TempUITests extends BaseTest {
     @Test
     public void fillManyTextBoxes() {
         page.navigate("https://datatables.net/examples/api/form.html");

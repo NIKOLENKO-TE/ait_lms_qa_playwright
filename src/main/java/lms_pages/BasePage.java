@@ -2,6 +2,7 @@ package lms_pages;
 
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.TimeoutError;
+import io.qameta.allure.Allure;
 import junit.framework.AssertionFailedError;
 import org.testng.Assert;
 
@@ -15,26 +16,23 @@ public class BasePage {
         this.page = page;
     }
 
-    public void changeLocaleTo(String language) {
-        page.getByTestId("choose_language_button").getByTestId("language-text-set").click();
-        page.getByTestId("choose_language_button").getByTestId("language-option-" + language).click();
-    }
-
     public void isCurrentPage(String expectedUrl, boolean expectedResult) {
-        String ERROR_MESSAGE = "\nCurrent page URL has not expected value\nExpected result [" + expectedResult + "]\nCurrent URL  %s\nExpected URL %s";
-        try {
-            page.waitForURL(url -> url.equals(expectedUrl), new Page.WaitForURLOptions().setTimeout(500));
-        } catch (TimeoutError e) {
-            if (expectedResult) {
-                throw new RuntimeException(String.format(ERROR_MESSAGE, page.url(), expectedUrl), e);
-            }
-        }
         boolean currentPageMatches = page.url().equals(expectedUrl);
-        if (expectedResult) {
-            Assert.assertTrue(currentPageMatches, String.format(ERROR_MESSAGE, page.url(), expectedUrl));
-        } else {
-            Assert.assertFalse(currentPageMatches, String.format(ERROR_MESSAGE, page.url(), expectedUrl));
-        }
+        String ERROR_MESSAGE = "\nCurrent page URL has not expected value\nExpected result [" + expectedResult + "]\nCurrent URL  %s\nExpected URL %s";
+        Allure.step("Check if current page matches the expected URL", () -> {
+            try {
+                page.waitForURL(url -> url.equals(expectedUrl), new Page.WaitForURLOptions().setTimeout(500));
+            } catch (TimeoutError e) {
+                if (expectedResult) {
+                    throw new RuntimeException(String.format(ERROR_MESSAGE, page.url(), expectedUrl), e);
+                }
+            }
+            if (expectedResult) {
+                Assert.assertTrue(currentPageMatches, String.format(ERROR_MESSAGE, page.url(), expectedUrl));
+            } else {
+                Assert.assertFalse(currentPageMatches, String.format(ERROR_MESSAGE, page.url(), expectedUrl));
+            }
+        });
     }
 
     public void requestResponseByURL(String url, String responseMethod, int expectedStatusCode, boolean expectedResult) {
@@ -44,7 +42,7 @@ public class BasePage {
                 try {
                     if (response.url() != null && response.url().equals(url)) {
                         int actualStatusCode = response.status();
-                        assertEquals(response.request().method(), responseMethod, "\nОжидаемый код ответа: " + expectedStatusCode + ", фактический код ответа: " + actualStatusCode);
+                        assertEquals(response.request().method(), responseMethod, "\nРћР¶РёРґР°РµРјС‹Р№ РєРѕРґ РѕС‚РІРµС‚Р°: " + expectedStatusCode + ", С„Р°РєС‚РёС‡РµСЃРєРёР№ РєРѕРґ РѕС‚РІРµС‚Р°: " + actualStatusCode);
                         org.junit.Assert.assertEquals(expectedResult, (actualStatusCode == expectedStatusCode));
                     }
                 } catch (NullPointerException e) {
@@ -52,7 +50,7 @@ public class BasePage {
                 } catch (AssertionFailedError e) {
                     fail("AssertionFailedError: " + e.getMessage());
                 } catch (TimeoutError | AssertionError e) {
-                    fail("\nОжидаемый код ответа от сервера: [" + expectedStatusCode + "], и ожидаемый результат: [" + expectedResult + "]\nTimeoutError: " + e.getMessage());
+                    fail("\nРћР¶РёРґР°РµРјС‹Р№ РєРѕРґ РѕС‚РІРµС‚Р° РѕС‚ СЃРµСЂРІРµСЂР°: [" + expectedStatusCode + "], Рё РѕР¶РёРґР°РµРјС‹Р№ СЂРµР·СѓР»СЊС‚Р°С‚: [" + expectedResult + "]\nTimeoutError: " + e.getMessage());
                 } catch (Exception e) {
                     fail("Exception: " + e.getMessage());
                 } catch (Throwable e) {
