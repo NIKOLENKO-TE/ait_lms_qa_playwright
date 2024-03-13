@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -20,7 +20,5 @@ jobs:
           distribution: 'adopt'
       - name: Set up Gradle
         run: echo "C:/Tools/gradle-8.6_new/bin" >> $GITHUB_PATH
-      - name: Install dependencies
-        run: sudo apt-get install -y libwoff1 libopus0 libwebp-dev libenchant-2-2 libgudev-1.0-0 libsecret-1-0 libhyphen0 libgdk-pixbuf2.0-0 libegl1 libnotify4 libxslt1.1 libevent-dev libgles2 libvpx6 libxcomposite1 libatk1.0-0 libatk-bridge2.0-0 libepoxy0 libgtk-3-0 libharfbuzz-icu0 libgstreamer-gl1.0-0 libgstreamer-plugins-bad1.0-0 libopenjp2-7 libharfbuzz0b
       - name: Build with Gradle
         run: gradle build
