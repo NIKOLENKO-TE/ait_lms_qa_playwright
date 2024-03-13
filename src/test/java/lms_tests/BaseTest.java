@@ -55,7 +55,7 @@ public class BaseTest {
     @BeforeMethod
     public void INIT_CONTEXT(Method method) {
         Allure.step("Initialize browser and page context for tests", () -> {
-            Browser.NewContextOptions contextOptions = new Browser.NewContextOptions().setViewportSize(2000, 1000);
+            Browser.NewContextOptions contextOptions = new Browser.NewContextOptions().setViewportSize(2000, 1000).setBaseURL(HomePage.homePageURL());
             if (ADD_VIDEO_TO_REPORT) {
                 contextOptions.setRecordVideoSize(2000, 1000).setRecordVideoDir(Paths.get("src/test_logs/"));
             }
@@ -69,7 +69,7 @@ public class BaseTest {
             page = this.context.newPage();
             basePage = new BasePage(page);
             Allure.step("Open browser and navigate to Home Page", () -> {
-                page.navigate(HomePage.homePageURL());
+                page.navigate(HomePage.homePageURL());;
             });
             LOG_START(method);
         });
@@ -112,7 +112,6 @@ public class BaseTest {
         enum Type {
             POSITIVE, NEGATIVE
         }
-
         Type value();
     }
 

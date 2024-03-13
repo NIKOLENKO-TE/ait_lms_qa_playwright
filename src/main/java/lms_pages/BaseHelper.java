@@ -209,7 +209,7 @@ public class BaseHelper extends BasePage {
             if (page.locator("text=Invalid email format").count() > 0) {
                 logger.error("[{}]: Invalid email format error occurred", methodName);
             }
-            page.waitForSelector("text=Invalid email format", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(500));
+            page.waitForSelector("text=Invalid email format", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(200));
         });
     }
 
@@ -224,7 +224,7 @@ public class BaseHelper extends BasePage {
             if (page.locator("text=The password must be at least").count() > 0) {
                 logger.error("[{}]: Invalid password format error occurred", methodName);
             }
-            page.waitForSelector("text=The password must be at least", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(500));
+            page.waitForSelector("text=The password must be at least", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(200));
         });
     }
 
