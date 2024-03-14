@@ -8,13 +8,13 @@ import io.qameta.allure.Allure;
 import lms_pages.BaseHelper;
 import lms_pages.BasePage;
 import lms_pages.UI.HomePage;
+import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
 
 import java.io.IOException;
 import java.lang.annotation.ElementType;
@@ -34,12 +34,12 @@ public class BaseTest {
     private Instant TEST_START_TIME;
 
     protected static Page page;
-    private Browser browser;
+    private static Browser browser;
     BasePage basePage = new BasePage(page);
     public static Logger logger = LoggerFactory.getLogger(BaseTest.class);
 
-    @BeforeSuite
-    public void SET_UP() {
+    @BeforeAll
+    public static void SET_UP() {
         browser = BaseHelper.CHROME;
         BaseHelper.BROWSER_HEADLESS_MODE = false; // * Run the browser in headless mode
         BaseHelper.BROWSER_DEVTOOLS_MODE = false; // * Open DevTools in the browser
