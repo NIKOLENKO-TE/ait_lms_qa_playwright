@@ -62,6 +62,9 @@ public class BaseTest {
             if (ADD_HAR_TO_REPORT) {
                 contextOptions.setRecordHarPath(Paths.get("src/test_logs/" + "Har_temp.har"));
             }
+            if (browser == null) {
+                SET_UP();
+            }
             this.context = browser.newContext(contextOptions);
             if (ADD_TRACE_ZIP_TO_REPORT) {
                 this.context.tracing().start(new Tracing.StartOptions().setScreenshots(true).setSnapshots(true).setSources(false));
