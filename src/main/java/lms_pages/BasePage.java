@@ -42,7 +42,7 @@ public class BasePage {
                 try {
                     if (response.url() != null && response.url().equals(url)) {
                         int actualStatusCode = response.status();
-                        assertEquals(response.request().method(), responseMethod, "\nОжидаемый код ответа: " + expectedStatusCode + ", фактический код ответа: " + actualStatusCode);
+                        assertEquals(response.request().method(), responseMethod, "\nExpected response code:" + expectedStatusCode + ", the actual response code is:" + actualStatusCode);
                         org.junit.Assert.assertEquals(expectedResult, (actualStatusCode == expectedStatusCode));
                     }
                 } catch (NullPointerException e) {
@@ -50,7 +50,7 @@ public class BasePage {
                 } catch (AssertionFailedError e) {
                     fail("AssertionFailedError: " + e.getMessage());
                 } catch (TimeoutError | AssertionError e) {
-                    fail("\nОжидаемый код ответа от сервера: [" + expectedStatusCode + "], и ожидаемый результат: [" + expectedResult + "]\nTimeoutError: " + e.getMessage());
+                    fail("\nExpected response code from the server: [" + expectedStatusCode + "], and the expected result: [" + expectedResult + "]\nTimeoutError: " + e.getMessage());
                 } catch (Exception e) {
                     fail("Exception: " + e.getMessage());
                 } catch (Throwable e) {

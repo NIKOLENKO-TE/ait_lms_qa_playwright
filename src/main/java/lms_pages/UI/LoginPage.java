@@ -64,10 +64,10 @@ public class LoginPage {
             boolean userIsLoggedIn = signOutButton.count() > 0;
             try {
                 if (loginButton.count() > 0) {
-                    userIsLoggedIn = false; // кнопка "LOGIN" найдена если пользователь не залогинен
+                    userIsLoggedIn = false; // "LOGIN" button found if user is not logged in
                 }
                 if (signOutButton.count() > 0) {
-                    userIsLoggedIn = true; // кнопка "USER" найдена если пользователь залогинен
+                    userIsLoggedIn = true; // "USER" button found if user is logged in
                 }
                 logger.error("[{}]: {}", methodName, userIsLoggedIn ? "User is logged in." : "User is not logged in.");
                 if (userIsLoggedIn != expectedLoginStatus) {
