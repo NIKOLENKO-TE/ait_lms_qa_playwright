@@ -44,7 +44,7 @@ public class BaseTest {
         BaseHelper.BROWSER_HEADLESS_MODE = false; // * Run the browser in headless mode
         BaseHelper.BROWSER_DEVTOOLS_MODE = false; // * Open DevTools in the browser
         BaseHelper.BROWSER_SLOW_DOWN_STEPS = 0; // * Latency of each test step in milliseconds
-        BaseHelper.ALLURE = !true; // ! Add files to ALLURE-report only for FAILED tests
+        BaseHelper.ALLURE = false; // ! Add files to ALLURE-report only for FAILED tests
         BaseHelper.ADD_TRACE_ZIP_TO_REPORT = ALLURE; // !!! Adding a trace to a report requires large resources and does not support WebKit browser
         BaseHelper.ADD_SCREENSHOT_TO_REPORT = ALLURE; // ? Add screenshots to the report (a screenshot will always be created in the folder)
         BaseHelper.ADD_VIDEO_TO_REPORT = ALLURE; // ? Add video to report

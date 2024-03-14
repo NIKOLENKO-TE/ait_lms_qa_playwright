@@ -39,3 +39,19 @@ test {
     useTestNG()
 }
 
+sourceSets {
+    test {
+        resources {
+            srcDir 'src/test/resources'
+        }
+    }
+}
+
+def registerTask(String taskName, String suitePath) {
+    tasks.register(taskName, Test) {
+        useTestNG() {
+            suites suitePath
+        }
+    }
+}
+registerTask('login_users', 'src/test/resources/login_users.xml')
