@@ -47,11 +47,22 @@ sourceSets {
     }
 }
 
+processTestResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+ext {
+    browserType = project.hasProperty('browserType') ? project.getProperty('browserType') : 'chrome' // По умолчанию запускаем в Chrome, если параметр не указан
+}
 def registerTask(String taskName, String suitePath) {
     tasks.register(taskName, Test) {
         useTestNG() {
             suites suitePath
         }
+        if (project.hasProperty('browser')) {
+            systemProperty 'browser', project.findProperty('browser')
+        }
+
     }
 }
+
 registerTask('login_users', 'src/test/resources/login_users.xml')

@@ -40,39 +40,32 @@ public class BaseTest {
 
     @BeforeAll
     public static void SET_UP() {
-        browser = BaseHelper.CHROME;
-        BaseHelper.BROWSER_HEADLESS_MODE = false; // * Run the browser in headless mode
-        BaseHelper.BROWSER_DEVTOOLS_MODE = false; // * Open DevTools in the browser
-        BaseHelper.BROWSER_SLOW_DOWN_STEPS = 0; // * Latency of each test step in milliseconds
-        BaseHelper.ALLURE = false; // ! Add files to ALLURE-report only for FAILED tests
-        BaseHelper.ADD_TRACE_ZIP_TO_REPORT = ALLURE; // !!! Adding a trace to a report requires large resources and does not support WebKit browser
-        BaseHelper.ADD_SCREENSHOT_TO_REPORT = ALLURE; // ? Add screenshots to the report (a screenshot will always be created in the folder)
-        BaseHelper.ADD_VIDEO_TO_REPORT = ALLURE; // ? Add video to report
-        BaseHelper.ADD_PAGE_SOURCE_TO_REPORT = ALLURE; // ? Add page source code to report
-        BaseHelper.ADD_HAR_TO_REPORT = ALLURE; // ? Add a HAR file to the report
+       browser = CHROME;
+      // browser = BaseHelper.setupBrowser("CHROME", false, false, 1000, false, false, false, false, false, false);
     }
 
     @BeforeMethod
     public void INIT_CONTEXT(Method method) {
         Allure.step("Initialize browser and page context for tests", () -> {
             Browser.NewContextOptions contextOptions = new Browser.NewContextOptions().setViewportSize(2000, 1000).setBaseURL(HomePage.homePageURL());
-            if (ADD_VIDEO_TO_REPORT) {
+            if (VIDEO) {
                 contextOptions.setRecordVideoSize(2000, 1000).setRecordVideoDir(Paths.get("src/test_logs/"));
             }
-            if (ADD_HAR_TO_REPORT) {
+            if (HAR) {
                 contextOptions.setRecordHarPath(Paths.get("src/test_logs/" + "Har_temp.har"));
             }
             if (browser == null) {
                 SET_UP();
             }
             this.context = browser.newContext(contextOptions);
-            if (ADD_TRACE_ZIP_TO_REPORT) {
+            if (TRACE) {
                 this.context.tracing().start(new Tracing.StartOptions().setScreenshots(true).setSnapshots(true).setSources(false));
             }
             page = this.context.newPage();
             basePage = new BasePage(page); // Инициализация basePage после инициализации page
             Allure.step("Open browser and navigate to Home Page", () -> {
-                page.navigate(HomePage.homePageURL());;
+                page.navigate(HomePage.homePageURL());
+                ;
             });
             LOG_START(method);
         });
@@ -115,6 +108,7 @@ public class BaseTest {
         enum Type {
             POSITIVE, NEGATIVE
         }
+
         Type value();
     }
 

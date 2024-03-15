@@ -27,23 +27,52 @@ public class BaseHelper extends BasePage {
     public Locator signOutButton;
     public Locator errorLocator;
     public AtomicBoolean isErrorPresent;
-    public static boolean BROWSER_HEADLESS_MODE = false;
-    public static boolean BROWSER_DEVTOOLS_MODE = false;
-    public static int BROWSER_SLOW_DOWN_STEPS = 0;
-    public static boolean ALLURE = true;
-    public static boolean ADD_TRACE_ZIP_TO_REPORT = ALLURE;
-    public static boolean ADD_SCREENSHOT_TO_REPORT = ALLURE;
-    public static boolean ADD_VIDEO_TO_REPORT = ALLURE;
-    public static boolean ADD_PAGE_SOURCE_TO_REPORT = ALLURE;
-    public static boolean ADD_HAR_TO_REPORT = ALLURE;
-    public static final Browser CHROME = Playwright.create().chromium().launch(new BrowserType.LaunchOptions().setHeadless(BROWSER_HEADLESS_MODE).setChannel("chrome").setDevtools(BROWSER_DEVTOOLS_MODE).setSlowMo(BROWSER_SLOW_DOWN_STEPS));
-    public static final Browser CHROMIUM = Playwright.create().chromium().launch(new BrowserType.LaunchOptions().setHeadless(BROWSER_HEADLESS_MODE).setDevtools(BROWSER_DEVTOOLS_MODE).setSlowMo(BROWSER_SLOW_DOWN_STEPS));
-    public static final Browser EDGE = Playwright.create().chromium().launch(new BrowserType.LaunchOptions().setHeadless(BROWSER_HEADLESS_MODE).setChannel("msedge").setDevtools(BROWSER_DEVTOOLS_MODE).setSlowMo(BROWSER_SLOW_DOWN_STEPS));
-    public static final Browser SAFARI_WEBKIT = Playwright.create().webkit().launch(new BrowserType.LaunchOptions().setHeadless(BROWSER_HEADLESS_MODE).setDevtools(BROWSER_DEVTOOLS_MODE).setSlowMo(BROWSER_SLOW_DOWN_STEPS));
-    public static final Browser FIREFOX = Playwright.create().firefox().launch(new BrowserType.LaunchOptions().setHeadless(BROWSER_HEADLESS_MODE).setDevtools(BROWSER_DEVTOOLS_MODE).setSlowMo(BROWSER_SLOW_DOWN_STEPS));
+    public static boolean MODE = false;
+    public static boolean DEVTOOL = true;
+    public static int SLOW = 0;
+    public static boolean ALLURE = true; // ! Add files to ALLURE-report only for FAILED tests
+    public static boolean TRACE = ALLURE; // !!! Adding a trace to a report requires large resources and does not support WebKit browser
+    public static boolean SCREENSHOT = ALLURE; // ? Add screenshots to the report (a screenshot will always be created in the folder)
+    public static boolean VIDEO = ALLURE; // ? Add video to report
+    public static boolean PAGE = ALLURE; // ? Add page source code to report
+    public static boolean HAR = ALLURE; // ? Add a HAR file to the report
+    public static final Browser CHROME = setupBrowser("CHROME", MODE, DEVTOOL, SLOW, ALLURE, TRACE, SCREENSHOT, VIDEO, PAGE, HAR);
+    public static final Browser CHROMIUM = setupBrowser("CHROMIUM", MODE, DEVTOOL, SLOW, ALLURE, TRACE, SCREENSHOT, VIDEO, PAGE, HAR);
+    public static final Browser EDGE = setupBrowser("EDGE", MODE, DEVTOOL, SLOW, ALLURE, TRACE, SCREENSHOT, VIDEO, PAGE, HAR);
+    public static final Browser SAFARI = setupBrowser("SAFARI", MODE, DEVTOOL, SLOW, ALLURE, TRACE, SCREENSHOT, VIDEO, PAGE, HAR);
+    public static final Browser FIREFOX = setupBrowser("FIREFOX", MODE, DEVTOOL, SLOW, ALLURE, TRACE, SCREENSHOT, VIDEO, PAGE, HAR);
 
     public BaseHelper(Page page) {
         super(page);
+    }
+
+    public static Browser setupBrowser(String BROWSER, boolean HEADLESS, boolean DEVTOOLS, int LATENCY, boolean ALLURE, boolean TRACE, boolean SCREENSHOT, boolean VIDEO, boolean PAGE, boolean HAR) {
+        Browser browser;
+        BrowserType.LaunchOptions launchOptions = new BrowserType
+                .LaunchOptions()
+                .setDevtools(DEVTOOLS) // * Open DevTools in the browser
+                .setSlowMo(LATENCY) // * Latency of each test step in milliseconds
+                .setHeadless(HEADLESS); // * Run the browser in headless mode
+        switch (BROWSER.toUpperCase()) {
+            case "CHROME":
+                browser = Playwright.create().chromium().launch(launchOptions.setChannel("chrome"));
+                break;
+            case "CHROMIUM":
+                browser = Playwright.create().chromium().launch(launchOptions);
+                break;
+            case "EDGE":
+                browser = Playwright.create().chromium().launch(launchOptions.setChannel("msedge"));
+                break;
+            case "SAFARI":
+                browser = Playwright.create().webkit().launch(launchOptions);
+                break;
+            case "FIREFOX":
+                browser = Playwright.create().firefox().launch(launchOptions);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported browser type: " + BROWSER);
+        }
+        return browser;
     }
 
     public static void FOLDER_CREATE_IF_ERROR(ITestResult result, Path errorDirPath) throws IOException {
@@ -53,7 +82,7 @@ public class BaseHelper extends BasePage {
     }
 
     public static void SCREENSHOT(ITestResult result, Path screenshotPath, Page page) {
-        if (!result.isSuccess() && !ADD_SCREENSHOT_TO_REPORT) {
+        if (!result.isSuccess() && !SCREENSHOT) {
             try {
                 page.screenshot(new Page.ScreenshotOptions().setPath(screenshotPath).setFullPage(true));
                 if (Files.exists(screenshotPath)) {
@@ -62,13 +91,13 @@ public class BaseHelper extends BasePage {
             } catch (Exception e) {
                 logger.error("Error while taking and saving screenshot: ", e);
             }
-        } else if (ADD_SCREENSHOT_TO_REPORT && !result.isSuccess()) {
+        } else if (SCREENSHOT && !result.isSuccess()) {
             try {
                 byte[] screenshot = page.screenshot(new Page.ScreenshotOptions().setPath(screenshotPath).setFullPage(true));
                 if (Files.exists(screenshotPath)) {
                     logger.info("FILE SCREENSHOT: {}", screenshotPath.toAbsolutePath());
                 }
-                if (ADD_SCREENSHOT_TO_REPORT) {
+                if (SCREENSHOT) {
                     Allure.addAttachment("Screenshot.png", new ByteArrayInputStream(screenshot));
                 }
             } catch (Exception e) {
@@ -78,7 +107,7 @@ public class BaseHelper extends BasePage {
     }
 
     public static void PAGE_SOURCE(ITestResult result, Path pageSourcePath, Page page) {
-        if (ADD_PAGE_SOURCE_TO_REPORT && !result.isSuccess()) {
+        if (PAGE && !result.isSuccess()) {
             try {
                 String pageSource = page.content();
                 Files.write(pageSourcePath, pageSource.getBytes());
@@ -93,7 +122,7 @@ public class BaseHelper extends BasePage {
     }
 
     public static void VIDEO(ITestResult result, Path videoPath, Page page) {
-        if (ADD_VIDEO_TO_REPORT && !result.isSuccess()) {
+        if (VIDEO && !result.isSuccess()) {
             try {
                 Path videoFileName = page.video().path();
                 Files.move(videoFileName, videoPath);
@@ -110,7 +139,7 @@ public class BaseHelper extends BasePage {
     public static void DELETING_UNUSED_VIDEO_AND_HAR(ITestResult result, Path harFilePath, Page page) {
         if (result.isSuccess() && ALLURE) {
             try {
-                if (ADD_VIDEO_TO_REPORT) {
+                if (VIDEO) {
                     Allure.step("Delete video files because test passed", () -> {
                         try {
                             Path videoFileName = page.video().path();
@@ -122,7 +151,7 @@ public class BaseHelper extends BasePage {
                         }
                     });
                 }
-                if (ADD_HAR_TO_REPORT) {
+                if (HAR) {
                     Allure.step("Delete HAR files because test passed", () -> {
                         try {
                             if (Files.exists(harFilePath)) {
@@ -145,7 +174,7 @@ public class BaseHelper extends BasePage {
 
     public static void HAR(ITestResult result, Path errorDirPath, Path harFilePath) {
         try {
-            if (ADD_HAR_TO_REPORT && !result.isSuccess()) {
+            if (HAR && !result.isSuccess()) {
                 Path harTempFilePath = Paths.get("src/test_logs/" + "Har_temp.har");
                 Files.move(harTempFilePath, errorDirPath.resolve("Har.har"));
                 byte[] harData = Files.readAllBytes(harFilePath);
@@ -161,7 +190,7 @@ public class BaseHelper extends BasePage {
 
     public static void ZIP(ITestResult result, Path tracePath, BrowserContext context) {
         try {
-            if (ADD_TRACE_ZIP_TO_REPORT && !result.isSuccess()) {
+            if (TRACE && !result.isSuccess()) {
                 context.tracing().stop(new Tracing.StopOptions().setPath(tracePath));
                 Allure.addAttachment("Trace.zip", new ByteArrayInputStream(Files.readAllBytes(tracePath)));
                 if (Files.exists(tracePath)) {

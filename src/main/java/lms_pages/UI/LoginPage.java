@@ -32,20 +32,34 @@ public class LoginPage {
         login(new UserCredentials(username, password), expectedLoginStatus);
     }
 
-    public void login(Object credentials, boolean expectedLoginStatus) {
-        if (credentials instanceof UserCredentials userCredentials) {
-            loginMethod(userCredentials.getUser_email(), userCredentials.getUser_password(), expectedLoginStatus);
-        } else if (credentials instanceof String[] loginInfo) {
-            if (loginInfo.length >= 2) {
-                loginMethod(loginInfo[0], loginInfo[1], expectedLoginStatus);
-            } else {
-                logger.error("Insufficient login information provided.");
-            }
+//    public void login(Object credentials, boolean expectedLoginStatus) {
+//        if (credentials instanceof UserCredentials userCredentials) {
+//            loginMethod(userCredentials.getUser_email(), userCredentials.getUser_password(), expectedLoginStatus);
+//        } else if (credentials instanceof String[] loginInfo) {
+//            if (loginInfo.length >= 2) {
+//                loginMethod(loginInfo[0], loginInfo[1], expectedLoginStatus);
+//            } else {
+//                logger.error("Insufficient login information provided.");
+//            }
+//        } else {
+//            logger.error("Unsupported credential type.");
+//        }
+//    }
+public void login(Object credentials, boolean expectedLoginStatus) {
+    if (credentials instanceof UserCredentials) {
+        UserCredentials userCredentials = (UserCredentials) credentials;
+        loginMethod(userCredentials.getUser_email(), userCredentials.getUser_password(), expectedLoginStatus);
+    } else if (credentials instanceof String[]) {
+        String[] loginInfo = (String[]) credentials;
+        if (loginInfo.length >= 2) {
+            loginMethod(loginInfo[0], loginInfo[1], expectedLoginStatus);
         } else {
-            logger.error("Unsupported credential type.");
+            logger.error("Insufficient login information provided.");
         }
+    } else {
+        logger.error("Unsupported credential type.");
     }
-
+}
     public void loginMethod(String username, String password, boolean expectedLoginStatus) {
         baseHelper.loginVariables();
         baseHelper.checkIfUserIsLoggedIn(baseHelper.signOutButton);
