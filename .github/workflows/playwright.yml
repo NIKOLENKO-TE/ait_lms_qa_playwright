@@ -14,13 +14,10 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
       - name: Build & Install
-        working-directory: /src/main/java
         run: mvn -B install -DskipTests --no-transfer-progress
       - name: Install Playwright
-        working-directory: /src/main/java
         run: mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install --with-deps"
       - name: Run tests
-        working-directory: /src/main/java
         run: mvn test
       - name: Archive test results
         uses: actions/upload-artifact@v3
@@ -28,4 +25,4 @@ jobs:
         with:
           name: playwright-results
           path: |
-            build/reports/tests/test/*
+            target/surefire-reports/*
