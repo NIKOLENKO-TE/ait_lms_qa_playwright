@@ -17,10 +17,6 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -93,22 +89,22 @@ public class BaseTest {
     }
 
     // Задаём аннотации для тест-кейсов
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.METHOD)
-    public @interface TestCaseID {
-        String value();
-    }
+//    @Retention(RetentionPolicy.RUNTIME)
+//    @Target(ElementType.METHOD)
+//    public @interface TestCaseID {
+//        String value();
+//    }
 
     // Задаём аннотации для сценрия тестов
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.METHOD)
-    public @interface TestType {
-        enum Type {
-            POSITIVE, NEGATIVE
-        }
-
-        Type value();
-    }
+//    @Retention(RetentionPolicy.RUNTIME)
+//    @Target(ElementType.METHOD)
+//    public @interface TestType {
+//        enum Type {
+//            POSITIVE, NEGATIVE
+//        }
+//
+//        Type value();
+//    }
 
     @AfterSuite
     public void TEAR_DOWN() {
