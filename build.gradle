@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id "io.qameta.allure" version "2.11.2"
+    id 'io.qameta.allure' version '2.11.2'
 }
 
 group 'org.example'
@@ -21,7 +21,7 @@ run {
         args project.execArgs.split()
     }
 }
-
+def allureVersion = "2.24.0"
 dependencies {
     implementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.1'
     implementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.1'
@@ -39,6 +39,10 @@ dependencies {
     testImplementation 'io.qameta.allure:allure-testng:2.17.2'
    // testImplementation 'com.microsoft.playwright:playwright', version: '1.17.1'
     testImplementation 'io.qameta.allure:allure-java-commons:2.17.2'
+    // Import allure-bom to ensure correct versions of all the dependencies are used
+    testImplementation platform("io.qameta.allure:allure-bom:$allureVersion")
+    // Add necessary Allure dependencies to dependencies section
+    testImplementation "io.qameta.allure:allure-testng"
 }
 
 test {
