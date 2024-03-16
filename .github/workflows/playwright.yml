@@ -28,6 +28,8 @@ jobs:
         run: .\gradlew build -x test --no-build-cache
       - name: Install Playwright
         run: npm install playwright
+      - name: Check Playwright version
+        run: npx playwright --version
       - name: Run tests
         run: .\gradlew test
       - name: Archive test results
