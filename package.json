@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "chrome-har": "^0.13.2",
     "debug": "^4.3.4",
     "playwright": "^1.42.0",
     "playwright-har": "^0.2.0"
@@ -9,6 +10,6 @@
     "@types/node": "^20.11.25"
   },
   "scripts": {
-    "PLAYWRIGHT_TESTS": "gradlew test"
+    "test": "gradlew test"
   }
 }
