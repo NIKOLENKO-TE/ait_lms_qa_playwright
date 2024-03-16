@@ -38,6 +38,15 @@ dependencies {
 
 test {
     useTestNG()
+    systemProperty 'allure.results.directory', 'build/allure-results'
+}
+
+tasks.withType(Test) {
+    finalizedBy 'allureReport'
+}
+
+allureReport {
+    reportDir = file('build/allure-report')
 }
 
 sourceSets {
