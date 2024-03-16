@@ -10,7 +10,7 @@ public class LogoTests extends BaseTest {
 
     @BeforeMethod
     public void INIT() {
-        super.SET_UP();
+        super.setUp();
         basePage = new BasePage(page);
     }
     @Test(invocationCount = 5)

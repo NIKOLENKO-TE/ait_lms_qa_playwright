@@ -51,17 +51,45 @@ processTestResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 ext {
-    browserType = project.hasProperty('browserType') ? project.getProperty('browserType') : 'chrome' // По умолчанию запускаем в Chrome, если параметр не указан
+// !  ADD DEFAULT VALUES FOR VARIABLES HERE
+    browserType = project.hasProperty('browserType') ? project.getProperty('browserType') : 'chrome'
 }
+
 def registerTask(String taskName, String suitePath) {
     tasks.register(taskName, Test) {
         useTestNG() {
             suites suitePath
         }
-        if (project.hasProperty('browser')) {
-            systemProperty 'browser', project.findProperty('browser')
+        if (project.hasProperty('browserType')) {
+            systemProperty 'browserType', project.findProperty('browserType')
         }
-
+        if (project.hasProperty('headless')) {
+            systemProperty 'headless', project.findProperty('headless')
+        }
+        if (project.hasProperty('devtools')) {
+            systemProperty 'devtools', project.findProperty('devtools')
+        }
+        if (project.hasProperty('slowdown')) {
+            systemProperty 'slowdown', project.findProperty('slowdown')
+        }
+        if (project.hasProperty('allure_report')) {
+            systemProperty 'allure_report', project.findProperty('allure_report')
+        }
+        if (project.hasProperty('trace')) {
+            systemProperty 'trace', project.findProperty('trace')
+        }
+        if (project.hasProperty('screenshot')) {
+            systemProperty 'screenshot', project.findProperty('screenshot')
+        }
+        if (project.hasProperty('video')) {
+            systemProperty 'video', project.findProperty('video')
+        }
+        if (project.hasProperty('page')) {
+            systemProperty 'page', project.findProperty('page')
+        }
+        if (project.hasProperty('har')) {
+            systemProperty 'har', project.findProperty('har')
+        }
     }
 }
 

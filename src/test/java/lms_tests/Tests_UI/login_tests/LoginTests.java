@@ -19,7 +19,7 @@ public class LoginTests extends BaseTest {
 
     @BeforeMethod
     public void INIT() {
-        SET_UP();
+        setUp();
         loginPage = new LoginPage(page);
         basePage = new BasePage(page);
     }
@@ -32,7 +32,7 @@ public class LoginTests extends BaseTest {
     public void LOGIN_STUDENT_CONFIRMED_WITH_NAME_PASSWORD_BY_USERNAME_PASSWORD() {
         loginPage.login("s01@dev-lms.de", "lms-dev-pass-2024", true); // * true
         loginPage.isUserLoggedIn(true);
-        basePage.isCurrentPage(LessonsPage.lessonsPageURL(), !true);
+        basePage.isCurrentPage(LessonsPage.lessonsPageURL(), true);
     }
     @Test
     @Feature("Login tests")

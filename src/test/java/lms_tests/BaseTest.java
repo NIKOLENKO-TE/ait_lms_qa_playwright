@@ -39,13 +39,12 @@ public class BaseTest {
     public static Logger logger = LoggerFactory.getLogger(BaseTest.class);
 
     @BeforeAll
-    public static void SET_UP() {
-       browser = CHROME;
-      // browser = BaseHelper.setupBrowser("CHROME", false, false, 1000, false, false, false, false, false, false);
+    public static void setUp() {
+        browser = BaseHelper.setupBrowser();
     }
 
     @BeforeMethod
-    public void INIT_CONTEXT(Method method) {
+    public void initContext(Method method) {
         Allure.step("Initialize browser and page context for tests", () -> {
             Browser.NewContextOptions contextOptions = new Browser.NewContextOptions().setViewportSize(2000, 1000).setBaseURL(HomePage.homePageURL());
             if (VIDEO) {
@@ -55,7 +54,7 @@ public class BaseTest {
                 contextOptions.setRecordHarPath(Paths.get("src/test_logs/" + "Har_temp.har"));
             }
             if (browser == null) {
-                SET_UP();
+                setUp();
             }
             this.context = browser.newContext(contextOptions);
             if (TRACE) {
@@ -65,14 +64,13 @@ public class BaseTest {
             basePage = new BasePage(page); // Инициализация basePage после инициализации page
             Allure.step("Open browser and navigate to Home Page", () -> {
                 page.navigate(HomePage.homePageURL());
-                ;
             });
             LOG_START(method);
         });
     }
 
     @AfterMethod
-    public void ADD_FILES_RO_REPORT(ITestResult result) throws IOException {
+    public void afterMethod(ITestResult result) throws IOException {
         String PARAMS = BaseHelper.getParams(result);
         Path ERROR_DIR = BaseHelper.getErrorDirFolderPath(result);
         FOLDER_CREATE_IF_ERROR(result, ERROR_DIR);
