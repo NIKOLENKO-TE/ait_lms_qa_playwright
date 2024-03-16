@@ -21,6 +21,9 @@ run {
         args project.execArgs.split()
     }
 }
+task playwrightInstall(type: Exec) {
+    commandLine 'npm', 'install', 'playwright'
+}
 
 dependencies {
     implementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.2'
