@@ -13,7 +13,7 @@ repositories {
 apply plugin: 'application'
 
 application {
-    mainClassName = 'com.microsoft.playwright.CLI'
+    mainClass.set('com.microsoft.playwright.CLI')
 }
 
 run {
@@ -44,6 +44,9 @@ sourceSets {
     test {
         resources {
             srcDir 'src/test/resources'
+        }
+        java {
+            srcDirs = ['src/test/java']
         }
     }
 }
