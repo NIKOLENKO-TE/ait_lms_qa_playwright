@@ -61,7 +61,7 @@ public class BaseTest {
                 this.context.tracing().start(new Tracing.StartOptions().setScreenshots(true).setSnapshots(true).setSources(false));
             }
             page = this.context.newPage();
-            basePage = new BasePage(page); // Инициализация basePage после инициализации page
+            basePage = new BasePage(page);
             Allure.step("Open browser and navigate to Home Page", () -> {
                 page.navigate(HomePage.homePageURL());
             });
