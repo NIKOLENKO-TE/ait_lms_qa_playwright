@@ -9,29 +9,29 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-
       # Установка прав доступа к gradlew
       - name: Set execute permission for gradlew
         run: git update-index --chmod=+x gradlew
-
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '21'
-      - name: Setup Node.js
+      - name: Install Node.js v"20.11.1"
         uses: actions/setup-node@v3
         with:
           node-version: '20.11.1'
-      - name: List Directory Contents
-        run: Get-ChildItem -Recurse
-      - name: Build & Install
+      - name: Check Node.js version
+        run: node --version
+      - name: Install Gradle v"8.6"
         run: .\gradlew build -x test --no-build-cache
-      - name: Install Playwright
+      - name: Check Gradle version
+        run: .\gradlew --version
+      - name: Install Playwright v"1.42.0"
         run: npm install playwright@1.42.0
       - name: Check Playwright version
         run: npx playwright --version
-      - name: Check Gradle version
-        run: .\gradlew --version
+      - name: List Directory Contents
+        run: Get-ChildItem -Recurse
       - name: Run tests
         run: .\gradlew test
       - name: Archive test results
@@ -41,3 +41,10 @@ jobs:
           name: playwright-results
           path: |
             build/reports/tests/test/*
+      - name: Archive Allure reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: allure-reports
+          path: |
+            build/allure-report/*
