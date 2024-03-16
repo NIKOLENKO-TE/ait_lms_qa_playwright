@@ -58,7 +58,7 @@ public class BaseTest {
             }
             this.context = browser.newContext(contextOptions);
             if (TRACE) {
-                this.context.tracing().start(new Tracing.StartOptions().setScreenshots(true).setSnapshots(true).setSources(false));
+                this.context.tracing().start(new Tracing.StartOptions().setScreenshots(true).setSnapshots(true));
             }
             page = this.context.newPage();
             basePage = new BasePage(page);
