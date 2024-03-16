@@ -23,8 +23,11 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Install dependencies and run tests
-        run: npm install && npm test
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: ./gradlew test
 
       - name: Archive test results
         uses: actions/upload-artifact@v2
