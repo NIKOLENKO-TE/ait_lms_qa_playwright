@@ -33,6 +33,9 @@ dependencies {
     implementation group: 'io.qameta.allure', name: 'allure-junit5', version: '2.17.2'
     implementation group: 'io.qameta.allure', name: 'allure-testng', version: '2.17.2'
     implementation group: 'io.qameta.allure', name: 'allure-java-migration', version: '2.17.2'
+    // https://mvnrepository.com/artifact/io.qameta.allure/allure-junit4-aspect
+    implementation group: 'io.qameta.allure', name: 'allure-junit4-aspect', version: '2.25.0'
+
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testImplementation 'io.qameta.allure:allure-testng:2.17.2'
