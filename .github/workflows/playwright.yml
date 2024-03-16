@@ -5,7 +5,7 @@ on:
       - master
 jobs:
   e2e-tests:
-    runs-on: windows-latest # or macos-latest, windows-latest
+    runs-on: ubuntu-latest # or macos-latest, windows-latest
     steps:
       - uses: actions/checkout@v3.6.0
       - uses: actions/setup-node@v3.8.2
@@ -25,3 +25,11 @@ jobs:
 
       - name: Install dependencies and run tests
         run: npm install && npm test
+
+      - name: Archive test results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results
+          path: |
+            build/reports/tests/test/*
