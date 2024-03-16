@@ -1,5 +1,4 @@
-name: End-to-End Tests with Playwright
-
+name: Java CI with Gradle
 on:
   push:
     branches:
