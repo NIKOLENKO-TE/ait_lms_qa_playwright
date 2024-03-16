@@ -9,10 +9,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # Установка прав доступа к gradlew
+      - name: Set execute permission for gradlew
+        run: chmod +x ./gradlew
+
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '21'
+      - name: List Directory Contents
+        run: ls -R
       - name: Build & Install
         run: ./gradlew build -x test --no-build-cache
       - name: Install Playwright
