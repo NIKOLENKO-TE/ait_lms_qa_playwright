@@ -19,7 +19,7 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
       - name: List Directory Contents
-        run: dir /s
+        run: Get-ChildItem -Recurse
       - name: Build & Install
         run: .\gradlew build -x test --no-build-cache
       - name: Install Playwright
