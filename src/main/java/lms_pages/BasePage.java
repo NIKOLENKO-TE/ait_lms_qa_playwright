@@ -2,7 +2,6 @@ package lms_pages;
 
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.TimeoutError;
-import io.qameta.allure.Allure;
 import junit.framework.AssertionFailedError;
 import org.testng.Assert;
 
@@ -19,7 +18,6 @@ public class BasePage {
     public void isCurrentPage(String expectedUrl, boolean expectedResult) {
         boolean currentPageMatches = page.url().equals(expectedUrl);
         String ERROR_MESSAGE = "\nCurrent page URL has not expected value\nExpected result [" + expectedResult + "]\nCurrent URL  %s\nExpected URL %s";
-        Allure.step("Check if current page matches the expected URL", () -> {
             try {
                 page.waitForURL(url -> url.equals(expectedUrl), new Page.WaitForURLOptions().setTimeout(500));
             } catch (TimeoutError e) {
@@ -32,7 +30,7 @@ public class BasePage {
             } else {
                 Assert.assertFalse(currentPageMatches, String.format(ERROR_MESSAGE, page.url(), expectedUrl));
             }
-        });
+
     }
 
     public void requestResponseByURL(String url, String responseMethod, int expectedStatusCode, boolean expectedResult) {

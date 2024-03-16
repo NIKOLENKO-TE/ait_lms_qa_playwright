@@ -3,7 +3,6 @@ package lms_pages.UI;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.TimeoutError;
-import io.qameta.allure.Allure;
 import lms_pages.BaseHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +71,7 @@ public void login(Object credentials, boolean expectedLoginStatus) {
 
     public void isUserLoggedIn(boolean expectedLoginStatus) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
-        Allure.step("Check if user is logged in", () -> {
+
             Locator loginButton = page.locator("button:has-text('Login')");
             Locator signOutButton = page.locator("button:has-text('SignOut')");
             boolean userIsLoggedIn = signOutButton.count() > 0;
@@ -94,6 +93,6 @@ public void login(Object credentials, boolean expectedLoginStatus) {
                 logger.error("[{}]: An unexpected error occurred: {}", methodName, e.getMessage());
                 throw new RuntimeException(e);
             }
-        });
+
     }
 }

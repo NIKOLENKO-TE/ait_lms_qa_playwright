@@ -173,7 +173,7 @@ public class BaseHelper extends BasePage {
         if (result.isSuccess() && (VIDEO || HAR)) {
             try {
                 if (VIDEO) {
-                    Allure.step("Delete video files because test passed", () -> {
+
                         try {
                             Path videoFileName = page.video().path();
                             if (Files.exists(videoFileName)) {
@@ -182,10 +182,10 @@ public class BaseHelper extends BasePage {
                         } catch (IOException e) {
                             logger.error("Error while deleting video file: ", e);
                         }
-                    });
+
                 }
                 if (HAR) {
-                    Allure.step("Delete HAR files because test passed", () -> {
+
                         try {
                             if (Files.exists(harFilePath)) {
                                 Files.delete(harFilePath);
@@ -197,7 +197,7 @@ public class BaseHelper extends BasePage {
                         } catch (IOException e) {
                             logger.error("Error while deleting HAR file: ", e);
                         }
-                    });
+
                 }
             } catch (Exception e) {
                 logger.error("Error while deleting video and HAR files: ", e);
@@ -271,16 +271,16 @@ public class BaseHelper extends BasePage {
     }
 
     public void checkIfUserIsLoggedIn(Locator signOutButton) {
-        Allure.step("Check if user is already logged in", () -> {
+
             boolean userIsLoggedIn = signOutButton.count() > 0;
             if (userIsLoggedIn) {
                 signOutButton.first().click();
             }
-        });
+
     }
 
     public void fillEmail(String username, String methodName) {
-        Allure.step("Fill in Email address", () -> {
+
             if (page.isClosed()) {
                 logger.error("Page is closed before email could be filled.");
                 return;
@@ -296,11 +296,11 @@ public class BaseHelper extends BasePage {
                 logger.error("[{}]: Invalid email format error occurred", methodName);
             }
             page.waitForSelector("text=Invalid email format", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(200));
-        });
+
     }
 
     public void fillPassword(String password, String methodName) {
-        Allure.step("Fill in Password", () -> {
+
             if (page.isClosed()) {
                 logger.error("Page is closed before password could be filled.");
                 return;
@@ -315,11 +315,11 @@ public class BaseHelper extends BasePage {
                 logger.error("[{}]: Invalid password format error occurred", methodName);
             }
             page.waitForSelector("text=The password must be at least", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(200));
-        });
+
     }
 
     public void clickSignInButton(String username, String password, String methodName) { //String methodName
-        Allure.step("Click on Sign In button", () -> {
+
             try {
                 ElementHandle signInButton = page.querySelector("button[label='Sign In']");
                 if (signInButton != null && signInButton.isEnabled()) {
@@ -333,11 +333,11 @@ public class BaseHelper extends BasePage {
             } catch (PlaywrightException e) {
                 logger.error("[{}]: Error occurred: {}", methodName, e.getMessage());
             }
-        });
+
     }
 
     public void checkLoginStatus(Locator errorLocator, AtomicBoolean isErrorPresent, String username, String password, boolean expectedLoginStatus, String methodName) {
-        Allure.step("Check login status", () -> {
+
             try {
                 page.waitForSelector("div:has-text('ErrorInvalid login or password')", new Page.WaitForSelectorOptions().setTimeout(1000));
                 if (errorLocator.count() > 0) {
@@ -352,6 +352,6 @@ public class BaseHelper extends BasePage {
                 logger.error("[{}]: Login status is not as expected. Expected login status: [{}]. Error is present on Login Page?: [{}]. User [{}]. Password [{}]", methodName, expectedLoginStatus, !actualLoginStatus, username, password);
                 fail("Login status is not as expected.\nExpected login status: [" + expectedLoginStatus + "]\nError is present on Login Page?: [" + !actualLoginStatus + "]\nUser [" + username + "]\nPassword [" + password + "]");
             }
-        });
+
     }
 }
