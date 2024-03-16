@@ -1,29 +1,24 @@
 name: Java CI with Gradle Playwright Tests
 on:
   push:
-    branches: [main, master]
+    branches: [ main, master ]
   pull_request:
-    branches: [main, master]
+    branches: [ main, master ]
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      # Установка прав доступа к gradlew
-      - name: Set execute permission for gradlew
-        run: chmod +x ./gradlew
-
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '21'
-      - name: List Directory Contents
-        run: ls -R
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y libwoff1 libopus0 libwebp6 libwebpdemux2 libenchant1c2a libgudev-1.0-0 libsecret-1-0 libhyphen0 libgdk-pixbuf2.0-0 libegl1 libnotify4 libxslt1.1 libevent-2.1-6 libgles2 libvpx5 libxcomposite1 libatk1.0-0 libatk-bridge2.0-0 libepoxy0 libgtk-3-0 libharfbuzz-icu0 libgcrypt20 libgstallocators-1.0-0 libgstapp-1.0-0 libgstpbutils-1.0-0 libgstaudio-1.0-0 libgsttag-1.0-0 libgstvideo-1.0-0 libgstgl-1.0-0 libgstcodecparsers-1.0-0 libgstfft-1.0-0 libjpeg-turbo8 libpng16-16 libopenjp2-7 libcairo-gobject2 libavcodec58 libavformat58 libavutil56 libswscale5 libasound2 libx264-155
       - name: Build & Install
-        run: ./gradlew build -x test --no-build-cache
+        run: ./gradlew install --no-transfer-progress
       - name: Install Playwright
-        run: ./gradlew playwrightInstall
+        run: npx playwright install --with-deps
       - name: Run tests
         run: ./gradlew test
       - name: Archive test results
