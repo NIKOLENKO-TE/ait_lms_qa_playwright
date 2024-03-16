@@ -1,6 +1,7 @@
 package lms_pages.UI;
 
 import com.microsoft.playwright.Page;
+import io.qameta.allure.Allure;
 import lms_pages.BasePage;
 
 public class HomePage extends BasePage {
@@ -11,10 +12,10 @@ public class HomePage extends BasePage {
         super(page);
     }
     public void navigateToHomePage() {
-
+        Allure.step("Navigate to Home Page", () -> {
             if (!page.url().equals(HomePage.homePageURL())) {
                 page.navigate(HomePage.homePageURL());
             }
-
+        });
     }
 }

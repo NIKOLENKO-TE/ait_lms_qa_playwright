@@ -4,6 +4,7 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Tracing;
+import io.qameta.allure.Allure;
 import lms_pages.BaseHelper;
 import lms_pages.BasePage;
 import lms_pages.UI.HomePage;
@@ -16,6 +17,10 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,7 +45,7 @@ public class BaseTest {
 
     @BeforeMethod
     public void initContext(Method method) {
-
+        Allure.step("Initialize browser and page context for tests", () -> {
             Browser.NewContextOptions contextOptions = new Browser.NewContextOptions().setViewportSize(2000, 1000).setBaseURL(HomePage.homePageURL());
             if (VIDEO) {
                 contextOptions.setRecordVideoSize(2000, 1000).setRecordVideoDir(Paths.get("src/test_logs/"));
@@ -53,15 +58,15 @@ public class BaseTest {
             }
             this.context = browser.newContext(contextOptions);
             if (TRACE) {
-                this.context.tracing().start(new Tracing.StartOptions().setScreenshots(true).setSnapshots(true));
+                this.context.tracing().start(new Tracing.StartOptions().setScreenshots(true).setSnapshots(true).setSources(false));
             }
             page = this.context.newPage();
             basePage = new BasePage(page);
-
+            Allure.step("Open browser and navigate to Home Page", () -> {
                 page.navigate(HomePage.homePageURL());
-
+            });
             LOG_START(method);
-
+        });
     }
 
     @AfterMethod
@@ -87,16 +92,34 @@ public class BaseTest {
         }
     }
 
+    // Задаём аннотации для тест-кейсов
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    public @interface TestCaseID {
+        String value();
+    }
+
+    // Задаём аннотации для сценрия тестов
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    public @interface TestType {
+        enum Type {
+            POSITIVE, NEGATIVE
+        }
+
+        Type value();
+    }
+
     @AfterSuite
     public void TEAR_DOWN() {
-
+        Allure.step("Closing the browser context and browser after all tests in the class are executed", () -> {
             if (browser != null) {
                 for (BrowserContext context : browser.contexts()) {
                     context.close();
                 }
                 browser.close();
             }
-
+        });
     }
 
     private void LOG_START(Method method) {

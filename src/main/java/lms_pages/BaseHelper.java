@@ -1,6 +1,7 @@
 package lms_pages;
 
 import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Allure;
 import lms_pages.UI.LoginPage;
@@ -16,8 +17,6 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.fail;
@@ -33,7 +32,7 @@ public class BaseHelper extends BasePage {
     public static boolean DEVTOOL = Boolean.parseBoolean(System.getProperty("devtools", String.valueOf(false))); // ? DevTools
     public static int SLOWDOWN = Integer.parseInt(System.getProperty("slowdown", String.valueOf(0))); // ? Slowdown steps
 
-    public static boolean ENABLE_ALL_FILES = Boolean.parseBoolean(System.getProperty("allure_report", String.valueOf(true))); // ! Add files to ALLURE-report only for FAILED tests
+    public static boolean ENABLE_ALL_FILES = Boolean.parseBoolean(System.getProperty("allure_report", String.valueOf(false))); // ! Add files to ALLURE-report only for FAILED tests
     public static boolean TRACE = Boolean.parseBoolean(System.getProperty("trace", String.valueOf(ENABLE_ALL_FILES))); // !!! Adding a trace to a report requires large resources and does not support WebKit browser
     public static boolean SCREENSHOT = Boolean.parseBoolean(System.getProperty("screenshot", String.valueOf(ENABLE_ALL_FILES))); // ? Add screenshots to the report (a screenshot will always be created in the folder)
     public static boolean VIDEO = Boolean.parseBoolean(System.getProperty("video", String.valueOf(ENABLE_ALL_FILES))); // ? Add video to report
@@ -82,7 +81,11 @@ public class BaseHelper extends BasePage {
         String browserType = System.getProperty("browserType", "CHROME");
 
         Browser browser;
-        BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setDevtools(DEVTOOL).setSlowMo(SLOWDOWN).setHeadless(HEADLESS);
+        BrowserType.LaunchOptions launchOptions = new BrowserType
+                .LaunchOptions()
+                .setDevtools(DEVTOOL)
+                .setSlowMo(SLOWDOWN)
+                .setHeadless(HEADLESS);
         switch (browserType.toUpperCase()) {
             case "CHROME":
                 browser = Playwright.create().chromium().launch(launchOptions.setChannel("chrome"));
@@ -104,13 +107,11 @@ public class BaseHelper extends BasePage {
         }
         return browser;
     }
-
     public static void FOLDER_CREATE_IF_ERROR(ITestResult result, Path errorDirPath) throws IOException {
         if (!result.isSuccess()) {
             Files.createDirectories(errorDirPath);
         }
     }
-
     public static void SCREENSHOT(ITestResult result, Path screenshotPath, Page page) {
         if (!result.isSuccess() && !SCREENSHOT) {
             try {
@@ -135,7 +136,6 @@ public class BaseHelper extends BasePage {
             }
         }
     }
-
     public static void PAGE_SOURCE(ITestResult result, Path pageSourcePath, Page page) {
         if (PAGE && !result.isSuccess()) {
             try {
@@ -150,7 +150,6 @@ public class BaseHelper extends BasePage {
             }
         }
     }
-
     public static void VIDEO(ITestResult result, Path videoPath, Page page) {
         if (VIDEO && !result.isSuccess()) {
             try {
@@ -168,12 +167,11 @@ public class BaseHelper extends BasePage {
             }
         }
     }
-
     public static void DELETING_UNUSED_VIDEO_AND_HAR(ITestResult result, Path harFilePath, Page page) {
         if (result.isSuccess() && (VIDEO || HAR)) {
             try {
                 if (VIDEO) {
-
+                    Allure.step("Delete video files because test passed", () -> {
                         try {
                             Path videoFileName = page.video().path();
                             if (Files.exists(videoFileName)) {
@@ -182,10 +180,10 @@ public class BaseHelper extends BasePage {
                         } catch (IOException e) {
                             logger.error("Error while deleting video file: ", e);
                         }
-
+                    });
                 }
                 if (HAR) {
-
+                    Allure.step("Delete HAR files because test passed", () -> {
                         try {
                             if (Files.exists(harFilePath)) {
                                 Files.delete(harFilePath);
@@ -197,14 +195,13 @@ public class BaseHelper extends BasePage {
                         } catch (IOException e) {
                             logger.error("Error while deleting HAR file: ", e);
                         }
-
+                    });
                 }
             } catch (Exception e) {
                 logger.error("Error while deleting video and HAR files: ", e);
             }
         }
     }
-
     public static void HAR(ITestResult result, Path errorDirPath, Path harFilePath) {
         try {
             if (HAR && !result.isSuccess()) {
@@ -220,7 +217,6 @@ public class BaseHelper extends BasePage {
             logger.error("Error while adding HAR file to report: ", e);
         }
     }
-
     public static void ZIP(ITestResult result, Path tracePath, BrowserContext context) {
         try {
             if (TRACE && !result.isSuccess()) {
@@ -234,59 +230,34 @@ public class BaseHelper extends BasePage {
             logger.error("Error while adding trace file to report: ", e);
         }
     }
-
     public static String getParams(ITestResult result) {
         return result.getParameters().length > 0 ? ", with VALUES: " + Arrays.toString(result.getParameters()) : "";
     }
-
     public static Path getErrorDirFolderPath(ITestResult result) {
         return Paths.get("src/test_logs/" + result.getMethod().getMethodName() + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss")));
     }
-
     public void loginVariables() {
         methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
         signOutButton = page.locator("button:has-text('SignOut')");
-
-        List<ElementHandle> divs = page.locator("div").elementHandles();
-        Optional<ElementHandle> errorDiv = divs.stream()
-                .filter(div -> {
-                    try {
-                        return div.innerText().contains("ErrorInvalid login or password");
-                    } catch (Exception e) {
-                        return false;
-                    }
-                })
-                .skip(1) // Skip the first match
-                .findFirst(); // Get the second match
-
-        if (errorDiv.isPresent()) {
-            // errorText is the inner text of the second div with the specified text
-            String errorText = errorDiv.get().innerText();
-        } else {
-            // Handle the case where no matching div was found
-            String errorText = null;
-        }
-
+        errorLocator = page.locator("div").filter(new Locator.FilterOptions().setHasText("ErrorInvalid login or password")).nth(2);
         isErrorPresent = new AtomicBoolean(false);
     }
-
     public void checkIfUserIsLoggedIn(Locator signOutButton) {
-
+        Allure.step("Check if user is already logged in", () -> {
             boolean userIsLoggedIn = signOutButton.count() > 0;
             if (userIsLoggedIn) {
                 signOutButton.first().click();
             }
-
+        });
     }
-
     public void fillEmail(String username, String methodName) {
-
+        Allure.step("Fill in Email address", () -> {
             if (page.isClosed()) {
                 logger.error("Page is closed before email could be filled.");
                 return;
             }
-            page.locator("button:has-text('Login')").click();
-            page.locator("input[placeholder='Email address']").click();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
+            page.getByPlaceholder("Email address").click();
             if (username == null || username.isEmpty()) {
                 logger.error("[{}]: Email address is empty.", methodName);
             } else {
@@ -296,16 +267,15 @@ public class BaseHelper extends BasePage {
                 logger.error("[{}]: Invalid email format error occurred", methodName);
             }
             page.waitForSelector("text=Invalid email format", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(200));
-
+        });
     }
-
     public void fillPassword(String password, String methodName) {
-
+        Allure.step("Fill in Password", () -> {
             if (page.isClosed()) {
                 logger.error("Page is closed before password could be filled.");
                 return;
             }
-            page.locator("input[type='password']").click();
+            page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Password")).click();
             if (password == null || password.isEmpty()) {
                 logger.error("[{}]: Password is empty.", methodName);
             } else {
@@ -315,11 +285,10 @@ public class BaseHelper extends BasePage {
                 logger.error("[{}]: Invalid password format error occurred", methodName);
             }
             page.waitForSelector("text=The password must be at least", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(200));
-
+        });
     }
-
     public void clickSignInButton(String username, String password, String methodName) { //String methodName
-
+        Allure.step("Click on Sign In button", () -> {
             try {
                 ElementHandle signInButton = page.querySelector("button[label='Sign In']");
                 if (signInButton != null && signInButton.isEnabled()) {
@@ -333,11 +302,10 @@ public class BaseHelper extends BasePage {
             } catch (PlaywrightException e) {
                 logger.error("[{}]: Error occurred: {}", methodName, e.getMessage());
             }
-
+        });
     }
-
     public void checkLoginStatus(Locator errorLocator, AtomicBoolean isErrorPresent, String username, String password, boolean expectedLoginStatus, String methodName) {
-
+        Allure.step("Check login status", () -> {
             try {
                 page.waitForSelector("div:has-text('ErrorInvalid login or password')", new Page.WaitForSelectorOptions().setTimeout(1000));
                 if (errorLocator.count() > 0) {
@@ -352,6 +320,6 @@ public class BaseHelper extends BasePage {
                 logger.error("[{}]: Login status is not as expected. Expected login status: [{}]. Error is present on Login Page?: [{}]. User [{}]. Password [{}]", methodName, expectedLoginStatus, !actualLoginStatus, username, password);
                 fail("Login status is not as expected.\nExpected login status: [" + expectedLoginStatus + "]\nError is present on Login Page?: [" + !actualLoginStatus + "]\nUser [" + username + "]\nPassword [" + password + "]");
             }
-
+        });
     }
 }
