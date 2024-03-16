@@ -28,7 +28,7 @@ task playwrightInstall(type: Exec) {
 dependencies {
     implementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.2'
     implementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.2'
-    implementation group: 'com.microsoft.playwright', name: 'playwright', version: '1.42.0'
+    implementation group: 'com.microsoft.playwright', name: 'playwright', version: '1.42.1'
     implementation group: 'org.testng', name: 'testng', version: '7.9.0'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.3'
     implementation group: 'junit', name: 'junit', version: '4.13.2'
