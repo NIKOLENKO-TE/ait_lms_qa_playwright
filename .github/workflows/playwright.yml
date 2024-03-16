@@ -18,6 +18,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
       - name: List Directory Contents
         run: Get-ChildItem -Recurse
       - name: Build & Install
