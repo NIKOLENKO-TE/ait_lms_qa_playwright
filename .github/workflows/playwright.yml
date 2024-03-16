@@ -27,7 +27,7 @@ jobs:
       - name: Build & Install
         run: .\gradlew build -x test --no-build-cache
       - name: Install Playwright
-        run: npm install playwright@1.42.1
+        run: npm install playwright@1.42.0
       - name: Check Playwright version
         run: npx playwright --version
       - name: Check Gradle version
