@@ -27,7 +27,7 @@ jobs:
       - name: Build & Install
         run: .\gradlew build -x test --no-build-cache
       - name: Install Playwright
-        run: .\gradlew playwrightInstall
+        run: npm install playwright
       - name: Run tests
         run: .\gradlew test
       - name: Archive test results
