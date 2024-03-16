@@ -8,13 +8,13 @@ import io.qameta.allure.Allure;
 import lms_pages.BaseHelper;
 import lms_pages.BasePage;
 import lms_pages.UI.HomePage;
-import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 
 import java.io.IOException;
 import java.lang.annotation.ElementType;
@@ -38,7 +38,7 @@ public class BaseTest {
     BasePage basePage = new BasePage(page);
     public static Logger logger = LoggerFactory.getLogger(BaseTest.class);
 
-    @BeforeAll
+    @BeforeSuite
     public static void setUp() {
         browser = BaseHelper.setupBrowser();
     }

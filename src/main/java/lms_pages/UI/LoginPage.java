@@ -7,8 +7,7 @@ import io.qameta.allure.Allure;
 import lms_pages.BaseHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.junit.jupiter.api.Assertions.fail;
+import org.testng.Assert;
 
 public class LoginPage {
 
@@ -85,7 +84,7 @@ public void login(Object credentials, boolean expectedLoginStatus) {
                 }
                 logger.error("[{}]: {}", methodName, userIsLoggedIn ? "User is logged in." : "User is not logged in.");
                 if (userIsLoggedIn != expectedLoginStatus) {
-                    fail("\nUser logged in status is not expected.\nExpected logged in status: [" + expectedLoginStatus + "]\nActual logged in status: [" + userIsLoggedIn + "]");
+                    Assert.fail("\nUser logged in status is not expected.\nExpected logged in status: [" + expectedLoginStatus + "]\nActual logged in status: [" + userIsLoggedIn + "]");
                 }
             } catch (TimeoutError e) {
                 logger.error("{}: Error occurred: [{}]\nUser is not logged in.", methodName, e.getMessage());

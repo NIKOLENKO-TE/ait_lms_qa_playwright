@@ -3,11 +3,7 @@ package lms_pages;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.TimeoutError;
 import io.qameta.allure.Allure;
-import junit.framework.AssertionFailedError;
 import org.testng.Assert;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class BasePage {
     protected Page page;
@@ -42,19 +38,17 @@ public class BasePage {
                 try {
                     if (response.url() != null && response.url().equals(url)) {
                         int actualStatusCode = response.status();
-                        assertEquals(response.request().method(), responseMethod, "\nExpected response code:" + expectedStatusCode + ", the actual response code is:" + actualStatusCode);
-                        org.junit.Assert.assertEquals(expectedResult, (actualStatusCode == expectedStatusCode));
+                        Assert.assertEquals(response.request().method(), responseMethod, "\nExpected response code:" + expectedStatusCode + ", the actual response code is:" + actualStatusCode);
+                        Assert.assertEquals(expectedResult, (actualStatusCode == expectedStatusCode));
                     }
                 } catch (NullPointerException e) {
-                    fail("NullPointerException: " + e.getMessage());
-                } catch (AssertionFailedError e) {
-                    fail("AssertionFailedError: " + e.getMessage());
+                    Assert.fail("NullPointerException: " + e.getMessage());
                 } catch (TimeoutError | AssertionError e) {
-                    fail("\nExpected response code from the server: [" + expectedStatusCode + "], and the expected result: [" + expectedResult + "]\nTimeoutError: " + e.getMessage());
+                    Assert.fail("\nExpected response code from the server: [" + expectedStatusCode + "], and the expected result: [" + expectedResult + "]\nTimeoutError: " + e.getMessage());
                 } catch (Exception e) {
-                    fail("Exception: " + e.getMessage());
+                    Assert.fail("Exception: " + e.getMessage());
                 } catch (Throwable e) {
-                    fail("Throwable: " + e.getMessage());
+                    Assert.fail("Throwable: " + e.getMessage());
                 }
             });
         });

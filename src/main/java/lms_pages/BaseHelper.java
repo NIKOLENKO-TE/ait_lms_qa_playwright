@@ -7,6 +7,7 @@ import io.qameta.allure.Allure;
 import lms_pages.UI.LoginPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 import org.testng.ITestResult;
 
 import java.io.ByteArrayInputStream;
@@ -18,8 +19,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class BaseHelper extends BasePage {
     static Logger logger = LoggerFactory.getLogger(LoginPage.class);
@@ -318,7 +317,7 @@ public class BaseHelper extends BasePage {
             boolean actualLoginStatus = !isErrorPresent.get();
             if (actualLoginStatus != expectedLoginStatus) {
                 logger.error("[{}]: Login status is not as expected. Expected login status: [{}]. Error is present on Login Page?: [{}]. User [{}]. Password [{}]", methodName, expectedLoginStatus, !actualLoginStatus, username, password);
-                fail("Login status is not as expected.\nExpected login status: [" + expectedLoginStatus + "]\nError is present on Login Page?: [" + !actualLoginStatus + "]\nUser [" + username + "]\nPassword [" + password + "]");
+                Assert.fail("Login status is not as expected.\nExpected login status: [" + expectedLoginStatus + "]\nError is present on Login Page?: [" + !actualLoginStatus + "]\nUser [" + username + "]\nPassword [" + password + "]");
             }
         });
     }
