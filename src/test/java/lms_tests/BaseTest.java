@@ -88,24 +88,6 @@ public class BaseTest {
         }
     }
 
-    // Задаём аннотации для тест-кейсов
-//    @Retention(RetentionPolicy.RUNTIME)
-//    @Target(ElementType.METHOD)
-//    public @interface TestCaseID {
-//        String value();
-//    }
-
-    // Задаём аннотации для сценрия тестов
-//    @Retention(RetentionPolicy.RUNTIME)
-//    @Target(ElementType.METHOD)
-//    public @interface TestType {
-//        enum Type {
-//            POSITIVE, NEGATIVE
-//        }
-//
-//        Type value();
-//    }
-
     @AfterSuite
     public void TEAR_DOWN() {
         Allure.step("Closing the browser context and browser after all tests in the class are executed", () -> {
