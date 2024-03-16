@@ -14,11 +14,11 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
       - name: Build & Install
-        run: ./gradlew install --no-transfer-progress
+        run: mvn -B install -D skipTests --no-transfer-progress
       - name: Install Playwright
-        run: npx playwright install --with-deps
+        run: mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install --with-deps"
       - name: Run tests
-        run: ./gradlew test
+        run: mvn test
       - name: Archive test results
         uses: actions/upload-artifact@v3
         if: always()
