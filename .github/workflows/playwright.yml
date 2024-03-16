@@ -1,9 +1,9 @@
 name: Java CI with Gradle Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -14,10 +14,13 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
       - name: Build & Install
-        run: mvn -B install -D skipTests --no-transfer-progress
+        working-directory: path/to/your/maven/project
+        run: mvn -B install -DskipTests --no-transfer-progress
       - name: Install Playwright
-        run: mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install --with-deps"
+        working-directory: path/to/your/maven/project
+        run: mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install --with-deps"
       - name: Run tests
+        working-directory: path/to/your/maven/project
         run: mvn test
       - name: Archive test results
         uses: actions/upload-artifact@v3
