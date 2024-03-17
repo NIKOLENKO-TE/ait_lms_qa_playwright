@@ -63,9 +63,7 @@ jobs:
           git config --global user.name "GitHub Actions"
           git checkout gh-pages
           git rm -rf ./*
-        # Удалить все файлы в ветке gh-pages
           git checkout master src/test_logs/ALLURE_REPORT_OFFLINE/* 
-        # Переместить файлы отчета на ветку gh-pages
           git add .
           git commit -m "Deploy Allure report to GitHub Pages"
           git push -f origin gh-pages
