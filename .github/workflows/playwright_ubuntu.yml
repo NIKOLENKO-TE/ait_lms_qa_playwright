@@ -1,4 +1,4 @@
-name: Java CI with Gradle [WINDOWS] Playwright Tests
+name: Java CI with Gradle [UBUNTU] Playwright Tests
 on:
   push:
     branches: [ main, master ]
@@ -66,15 +66,15 @@ jobs:
           path: |
             build/reports/tests/test/*
       # Создание отчета Allure-offline
-      - name: List files in ALLURE_REPORT_OFFLINE directory
-        run: ls -R src/test_logs/ALLURE_REPORT_OFFLINE/
-      - name: Archive [Allure reports]
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: allure-report-offline
-          path: |
-            src/test_logs/ALLURE_REPORT_OFFLINE/
+#      - name: List files in ALLURE_REPORT_OFFLINE directory
+#        run: ls -R src/test_logs/ALLURE_REPORT_OFFLINE/
+#      - name: Archive [Allure reports]
+#        uses: actions/upload-artifact@v4
+#        if: always()
+#        with:
+#          name: allure-report-offline
+#          path: |
+#            src/test_logs/ALLURE_REPORT_OFFLINE/
       # Создание архива с файлами упавших тестов
       - name: Archive [Allure attachments for failed tests]
         uses: actions/upload-artifact@v4
@@ -83,14 +83,6 @@ jobs:
           name: allure-attachments for failed tests
           path: |
             src/test_logs/*
-      # Load test report history
-#      - name: Load test report history
-#        uses: actions/checkout@v3
-#        if: always()
-#        continue-on-error: true
-#        with:
-#          ref: gh-pages
-#          path: gh-pages
       # Build test report
       - name: Build test report
         uses: simple-elf/allure-report-action@v1.7
