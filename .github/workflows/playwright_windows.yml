@@ -41,6 +41,24 @@ jobs:
         run: npm install playwright@1.42.0
       - name: Check Playwright version
         run: npx playwright --version
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwoff1 \
+                                  libopus0 \
+                                  libwebp6 \
+                                  libwebpdemux2 \
+                                  libenchant1c2a \
+                                  libgudev-1.0-0 \
+                                  libsecret-1-0 \
+                                  libhyphen0 \
+                                  libgdk-pixbuf2.0-0 \
+                                  libegl1 \
+                                  libnotify4 \
+                                  libxslt1.1 \
+                                  libevent-2.1-6 \
+                                  libgles2 \
+                                  libvpx5
       # Установка Allure
       - name: Install Allure
         run: npm install -g allure-commandline
