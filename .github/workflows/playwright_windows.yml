@@ -57,13 +57,6 @@ jobs:
           name: allure-reports
           path: |
             build/allure-report/*
-      - name: Archive [Allure attachments]
-        uses: actions/upload-artifact@v4 # обновлено до v4
-        if: always()
-        with:
-          name: allure-attachments
-          path: |
-            build/allure-report/data/attachments/*
       - name: Archive [Allure attachments for failed tests]
         uses: actions/upload-artifact@v4
         if: always()
