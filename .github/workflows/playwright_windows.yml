@@ -62,9 +62,3 @@ jobs:
           name: allure-attachments
           path: |
             build/allure-report/data/attachments/*
-      - name: Build test report
-        uses: simple-elf/allure-report-action@v1.7
-        if: always()
-        with:
-          allure_history: allure-history
-          allure_results: build/allure-results
