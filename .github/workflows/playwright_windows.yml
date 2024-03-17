@@ -37,10 +37,12 @@ jobs:
         run: npm install playwright@1.42.0
       - name: Check Playwright version
         run: npx playwright --version
-      - name: /////// List Directories ///////
+      - name: /////// List Directories before tests ///////
         run: Get-ChildItem -Recurse
       - name: ~~~~~~~ Run tests ~~~~~~~
         run: .\gradlew test
+      - name: /////// List Directories after tests ///////
+        run: Get-ChildItem -Recurse
       - name: Archive [test results]
         uses: actions/upload-artifact@v4 # обновлено до v4
         if: always()
