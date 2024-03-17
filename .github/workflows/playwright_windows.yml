@@ -60,8 +60,7 @@ jobs:
         with:
           name: allure-report-offline
           path: |
-            build/allure-report/*
-            src/test_logs/ALLURE_REPORT_OFFLINE/*
+            src/test_logs/ALLURE_REPORT_OFFLINE/
       - name: Archive [Allure attachments for failed tests]
         uses: actions/upload-artifact@v4
         if: always()
