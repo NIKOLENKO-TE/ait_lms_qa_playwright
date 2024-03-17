@@ -64,6 +64,8 @@ jobs:
           path: |
             build/reports/tests/test/*
       # Создание отчета Allure-offline
+      - name: List files in ALLURE_REPORT_OFFLINE directory
+        run: ls -R src/test_logs/ALLURE_REPORT_OFFLINE/
       - name: Archive [Allure reports]
         uses: actions/upload-artifact@v4 # обновлено до v4
         if: always()
