@@ -51,7 +51,7 @@ jobs:
         run: ls -R # Изменено с Get-ChildItem -Recurse на ls -R
       # Запуск тестов
       - name: ~~~~~~~ Run tests ~~~~~~~
-        run: ./gradlew test # Изменено с .\gradlew на ./gradlew
+        run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew test
       # Список папок после тестов
       - name: List Directories after tests
         run: ls -R # Изменено с Get-ChildItem -Recurse на ls -R
