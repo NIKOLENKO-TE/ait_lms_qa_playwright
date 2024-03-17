@@ -25,7 +25,7 @@ jobs:
       - name: Check Java Core version
         run: javac -version
       #// !  Установка Node.js
-      - name: Install Node version "19"
+      - name: Install Node version "21"
         uses: actions/setup-node@v4
         with:
           node-version: '21'
@@ -38,6 +38,11 @@ jobs:
         run: ./gradlew --version
       - name: Clean Gradle build
         run: ./gradlew clean
+      #// ! Установка зависимостей для Playwright
+      - name: Install Playwright dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwoff2dec1 libvpx6 libevent-2.1-7 libopus0 libharfbuzz-icu0 libgstreamer-plugins-base1.0-0 libgstreamer1.0-0 libgstreamer-gl1.0-0 libgstreamer-plugins-bad1.0-0 libhyphen0 libmanette-0.2-0 libflite1 libgles2 libx264-160
       #// !  Установка Playwright
       - name: Install Playwright version "1.42.0"
         run: npm install playwright@1.42.0
@@ -51,7 +56,7 @@ jobs:
       #// !  Список папок до тестов
       - name: List Directories before tests
         if: always()
-        run:  ls -R
+        run: ls -R
       #// !  Запуск тестов
       - name: ~~~~~~~ Run tests ~~~~~~~
         run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew test
