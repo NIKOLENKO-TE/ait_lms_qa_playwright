@@ -6,7 +6,7 @@ on:
     branches: [main, master]
 jobs:
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       # Установка Java
@@ -30,17 +30,17 @@ jobs:
       - name: Check Node version
         run: node --version
       - name: /////// Install Gradle version "8.6" ///////
-        run: .\gradlew build -x test --no-build-cache
+        run: ./gradlew build -x test --no-build-cache
       - name: Check Gradle version
-        run: .\gradlew --version
+        run: ./gradlew --version
       - name: /////// Install Playwright version "1.42.0" ///////
         run: npm install playwright@1.42.0
       - name: Check Playwright version
         run: npx playwright --version
       - name: /////// List Directories ///////
-        run: Get-ChildItem -Recurse
+        run: ls -R
       - name: ~~~~~~~ Run tests ~~~~~~~
-        run: .\gradlew test
+        run: ./gradlew test
       - name: Archive [test results]
         uses: actions/upload-artifact@v4 # обновлено до v4
         if: always()
@@ -62,3 +62,10 @@ jobs:
           name: allure-attachments
           path: |
             build/allure-report/data/attachments/*
+      - name: Build test report
+        uses: simple-elf/allure-report-action@v1.7
+        if: always()
+        with:
+          gh_pages: gh-pages
+          allure_history: allure-history
+          allure_results: build/allure-results
