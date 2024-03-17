@@ -55,15 +55,16 @@ jobs:
       # Список папок после тестов
       - name: List Directories after tests
         run: Get-ChildItem -Recurse
-    # Загрузка отчета Allure в GitHub Pages
+      # Загрузка отчета Allure в GitHub Pages
       - name: Deploy to GitHub Pages
         if: always()
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-          git checkout -b gh-pages
-          Move-Item -Path src\test_logs\ALLURE_REPORT_OFFLINE\* -Destination . -Force
-          git add src/test_logs/ALLURE_REPORT_OFFLINE/*
+          git checkout gh-pages
+          git rm -rf ./* # Удалить все файлы в ветке gh-pages
+          git checkout master src/test_logs/ALLURE_REPORT_OFFLINE/* # Переместить файлы отчета на ветку gh-pages
+          git add .
           git commit -m "Deploy Allure report to GitHub Pages"
           git push -f origin gh-pages
       # Создание отчетоа Playwright
