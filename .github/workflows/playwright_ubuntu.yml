@@ -42,23 +42,8 @@ jobs:
       - name: Install Playwright dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y 
-          libwoff1 \
-          libopus0 \
-          libwebp6 \
-          libwebpdemux2 \
-          libenchant1c2a \
-          libgudev-1.0-0 \
-          libsecret-1-0 \
-          libhyphen0 \
-          libgdk-pixbuf2.0-0 \
-          libegl1 \
-          libnotify4 \
-          libxslt1.1 \
-          libevent-2.1-6 \
-          libgles2 \
-          libvpx5
-      #// !  Установка Playwright
+          sudo apt-get install -y libwoff2dec1 libvpx6 libevent-2.1-7 libopus0 libharfbuzz-icu0 libgstreamer-plugins-base1.0-0 libgstreamer1.0-0 libgstreamer-gl1.0-0 libgstreamer-plugins-bad1.0-0 libhyphen0 libmanette-0.2-0 libflite1 libgles2 libx264-160
+        #// !  Установка Playwright
       - name: Install Playwright version "1.42.0"
         run: npm install playwright@1.42.0
       - name: Check Playwright version
