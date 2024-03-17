@@ -75,7 +75,6 @@ public class BaseHelper extends BasePage {
         }
         return browser;
     }
-
     public static Browser setupBrowser() {
         String browserType = System.getProperty("browserType", "CHROME");
 

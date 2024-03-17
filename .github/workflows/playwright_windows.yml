@@ -1,4 +1,4 @@
-name: Java CI with Gradle Playwright Tests
+name: Java CI with Gradle [WINDOWS] Playwright Tests
 on:
   push:
     branches: [main, master]
@@ -66,13 +66,13 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: allure-attachments
+          name: allure-attachments for failed tests
           path: |
             src/test_logs/*
       - name: Archive [Allure attachments for all tests]
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: allure-attachments
+          name: allure-attachments for all tests
           path: |
             src/test_logs/*
