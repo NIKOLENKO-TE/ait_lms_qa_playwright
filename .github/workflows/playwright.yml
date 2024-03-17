@@ -54,4 +54,4 @@ jobs:
         with:
           name: allure-reports
           path: |
-            build/allure-report/*
+            build/allure-results/*
