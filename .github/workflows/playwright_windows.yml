@@ -1,9 +1,9 @@
 name: Java CI with Gradle [WINDOWS] Playwright Tests
 on:
   push:
-    branches: [main, master]
+    branches: [ main, master ]
   pull_request:
-    branches: [main, master]
+    branches: [ main, master ]
 jobs:
   test:
     runs-on: windows-latest
@@ -17,36 +17,45 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+      # Проверка версий Java, JVM, Java Core
       - name: Check Java version
         run: java -version
       - name: Check JVM version
         run: echo $JAVA_HOME
       - name: Check Java Core version
         run: javac -version
-      - name: ///////  Install Node version "20.11.1" ///////
+      # Установка Node.js
+      - name: Install Node version "20.11.1"
         uses: actions/setup-node@v4 # обновлено до v4
         with:
           node-version: '20.11.1'
       - name: Check Node version
         run: node --version
-      - name: /////// Install Gradle version "8.6" ///////
+      # Установка Gradle
+      - name: Install Gradle version "8.6"
         run: .\gradlew build -x test --no-build-cache
       - name: Check Gradle version
         run: .\gradlew --version
-      - name: /////// Install Playwright version "1.42.0" ///////
+      # Установка Playwright
+      - name: Install Playwright version "1.42.0"
         run: npm install playwright@1.42.0
       - name: Check Playwright version
         run: npx playwright --version
-      - name: /////// Install Allure ///////
+      # Установка Allure
+      - name: Install Allure
         run: npm install -g allure-commandline
       - name: Check Allure version
         run: allure --version
-      - name: /////// List Directories before tests ///////
+      # Список папок до тестов
+      - name: List Directories before tests
         run: Get-ChildItem -Recurse
+      # Запуск тестов
       - name: ~~~~~~~ Run tests ~~~~~~~
         run: .\gradlew test
-      - name: /////// List Directories after tests ///////
+      # Список папок после тестов
+      - name: List Directories after tests
         run: Get-ChildItem -Recurse
+      # Загрузка отчета Allure в GitHub Pages
       - name: Deploy to GitHub Pages
         if: always()
         run: |
@@ -57,6 +66,7 @@ jobs:
           git add .
           git commit -m "Deploy Allure report to GitHub Pages"
           git push -f origin gh-pages
+      # Создание отчетоа Playwright
       - name: Archive [test results]
         uses: actions/upload-artifact@v4 # обновлено до v4
         if: always()
@@ -64,6 +74,7 @@ jobs:
           name: playwright-results
           path: |
             build/reports/tests/test/*
+      # Создание отчета Allure-offline
       - name: Archive [Allure reports]
         uses: actions/upload-artifact@v4 # обновлено до v4
         if: always()
@@ -71,6 +82,7 @@ jobs:
           name: allure-report-offline
           path: |
             src/test_logs/ALLURE_REPORT_OFFLINE/
+      # Создание архива с файлами упавших тестов
       - name: Archive [Allure attachments for failed tests]
         uses: actions/upload-artifact@v4
         if: always()
