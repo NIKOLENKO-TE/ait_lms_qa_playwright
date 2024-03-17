@@ -47,6 +47,15 @@ jobs:
         run: .\gradlew test
       - name: /////// List Directories after tests ///////
         run: Get-ChildItem -Recurse
+      - name: Deploy to GitHub Pages
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git checkout -b gh-pages
+          Move-Item -Path src\test_logs\ALLURE_REPORT_OFFLINE\* -Destination . -Force
+          git add .
+          git commit -m "Deploy Allure report to GitHub Pages"
+          git push -f origin gh-pages
       - name: Archive [test results]
         uses: actions/upload-artifact@v4 # обновлено до v4
         if: always()
@@ -68,12 +77,3 @@ jobs:
           name: allure-attachments for failed tests
           path: |
             src/test_logs/*
-      - name: Deploy to GitHub Pages
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git checkout -b gh-pages
-          Move-Item -Path src\test_logs\ALLURE_REPORT_OFFLINE\* -Destination . -Force
-          git add .
-          git commit -m "Deploy Allure report to GitHub Pages"
-          git push -f origin gh-pages
