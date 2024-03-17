@@ -50,13 +50,13 @@ jobs:
         run: allure --version
       #// !  Список папок до тестов
       - name: List Directories before tests
-        run:  Get-ChildItem -Recurse #ls -R
+        run:  ls -R
       #// !  Запуск тестов
       - name: ~~~~~~~ Run tests ~~~~~~~
         run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew test
       #// !  Список папок после тестов
       - name: List Directories after tests
-        run: Get-ChildItem -Recurse #ls -R
+        run: ls -R
       #// ! Создание отчетоа Playwright
       - name: Archive [test results]
         uses: actions/upload-artifact@v4
