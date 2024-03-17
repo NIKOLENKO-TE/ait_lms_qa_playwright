@@ -118,7 +118,7 @@ public class BaseTest {
                 context.close();
             }
             browser.close();
-            GENERATE_OFFLINE_ALLURE_REPORT(page);
+           // GENERATE_OFFLINE_ALLURE_REPORT(page);
         }
     }
 

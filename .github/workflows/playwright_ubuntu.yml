@@ -6,14 +6,14 @@ on:
     branches: [ main, master ]
 jobs:
   test:
-    runs-on: ubuntu-latest # Изменено с windows-latest на ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       # Установка Java
       - name: Set execute permission for gradlew
-        run: chmod +x gradlew # Изменено с git update-index --chmod=+x gradlew на chmod +x gradlew
-      - name: /////// Install Java version "21" ///////
-        uses: actions/setup-java@v4 # обновлено до v4
+        run: chmod +x gradlew
+      - name: Install Java version "21"
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
@@ -26,16 +26,18 @@ jobs:
         run: javac -version
       # Установка Node.js
       - name: Install Node version "20.11.1"
-        uses: actions/setup-node@v4 # обновлено до v4
+        uses: actions/setup-node@v4
         with:
           node-version: '20.11.1'
       - name: Check Node version
         run: node --version
       # Установка Gradle
       - name: Install Gradle version "8.6"
-        run: ./gradlew build -x test --no-build-cache # Изменено с .\gradlew на ./gradlew
+        run: ./gradlew build -x test --no-build-cache
       - name: Check Gradle version
-        run: ./gradlew --version # Изменено с .\gradlew на ./gradlew
+        run: ./gradlew --version
+      - name: Clean Gradle build
+        run: ./gradlew clean
       # Установка Playwright
       - name: Install Playwright version "1.42.0"
         run: npm install playwright@1.42.0
@@ -48,16 +50,16 @@ jobs:
         run: allure --version
       # Список папок до тестов
       - name: List Directories before tests
-        run: ls -R # Изменено с Get-ChildItem -Recurse на ls -R
+        run: ls -R
       # Запуск тестов
       - name: ~~~~~~~ Run tests ~~~~~~~
         run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew test
       # Список папок после тестов
       - name: List Directories after tests
-        run: ls -R # Изменено с Get-ChildItem -Recurse на ls -R
+        run: ls -R
       # Создание отчетоа Playwright
       - name: Archive [test results]
-        uses: actions/upload-artifact@v4 # обновлено до v4
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-results
@@ -67,7 +69,7 @@ jobs:
       - name: List files in ALLURE_REPORT_OFFLINE directory
         run: ls -R src/test_logs/ALLURE_REPORT_OFFLINE/
       - name: Archive [Allure reports]
-        uses: actions/upload-artifact@v4 # обновлено до v4
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: allure-report-offline
@@ -82,13 +84,13 @@ jobs:
           path: |
             src/test_logs/*
       # Load test report history
-      - name: Load test report history
-        uses: actions/checkout@v3
-        if: always()
-        continue-on-error: true
-        with:
-          ref: gh-pages
-          path: gh-pages
+#      - name: Load test report history
+#        uses: actions/checkout@v3
+#        if: always()
+#        continue-on-error: true
+#        with:
+#          ref: gh-pages
+#          path: gh-pages
       # Build test report
       - name: Build test report
         uses: simple-elf/allure-report-action@v1.7
