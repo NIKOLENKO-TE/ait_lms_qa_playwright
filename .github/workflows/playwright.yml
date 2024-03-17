@@ -48,12 +48,8 @@ jobs:
           name: playwright-results
           path: |
             build/reports/tests/test/*
-      - name: Generate Allure report
-        run: allure generate build/allure-results --clean -o build/allure-report
-      - name: Archive [Allure report]
-        uses: actions/upload-artifact@v4
-        if: always()
+      - name: Allure Report with history
+        uses: simple-elf/allure-report-action@v1.9
         with:
-          name: allure-report
-          path: |
-            build/allure-report/*
+          allure_results: build/allure-results
+          allure_report: build/allure-report
