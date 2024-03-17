@@ -48,13 +48,13 @@ jobs:
           name: playwright-results
           path: |
             build/reports/tests/test/*
-#      - name: Allure Report with history
-#        uses: simple-elf/allure-report-action@v1.9
-#        with:
-#          allure_results: build/allure-results
-#          allure_report: build/allure-report
+      - name: Allure Report with history
+        uses: simple-elf/allure-report-action@v1.9
+        with:
+          allure_results: build/allure-results
+          allure_report: build/allure-report
       - name: Allure Report Upload for GitHub Actions
         uses: ALJAZEERAPLUS/allure-report-upload-action@v1.2
         with:
           allure-results-dir: 'build/allure-results'
-          allure-project-id: 'id'
+          allure-project-id: ''
