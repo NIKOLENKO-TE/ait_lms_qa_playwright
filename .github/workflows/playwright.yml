@@ -48,13 +48,17 @@ jobs:
           name: playwright-results
           path: |
             build/reports/tests/test/*
-      - name: Allure Report with history
-        uses: simple-elf/allure-report-action@v1.9
+      - name: Archive [Allure reports]
+        uses: actions/upload-artifact@v4 # обновлено до v4
+        if: always()
         with:
-          allure_results: build/allure-results
-          allure_report: build/allure-report
-      - name: Allure Report Upload for GitHub Actions
-        uses: ALJAZEERAPLUS/allure-report-upload-action@v1.2
+          name: allure-reports
+          path: |
+            build/allure-report/*
+      - name: Archive [Allure attachments]
+        uses: actions/upload-artifact@v4 # обновлено до v4
+        if: always()
         with:
-          allure-results-dir: 'build/allure-results'
-          allure-project-id: ''
+          name: allure-attachments
+          path: |
+            build/allure-report/data/attachments/*
