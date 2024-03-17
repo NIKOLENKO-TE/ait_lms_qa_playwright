@@ -11,6 +11,7 @@ import org.testng.Assert;
 import org.testng.ITestResult;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,6 +38,7 @@ public class BaseHelper extends BasePage {
     public static boolean VIDEO = Boolean.parseBoolean(System.getProperty("video", String.valueOf(ENABLE_ALL_FILES))); // ? Add video to report
     public static boolean PAGE = Boolean.parseBoolean(System.getProperty("page", String.valueOf(ENABLE_ALL_FILES))); // ? Add page source code to report
     public static boolean HAR = Boolean.parseBoolean(System.getProperty("har", String.valueOf(ENABLE_ALL_FILES))); // ? Add a HAR file to the report
+    public static boolean ENABLE_OFFLINE_REPORT = Boolean.parseBoolean(System.getProperty("allure_report_offline", String.valueOf(true)));
 
     public BaseHelper(Page page) {
         super(page);
@@ -75,6 +77,7 @@ public class BaseHelper extends BasePage {
         }
         return browser;
     }
+
     public static Browser setupBrowser() {
         String browserType = System.getProperty("browserType", "CHROME");
 
@@ -105,11 +108,13 @@ public class BaseHelper extends BasePage {
         }
         return browser;
     }
+
     public static void FOLDER_CREATE_IF_ERROR(ITestResult result, Path errorDirPath) throws IOException {
         if (!result.isSuccess()) {
             Files.createDirectories(errorDirPath);
         }
     }
+
     public static void SCREENSHOT(ITestResult result, Path screenshotPath, Page page) {
         if (!result.isSuccess() && !SCREENSHOT) {
             try {
@@ -134,6 +139,7 @@ public class BaseHelper extends BasePage {
             }
         }
     }
+
     public static void PAGE_SOURCE(ITestResult result, Path pageSourcePath, Page page) {
         if (PAGE && !result.isSuccess()) {
             try {
@@ -148,6 +154,7 @@ public class BaseHelper extends BasePage {
             }
         }
     }
+
     public static void VIDEO(ITestResult result, Path videoPath, Page page) {
         if (VIDEO && !result.isSuccess()) {
             try {
@@ -165,6 +172,7 @@ public class BaseHelper extends BasePage {
             }
         }
     }
+
     public static void DELETING_UNUSED_VIDEO_AND_HAR(ITestResult result, Path harFilePath, Page page) {
         if (result.isSuccess() && (VIDEO || HAR)) {
             try {
@@ -200,6 +208,14 @@ public class BaseHelper extends BasePage {
             }
         }
     }
+    public static void createInternetShortcut(String url, Path shortcutPath) {
+        String shortcut = "[InternetShortcut]\nURL=" + url + "\n";
+        try {
+            Files.write(shortcutPath, shortcut.getBytes());
+        } catch (IOException e) {
+            logger.error("Error while creating internet shortcut: ", e);
+        }
+    }
     public static void HAR(ITestResult result, Path errorDirPath, Path harFilePath) {
         try {
             if (HAR && !result.isSuccess()) {
@@ -207,6 +223,8 @@ public class BaseHelper extends BasePage {
                 Files.move(harTempFilePath, errorDirPath.resolve("Har.har"));
                 byte[] harData = Files.readAllBytes(harFilePath);
                 Allure.addAttachment("Har.har", new ByteArrayInputStream(harData));
+                Path shortcutPath = errorDirPath.resolve("Link to HAR Viewer.url");  // * Create a shortcut to the website after saving the HAR file
+                createInternetShortcut("http://www.softwareishard.com/har/viewer/", shortcutPath);
             }
             if (Files.exists(harFilePath)) {
                 logger.info("FILE HAR  : {}", harFilePath.toAbsolutePath());
@@ -215,6 +233,7 @@ public class BaseHelper extends BasePage {
             logger.error("Error while adding HAR file to report: ", e);
         }
     }
+
     public static void ZIP(ITestResult result, Path tracePath, BrowserContext context) {
         try {
             if (TRACE && !result.isSuccess()) {
@@ -223,23 +242,30 @@ public class BaseHelper extends BasePage {
                 if (Files.exists(tracePath)) {
                     logger.info("FILE TRACE: {}", tracePath.toAbsolutePath());
                 }
+                // Создание ярлыка в папке для упавшего теста
+                Path shortcutPath = tracePath.getParent().resolve("Link to TRACE Viewer.url");
+                createInternetShortcut("https://trace.playwright.dev/", shortcutPath);
             }
         } catch (Exception e) {
             logger.error("Error while adding trace file to report: ", e);
         }
     }
+
     public static String getParams(ITestResult result) {
         return result.getParameters().length > 0 ? ", with VALUES: " + Arrays.toString(result.getParameters()) : "";
     }
+
     public static Path getErrorDirFolderPath(ITestResult result) {
         return Paths.get("src/test_logs/" + result.getMethod().getMethodName() + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss")));
     }
+
     public void loginVariables() {
         methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
         signOutButton = page.locator("button:has-text('SignOut')");
         errorLocator = page.locator("div").filter(new Locator.FilterOptions().setHasText("ErrorInvalid login or password")).nth(2);
         isErrorPresent = new AtomicBoolean(false);
     }
+
     public void checkIfUserIsLoggedIn(Locator signOutButton) {
         Allure.step("Check if user is already logged in", () -> {
             boolean userIsLoggedIn = signOutButton.count() > 0;
@@ -248,6 +274,7 @@ public class BaseHelper extends BasePage {
             }
         });
     }
+
     public void fillEmail(String username, String methodName) {
         Allure.step("Fill in Email address", () -> {
             if (page.isClosed()) {
@@ -267,6 +294,7 @@ public class BaseHelper extends BasePage {
             page.waitForSelector("text=Invalid email format", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(200));
         });
     }
+
     public void fillPassword(String password, String methodName) {
         Allure.step("Fill in Password", () -> {
             if (page.isClosed()) {
@@ -285,6 +313,7 @@ public class BaseHelper extends BasePage {
             page.waitForSelector("text=The password must be at least", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(200));
         });
     }
+
     public void clickSignInButton(String username, String password, String methodName) { //String methodName
         Allure.step("Click on Sign In button", () -> {
             try {
@@ -302,6 +331,7 @@ public class BaseHelper extends BasePage {
             }
         });
     }
+
     public void checkLoginStatus(Locator errorLocator, AtomicBoolean isErrorPresent, String username, String password, boolean expectedLoginStatus, String methodName) {
         Allure.step("Check login status", () -> {
             try {
@@ -317,6 +347,27 @@ public class BaseHelper extends BasePage {
             if (actualLoginStatus != expectedLoginStatus) {
                 logger.error("[{}]: Login status is not as expected. Expected login status: [{}]. Error is present on Login Page?: [{}]. User [{}]. Password [{}]", methodName, expectedLoginStatus, !actualLoginStatus, username, password);
                 Assert.fail("Login status is not as expected.\nExpected login status: [" + expectedLoginStatus + "]\nError is present on Login Page?: [" + !actualLoginStatus + "]\nUser [" + username + "]\nPassword [" + password + "]");
+            }
+        });
+    }
+
+    public static void GENERATE_OFFLINE_ALLURE_REPORT(Page page) {
+        Allure.step("Generating offline Allure report", () -> {
+            if (ENABLE_OFFLINE_REPORT) {
+                try {
+                    String command = "node_modules/.bin/allure.cmd generate build/allure-results -o src/test_logs/ALLURE_REPORT_OFFLINE --clean";
+                    ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
+                    processBuilder.directory(new File(System.getProperty("user.dir")));
+                    Process process = processBuilder.start();
+                    int exitCode = process.waitFor();
+                    if (exitCode == 0) {
+                        logger.info("Offline report generated successfully");
+                    } else {
+                        logger.error("Failed to generate offline report. Exit code: {}", exitCode);
+                    }
+                } catch (IOException | InterruptedException e) {
+                    logger.error("Error while generating offline report: ", e);
+                }
             }
         });
     }

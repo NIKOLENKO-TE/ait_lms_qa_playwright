@@ -82,6 +82,7 @@ public class BaseTest {
         HAR(result, ERROR_DIR, ERROR_DIR.resolve("Har.har"));
         DELETING_UNUSED_VIDEO_AND_HAR(result, ERROR_DIR.resolve("Har.har"), page);
         LOG_END(result, PARAMS, Duration.between(TEST_START_TIME, Instant.now()).toMillis());
+
         page.close();
     }
 
@@ -112,14 +113,13 @@ public class BaseTest {
 
     @AfterSuite
     public void TEAR_DOWN() {
-        Allure.step("Closing the browser context and browser after all tests in the class are executed", () -> {
-            if (browser != null) {
-                for (BrowserContext context : browser.contexts()) {
-                    context.close();
-                }
-                browser.close();
+        if (browser != null) {
+            for (BrowserContext context : browser.contexts()) {
+                context.close();
             }
-        });
+            browser.close();
+            GENERATE_OFFLINE_ALLURE_REPORT(page);
+        }
     }
 
     private void LOG_START(Method method) {

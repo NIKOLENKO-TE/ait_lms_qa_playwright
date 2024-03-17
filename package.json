@@ -7,7 +7,8 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.42.1",
-    "@types/node": "^20.11.25"
+    "@types/node": "^20.11.25",
+    "allure-commandline": "^2.27.0"
   },
   "scripts": {
     "test": "gradlew test"

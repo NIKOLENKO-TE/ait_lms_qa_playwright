@@ -21,6 +21,7 @@ run {
         args project.execArgs.split()
     }
 }
+
 task playwrightInstall(type: Exec) {
     commandLine 'npm', 'install', 'playwright'
 }
@@ -31,7 +32,6 @@ dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.3'
     testImplementation 'io.qameta.allure:allure-testng:2.25.0'
 }
-
 
 test {
     useTestNG()
