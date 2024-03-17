@@ -41,7 +41,7 @@ public class LoginTests extends BaseTest {
     @TestType(NEGATIVE)
     public void LOGIN_STUDENT_NOT_CONFIRMED_WITHOUT_EMAIL() {
         loginPage.login(UserCredentials.STUDENT_NOT_CONFIRMED_WITHOUT_EMAIL, false); // ! false
-        loginPage.isUserLoggedIn(false);
+        loginPage.isUserLoggedIn(!false);
     }
     @Test
     @Feature("Login tests")
@@ -50,7 +50,7 @@ public class LoginTests extends BaseTest {
     @TestType(NEGATIVE)
     public void LOGIN_STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_4() {
         loginPage.login(UserCredentials.STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_4, false); // ! false
-        loginPage.isUserLoggedIn(false);
+        loginPage.isUserLoggedIn(!false);
     }
 
     @Test
