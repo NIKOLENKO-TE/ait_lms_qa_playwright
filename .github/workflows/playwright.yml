@@ -13,8 +13,8 @@ jobs:
       - name: Set execute permission for gradlew
         run: chmod +x gradlew
       - name: /////// Install Java version "21" ///////
-        continueOnError: true
         uses: actions/setup-java@v4 # обновлено до v4
+        if: ${{ always() }}
         with:
           distribution: 'temurin'
           java-version: '21'
