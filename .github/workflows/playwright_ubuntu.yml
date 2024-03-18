@@ -49,7 +49,7 @@ jobs:
       - name: Install Debug "4.3.1"
         run: npm install debug@4.3.1
       - name: Check Debug version
-        run: npx debug --version
+        run: npm list debug
       #// !  Установка Playwright
       - name: Install Playwright version "1.42.0"
         run: npm install playwright@1.42.0
