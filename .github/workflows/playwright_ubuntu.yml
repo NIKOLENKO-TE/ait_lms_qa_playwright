@@ -100,6 +100,14 @@ jobs:
           gh_pages: gh-pages
           allure_history: allure-history
           allure_results: build/allure-results
+
+      #// ! Move Allure report to root directory
+      - name: Move Allure report to root directory
+        run: |
+          REPORT_DIR=$(ls -d allure-history/*/ | head -n 1)
+          mv "$REPORT_DIR"* allure-history/
+          working-directory: allure-history
+
       #// !  Publish test report
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
