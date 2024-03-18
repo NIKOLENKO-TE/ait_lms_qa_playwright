@@ -44,12 +44,21 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libevent-2.1-7 libopus0 libharfbuzz-icu0 libgstreamer-plugins-base1.0-0 libgstreamer1.0-0 libgstreamer-gl1.0-0 libgstreamer-plugins-bad1.0-0 libhyphen0 libmanette-0.2-0 libflite1 libgles2 libwoff1 libvpx7 gstreamer1.0-libav
       #// !  Установка Debug
+      - name: Uninstall old Debug
+        run: npm uninstall debug
       - name: Install Debug "4.3.1"
-        run: npm uninstall debug && npm install debug@4.3.1
+        run: npm install debug@4.3.1
+      - name: Check Debug version
+        run: npx debug --version
       #// !  Установка Playwright
       - name: Install Playwright version "1.42.0"
         run: npm install playwright@1.42.0
       - name: Check Playwright version
+        run: npx playwright --version
+      #// !  Установка браузеров для Playwright
+      - name: Install Playwright browsers
+        run: npx playwright install chrome
+      - name: Check installed Playwright browsers versions
         run: npx playwright --version
       #// !  Установка Allure
       - name: Install Allure
