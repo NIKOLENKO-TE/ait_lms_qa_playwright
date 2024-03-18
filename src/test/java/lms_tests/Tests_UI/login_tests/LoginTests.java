@@ -32,7 +32,7 @@ public class LoginTests extends BaseTest {
     public void LOGIN_STUDENT_CONFIRMED_WITH_NAME_PASSWORD_BY_USERNAME_PASSWORD() {
         loginPage.login("s01@dev-lms.de", "lms-dev-pass-2024", true); // * true
         loginPage.isUserLoggedIn(true);
-        basePage.isCurrentPage(LessonsPage.lessonsPageURL(), !true);
+        basePage.isCurrentPage(LessonsPage.lessonsPageURL(), true);
     }
     @Test
     @Feature("Login tests")
@@ -95,7 +95,7 @@ public class LoginTests extends BaseTest {
     @TestCaseID("TC-08")
     @TestType(POSITIVE)
     public void LOGIN_STUDENT_CONFIRMED_PRIMARY_COHORT_NONE() {
-        loginPage.login(UserCredentials.STUDENT_CONFIRMED_PRIMARY_COHORT_NONE, !true); // * true
+        loginPage.login(UserCredentials.STUDENT_CONFIRMED_PRIMARY_COHORT_NONE, true); // * true
         loginPage.isUserLoggedIn(true);
     }
     @Test
