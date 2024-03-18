@@ -12,11 +12,11 @@ jobs:
       #// !  Установка Java
       - name: Set execute permission for gradlew
         run: chmod +x gradlew
-      - name: Install Java version "21"
+      - name: Install Java version "17"
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '17'
       #// !  Проверка версий Java, JVM, Java Core
       - name: Check Java version
         run: java -version
@@ -25,14 +25,14 @@ jobs:
       - name: Check Java Core version
         run: javac -version
       #// !  Установка Node.js
-      - name: Install Node version "21"
+      - name: Install Node version "16"
         uses: actions/setup-node@v4
         with:
-          node-version: '21'
+          node-version: '16'
       - name: Check Node version
         run: node --version
       #// !  Установка Gradle
-      - name: Install Gradle version "8.6"
+      - name: Build with Gradle
         run: ./gradlew build -x test --no-build-cache
       - name: Check Gradle version
         run: ./gradlew --version
@@ -98,4 +98,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: allure-history
+          publish_dir: ./  #allure-history
