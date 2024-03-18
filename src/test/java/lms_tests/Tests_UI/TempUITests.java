@@ -34,6 +34,7 @@ public class TempUITests extends BaseTest {
 //        video.close();
 //        playwright.close();
 //    }
+@Test
     public void textBoxFillTest() {
         page.navigate("http://85.192.34.140:8081/");
         page.getByText("Elements").click();
