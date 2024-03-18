@@ -108,3 +108,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-results
+      #// ! Отправка отчета в Allure вторая версия
+      - name: Copy Allure report to root
+        run: mv allure-report/* .
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-report # Путь к корневой директории репозитория, куда скопированы файлы отчета
