@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "chrome-har": "^0.13.2",
+    "debug": "^4.3.1",
+    "playwright": "^1.42.0",
+    "playwright-har": "^0.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.1",
+    "@types/node": "^20.11.25",
+    "allure-commandline": "^2.27.0"
+  },
+  "scripts": {
+    "test": "gradlew test"
+  }
+}

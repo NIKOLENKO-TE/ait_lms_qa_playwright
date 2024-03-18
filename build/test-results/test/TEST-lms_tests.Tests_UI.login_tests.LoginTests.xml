@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="lms_tests.Tests_UI.login_tests.LoginTests" tests="20" skipped="0" failures="2" errors="0" timestamp="2024-03-18T17:05:01" hostname="fv-az837-942" time="53.139">
+  <properties/>
+  <testcase name="LOGIN_ADMIN_CONFIRMED_WITHOUT_ZOOM_ACCOUNT" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="2.129"/>
+  <testcase name="LOGIN_ADMIN_CONFIRMED_WITHOUT_ZOOM_ACCOUNT_WITHOUT_PASSWORD" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="2.048"/>
+  <testcase name="LOGIN_ADMIN_CONFIRMED_WITH_INVALID_ZOOM_ACCOUNT" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="2.082"/>
+  <testcase name="LOGIN_ADMIN_NOT_CONFIRMED_WITH_INVALID_ZOOM_ACCOUNT" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="1.277"/>
+  <testcase name="LOGIN_NON_EXISTENT_ACCOUNT" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="0.798"/>
+  <testcase name="LOGIN_STUDENT_CONFIRMED_PRIMARY_COHORT_1" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="1.474"/>
+  <testcase name="LOGIN_STUDENT_CONFIRMED_PRIMARY_COHORT_NONE" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="1.572">
+    <failure message="java.lang.AssertionError: Login status is not as expected.&#10;Expected login status: [false]&#10;Error is present on Login Page?: [false]&#10;User [s11@dev-lms.de]&#10;Password [lms-dev-pass-2024]" type="java.lang.AssertionError">java.lang.AssertionError: Login status is not as expected.
+Expected login status: [false]
+Error is present on Login Page?: [false]
+User [s11@dev-lms.de]
+Password [lms-dev-pass-2024]
+	at org.testng.Assert.fail(Assert.java:111)
+	at lms_pages.BaseHelper.lambda$checkLoginStatus$6(BaseHelper.java:349)
+	at io.qameta.allure.Allure.lambda$step$0(Allure.java:113)
+	at io.qameta.allure.Allure.lambda$step$1(Allure.java:127)
+	at io.qameta.allure.Allure.step(Allure.java:181)
+	at io.qameta.allure.Allure.step(Allure.java:125)
+	at io.qameta.allure.Allure.step(Allure.java:112)
+	at lms_pages.BaseHelper.checkLoginStatus(BaseHelper.java:336)
+	at lms_pages.UI.LoginPage.loginMethod(LoginPage.java:69)
+	at lms_pages.UI.LoginPage.login(LoginPage.java:50)
+	at lms_tests.Tests_UI.login_tests.LoginTests.LOGIN_STUDENT_CONFIRMED_PRIMARY_COHORT_NONE(LoginTests.java:98)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:139)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:664)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:228)
+	at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+	at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:961)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:201)
+	at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:148)
+	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:128)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.testng.TestRunner.privateRun(TestRunner.java:819)
+	at org.testng.TestRunner.run(TestRunner.java:619)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:443)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:437)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:397)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:336)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1301)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1228)
+	at org.testng.TestNG.runSuites(TestNG.java:1134)
+	at org.testng.TestNG.run(TestNG.java:1101)
+	at org.gradle.api.internal.tasks.testing.testng.TestNGTestClassProcessor.runTests(TestNGTestClassProcessor.java:148)
+	at org.gradle.api.internal.tasks.testing.testng.TestNGTestClassProcessor.stop(TestNGTestClassProcessor.java:95)
+	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:62)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94)
+	at jdk.proxy1/jdk.proxy1.$Proxy2.stop(Unknown Source)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:193)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:129)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:100)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:60)
+	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:113)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+</failure>
+  </testcase>
+  <testcase name="LOGIN_STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_4" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="1.574"/>
+  <testcase name="LOGIN_STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_NONE" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="1.508"/>
+  <testcase name="LOGIN_STUDENT_CONFIRMED_WITH_NAME_PASSWORD_BY_USERNAME_PASSWORD" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="1.51">
+    <failure message="java.lang.AssertionError: &#10;Current page URL has not expected value&#10;Expected result [false]&#10;Current URL  https://lms-development-rtprf.ondigitalocean.app/#/student-cabinet/lessons&#10;Expected URL https://lms-development-rtprf.ondigitalocean.app/#/student-cabinet/lessons expected [false] but found [true]" type="java.lang.AssertionError">java.lang.AssertionError: 
+Current page URL has not expected value
+Expected result [false]
+Current URL  https://lms-development-rtprf.ondigitalocean.app/#/student-cabinet/lessons
+Expected URL https://lms-development-rtprf.ondigitalocean.app/#/student-cabinet/lessons expected [false] but found [true]
+	at org.testng.Assert.fail(Assert.java:111)
+	at org.testng.Assert.failNotEquals(Assert.java:1578)
+	at org.testng.Assert.assertFalse(Assert.java:79)
+	at lms_pages.BasePage.lambda$isCurrentPage$1(BasePage.java:29)
+	at io.qameta.allure.Allure.lambda$step$0(Allure.java:113)
+	at io.qameta.allure.Allure.lambda$step$1(Allure.java:127)
+	at io.qameta.allure.Allure.step(Allure.java:181)
+	at io.qameta.allure.Allure.step(Allure.java:125)
+	at io.qameta.allure.Allure.step(Allure.java:112)
+	at lms_pages.BasePage.isCurrentPage(BasePage.java:18)
+	at lms_tests.Tests_UI.login_tests.LoginTests.LOGIN_STUDENT_CONFIRMED_WITH_NAME_PASSWORD_BY_USERNAME_PASSWORD(LoginTests.java:35)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:139)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:664)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:228)
+	at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+	at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:961)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:201)
+	at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:148)
+	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:128)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.testng.TestRunner.privateRun(TestRunner.java:819)
+	at org.testng.TestRunner.run(TestRunner.java:619)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:443)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:437)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:397)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:336)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1301)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1228)
+	at org.testng.TestNG.runSuites(TestNG.java:1134)
+	at org.testng.TestNG.run(TestNG.java:1101)
+	at org.gradle.api.internal.tasks.testing.testng.TestNGTestClassProcessor.runTests(TestNGTestClassProcessor.java:148)
+	at org.gradle.api.internal.tasks.testing.testng.TestNGTestClassProcessor.stop(TestNGTestClassProcessor.java:95)
+	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:62)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94)
+	at jdk.proxy1/jdk.proxy1.$Proxy2.stop(Unknown Source)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:193)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:129)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:100)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:60)
+	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:113)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+</failure>
+  </testcase>
+  <testcase name="LOGIN_STUDENT_NOT_CONFIRMED_PRIMARY_COHORT_5" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="1.409"/>
+  <testcase name="LOGIN_STUDENT_NOT_CONFIRMED_PRIMARY_COHORT_NONE" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="0.732"/>
+  <testcase name="LOGIN_STUDENT_NOT_CONFIRMED_WITHOUT_EMAIL" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="1.573"/>
+  <testcase name="LOGIN_STUDENT_NOT_CONFIRMED_WITHOUT_PASS" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="2.171"/>
+  <testcase name="LOGIN_TEACHER_CONFIRMED_WITHOUT_ZOOM_ACCOUNT" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="1.479"/>
+  <testcase name="LOGIN_TEACHER_CONFIRMED_WITH_INVALID_ZOOM_ACCOUNT" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="1.603"/>
+  <testcase name="LOGIN_TEACHER_CONFIRMED_WITH_VALID_ZOOM_ACCOUNT" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="1.628"/>
+  <testcase name="LOGIN_TEACHER_NOT_CONFIRMED_WITHOUT_ZOOM_ACCOUNT" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="0.791"/>
+  <testcase name="LOGIN_TEACHER_NOT_CONFIRMED_WITHOUT_ZOOM_ACCOUNT_WITHOUT_PASSWORD" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="1.527"/>
+  <testcase name="LOGIN_TEACHER_NOT_CONFIRMED_WITH_INVALID_ZOOM_ACCOUNT" classname="lms_tests.Tests_UI.login_tests.LoginTests" time="0.762"/>
+  <system-out><![CDATA[17:05:01.210 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_ADMIN_CONFIRMED_WITHOUT_ZOOM_ACCOUNT ]===================================]
+17:05:01.210 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:03.843 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is logged in.
+17:05:04.162 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [2952] milliseconds;
+17:05:04.568 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_ADMIN_CONFIRMED_WITHOUT_ZOOM_ACCOUNT_WITHOUT_PASSWORD ]===================================]
+17:05:04.569 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:06.068 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: Password is empty.
+17:05:06.103 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: Sign In button not found or not enabled.
+17:05:07.110 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is not logged in.
+17:05:07.395 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [2826] milliseconds;
+17:05:07.788 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_ADMIN_CONFIRMED_WITH_INVALID_ZOOM_ACCOUNT ]===================================]
+17:05:07.788 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:10.387 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is logged in.
+17:05:10.688 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [2900] milliseconds;
+17:05:11.085 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_ADMIN_NOT_CONFIRMED_WITH_INVALID_ZOOM_ACCOUNT ]===================================]
+17:05:11.085 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:12.908 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: USER [a02@dev-lms.de] and PASSWORD [lms-dev-pass-2024] is not logged in because login or password is invalid, user not exist or not confirmed yet.
+17:05:12.913 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is not logged in.
+17:05:13.199 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [2114] milliseconds;
+17:05:13.591 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_NON_EXISTENT_ACCOUNT ]===================================]
+17:05:13.591 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:14.907 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: USER [sss@dev-lms.de] and PASSWORD [ssSSSs@2012] is not logged in because login or password is invalid, user not exist or not confirmed yet.
+17:05:14.913 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is not logged in.
+17:05:15.062 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [1471] milliseconds;
+17:05:15.461 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_STUDENT_CONFIRMED_PRIMARY_COHORT_1 ]===================================]
+17:05:15.461 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:17.509 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is logged in.
+17:05:17.805 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [2344] milliseconds;
+17:05:18.196 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_STUDENT_CONFIRMED_PRIMARY_COHORT_NONE ]===================================]
+17:05:18.196 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:20.304 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: Login status is not as expected. Expected login status: [false]. Error is present on Login Page?: [false]. User [s11@dev-lms.de]. Password [lms-dev-pass-2024]
+17:05:20.441 [Test worker] INFO  lms_pages.UI.LoginPage -- FILE TRACE: /home/runner/work/ALLCOM_QA_PLAYWRIGHT/ALLCOM_QA_PLAYWRIGHT/src/test_logs/LOGIN_STUDENT_CONFIRMED_PRIMARY_COHORT_NONE_17-05-20/Trace.zip
+17:05:20.723 [Test worker] INFO  lms_pages.UI.LoginPage -- FILE SCREENSHOT: /home/runner/work/ALLCOM_QA_PLAYWRIGHT/ALLCOM_QA_PLAYWRIGHT/src/test_logs/LOGIN_STUDENT_CONFIRMED_PRIMARY_COHORT_NONE_17-05-20/Screenshot.png
+17:05:20.731 [Test worker] INFO  lms_pages.UI.LoginPage -- FILE PAGE : /home/runner/work/ALLCOM_QA_PLAYWRIGHT/ALLCOM_QA_PLAYWRIGHT/src/test_logs/LOGIN_STUDENT_CONFIRMED_PRIMARY_COHORT_NONE_17-05-20/Page Source.html
+17:05:21.080 [Test worker] INFO  lms_pages.UI.LoginPage -- FILE VIDEO: /home/runner/work/ALLCOM_QA_PLAYWRIGHT/ALLCOM_QA_PLAYWRIGHT/src/test_logs/LOGIN_STUDENT_CONFIRMED_PRIMARY_COHORT_NONE_17-05-20/Video.webm
+17:05:21.086 [Test worker] INFO  lms_pages.UI.LoginPage -- FILE HAR  : /home/runner/work/ALLCOM_QA_PLAYWRIGHT/ALLCOM_QA_PLAYWRIGHT/src/test_logs/LOGIN_STUDENT_CONFIRMED_PRIMARY_COHORT_NONE_17-05-20/Har.har
+17:05:21.086 [Test worker] ERROR lms_tests.BaseTest -- TEST FAILED, Time taken: [2890] milliseconds;
+17:05:21.492 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_4 ]===================================]
+17:05:21.492 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:22.575 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: Password is empty.
+17:05:22.630 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: Sign In button not found or not enabled.
+17:05:23.638 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is not logged in.
+17:05:23.937 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [2444] milliseconds;
+17:05:24.332 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_NONE ]===================================]
+17:05:24.333 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:25.287 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: Password is empty.
+17:05:25.329 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: Sign In button not found or not enabled.
+17:05:26.336 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is not logged in.
+17:05:26.615 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [2282] milliseconds;
+17:05:26.991 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_STUDENT_CONFIRMED_WITH_NAME_PASSWORD_BY_USERNAME_PASSWORD ]===================================]
+17:05:26.991 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:29.042 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is logged in.
+17:05:29.173 [Test worker] INFO  lms_pages.UI.LoginPage -- FILE TRACE: /home/runner/work/ALLCOM_QA_PLAYWRIGHT/ALLCOM_QA_PLAYWRIGHT/src/test_logs/LOGIN_STUDENT_CONFIRMED_WITH_NAME_PASSWORD_BY_USERNAME_PASSWORD_17-05-29/Trace.zip
+17:05:29.378 [Test worker] INFO  lms_pages.UI.LoginPage -- FILE SCREENSHOT: /home/runner/work/ALLCOM_QA_PLAYWRIGHT/ALLCOM_QA_PLAYWRIGHT/src/test_logs/LOGIN_STUDENT_CONFIRMED_WITH_NAME_PASSWORD_BY_USERNAME_PASSWORD_17-05-29/Screenshot.png
+17:05:29.384 [Test worker] INFO  lms_pages.UI.LoginPage -- FILE PAGE : /home/runner/work/ALLCOM_QA_PLAYWRIGHT/ALLCOM_QA_PLAYWRIGHT/src/test_logs/LOGIN_STUDENT_CONFIRMED_WITH_NAME_PASSWORD_BY_USERNAME_PASSWORD_17-05-29/Page Source.html
+17:05:29.713 [Test worker] INFO  lms_pages.UI.LoginPage -- FILE VIDEO: /home/runner/work/ALLCOM_QA_PLAYWRIGHT/ALLCOM_QA_PLAYWRIGHT/src/test_logs/LOGIN_STUDENT_CONFIRMED_WITH_NAME_PASSWORD_BY_USERNAME_PASSWORD_17-05-29/Video.webm
+17:05:29.718 [Test worker] INFO  lms_pages.UI.LoginPage -- FILE HAR  : /home/runner/work/ALLCOM_QA_PLAYWRIGHT/ALLCOM_QA_PLAYWRIGHT/src/test_logs/LOGIN_STUDENT_CONFIRMED_WITH_NAME_PASSWORD_BY_USERNAME_PASSWORD_17-05-29/Har.har
+17:05:29.718 [Test worker] ERROR lms_tests.BaseTest -- TEST FAILED, Time taken: [2726] milliseconds;
+17:05:30.110 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_STUDENT_NOT_CONFIRMED_PRIMARY_COHORT_5 ]===================================]
+17:05:30.110 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:31.903 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: USER [s05@dev-lms.de] and PASSWORD [lms-dev-pass-2024] is not logged in because login or password is invalid, user not exist or not confirmed yet.
+17:05:31.908 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is not logged in.
+17:05:32.247 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [2136] milliseconds;
+17:05:32.646 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_STUDENT_NOT_CONFIRMED_PRIMARY_COHORT_NONE ]===================================]
+17:05:32.647 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:33.909 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: USER [s09@dev-lms.de] and PASSWORD [lms-dev-pass-2024] is not logged in because login or password is invalid, user not exist or not confirmed yet.
+17:05:33.916 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is not logged in.
+17:05:34.099 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [1452] milliseconds;
+17:05:34.569 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_STUDENT_NOT_CONFIRMED_WITHOUT_EMAIL ]===================================]
+17:05:34.569 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:35.458 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: Email address is empty.
+17:05:35.629 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: Sign In button not found or not enabled.
+17:05:36.635 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is not logged in.
+17:05:36.909 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [2340] milliseconds;
+17:05:37.298 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_STUDENT_NOT_CONFIRMED_WITHOUT_PASS ]===================================]
+17:05:37.298 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:38.809 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: Password is empty.
+17:05:38.854 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: Sign In button not found or not enabled.
+17:05:39.860 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is not logged in.
+17:05:40.163 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [2865] milliseconds;
+17:05:40.590 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_TEACHER_CONFIRMED_WITHOUT_ZOOM_ACCOUNT ]===================================]
+17:05:40.590 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:42.608 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is logged in.
+17:05:42.916 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [2326] milliseconds;
+17:05:43.304 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_TEACHER_CONFIRMED_WITH_INVALID_ZOOM_ACCOUNT ]===================================]
+17:05:43.304 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:45.393 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is logged in.
+17:05:45.683 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [2379] milliseconds;
+17:05:46.079 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_TEACHER_CONFIRMED_WITH_VALID_ZOOM_ACCOUNT ]===================================]
+17:05:46.079 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:48.224 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is logged in.
+17:05:48.517 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [2438] milliseconds;
+17:05:48.941 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_TEACHER_NOT_CONFIRMED_WITHOUT_ZOOM_ACCOUNT ]===================================]
+17:05:48.941 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:50.274 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: USER [t06@dev-lms.de] and PASSWORD [lms-dev-pass-2024] is not logged in because login or password is invalid, user not exist or not confirmed yet.
+17:05:50.281 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is not logged in.
+17:05:50.500 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [1558] milliseconds;
+17:05:50.899 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_TEACHER_NOT_CONFIRMED_WITHOUT_ZOOM_ACCOUNT_WITHOUT_PASSWORD ]===================================]
+17:05:50.900 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:51.843 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: Password is empty.
+17:05:51.893 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: Sign In button not found or not enabled.
+17:05:52.905 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is not logged in.
+17:05:53.200 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [2300] milliseconds;
+17:05:53.591 [Test worker] INFO  lms_tests.BaseTest -- [===================================[ LOGIN_TEACHER_NOT_CONFIRMED_WITH_INVALID_ZOOM_ACCOUNT ]===================================]
+17:05:53.591 [Test worker] INFO  lms_tests.BaseTest -- TEST START;
+17:05:54.847 [Test worker] ERROR lms_pages.UI.LoginPage -- [loginMethod]: USER [t02@dev-lms.de] and PASSWORD [lms-dev-pass-2024] is not logged in because login or password is invalid, user not exist or not confirmed yet.
+17:05:54.853 [Test worker] ERROR lms_pages.UI.LoginPage -- [isUserLoggedIn]: User is not logged in.
+17:05:55.000 [Test worker] INFO  lms_tests.BaseTest -- TEST PASSED, Time taken: [1409] milliseconds;
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
