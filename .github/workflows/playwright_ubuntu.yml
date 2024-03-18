@@ -24,6 +24,13 @@ jobs:
         run: echo $JAVA_HOME
       - name: Check Java Core version
         run: javac -version
+      #// !  Установка Node.js
+      - name: Install Node version "20"
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check Node version
+        run: node --version
       #// !  Установка Gradle
       - name: Build with Gradle
         run: ./gradlew build -x test --no-build-cache
@@ -62,13 +69,6 @@ jobs:
       - name: List Directories before tests
         if: always()
         run: ls -R
-      #// !  Установка Node.js
-      - name: Install Node version "20"
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Check Node version
-        run: node --version
       #// !  Запуск тестов
       - name: ~~~~~~~ Run tests ~~~~~~~
         run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew test
