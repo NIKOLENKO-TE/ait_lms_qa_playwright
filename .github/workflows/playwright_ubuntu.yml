@@ -92,13 +92,14 @@ jobs:
           name: allure-attachments for failed tests
           path: |
             src/test_logs/*
-      #// !  Find latest deployment number
-      - name: Find latest deployment number
-        id: find-deployment
-        run: |
-          latest_deployment=$(ls -d ALLCOM_QA_PLAYWRIGHT/allure-history/* | grep -Eo '[0-9]+' | sort -nr | head -n1)
-          echo "LATEST_DEPLOYMENT=$latest_deployment" >> $GITHUB_ENV
-
+      #// !  Build test report
+      - name: Build test report
+        uses: simple-elf/allure-report-action@v1.7
+        if: always()
+        with:
+          gh_pages: gh-pages
+          allure_history: allure-history
+          allure_results: build/allure-results
       #// !  Publish test report
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
@@ -106,4 +107,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ALLCOM_QA_PLAYWRIGHT/allure-history/${{ env.LATEST_DEPLOYMENT }}
+          publish_dir: allure-history
