@@ -1,15 +1,19 @@
 package lms_tests.Tests_UI;
 
+import com.microsoft.playwright.ElementHandle;
 import lms_tests.BaseTest;
+import org.testng.annotations.Test;
+
+import java.util.List;
 
 public class TempUITests extends BaseTest {
-//    @Test
-//    public void fillManyTextBoxes() {
-//        page.navigate("https://datatables.net/examples/api/form.html");
-//        page.selectOption("[name=example_length]", "100");
-//        List<ElementHandle> fields = page.querySelectorAll("//tbody//input[@type='text']");
-//        fields.forEach(x -> x.fill("threadqa playwright"));
-//    }
+    @Test
+    public void fillManyTextBoxes() {
+        page.navigate("https://datatables.net/examples/api/form.html");
+        page.selectOption("[name=example_length]", "100");
+        List<ElementHandle> fields = page.querySelectorAll("//tbody//input[@type='text']");
+        fields.forEach(x -> x.fill("threadqa playwright"));
+    }
 
 //    @Test
 //    public void recordVideoWithPW() {
