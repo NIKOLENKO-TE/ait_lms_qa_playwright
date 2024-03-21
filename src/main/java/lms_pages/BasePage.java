@@ -5,6 +5,9 @@ import com.microsoft.playwright.TimeoutError;
 import io.qameta.allure.Allure;
 import org.testng.Assert;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
 public class BasePage {
     protected Page page;
 
@@ -24,13 +27,12 @@ public class BasePage {
                 }
             }
             if (expectedResult) {
-                Assert.assertTrue(currentPageMatches, String.format(ERROR_MESSAGE, page.url(), expectedUrl));
+                assertTrue(currentPageMatches, String.format(ERROR_MESSAGE, page.url(), expectedUrl));
             } else {
                 Assert.assertFalse(currentPageMatches, String.format(ERROR_MESSAGE, page.url(), expectedUrl));
             }
         });
     }
-
     public void requestResponseByURL(String url, String responseMethod, int expectedStatusCode, boolean expectedResult) {
         page.navigate(url);
         page.waitForRequest(url, new Page.WaitForRequestOptions().setTimeout(2000), () -> {
@@ -38,8 +40,8 @@ public class BasePage {
                 try {
                     if (response.url() != null && response.url().equals(url)) {
                         int actualStatusCode = response.status();
-                        Assert.assertEquals(response.request().method(), responseMethod, "\nExpected response code:" + expectedStatusCode + ", the actual response code is:" + actualStatusCode);
-                        Assert.assertEquals(expectedResult, (actualStatusCode == expectedStatusCode));
+                        assertEquals(response.request().method(), responseMethod, "\nExpected response code:" + expectedStatusCode + ", the actual response code is:" + actualStatusCode);
+                        assertEquals(expectedResult, (actualStatusCode == expectedStatusCode));
                     }
                 } catch (NullPointerException e) {
                     Assert.fail("NullPointerException: " + e.getMessage());

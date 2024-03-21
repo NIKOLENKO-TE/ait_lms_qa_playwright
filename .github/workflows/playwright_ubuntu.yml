@@ -76,6 +76,14 @@ jobs:
       - name: List Directories after tests
         if: always()
         run: ls -R
+      #// ! Создание отчетоа Gradle
+      - name: Archive [test results]
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gradle-results
+          path: |
+            build/reports/tests/test/*
       #// ! Создание отчетоа Playwright
       - name: Archive [test results]
         uses: actions/upload-artifact@v4
@@ -83,7 +91,7 @@ jobs:
         with:
           name: playwright-results
           path: |
-            build/reports/tests/test/*
+            playwright-report/*
       #// !  Создание архива с файлами упавших тестов
       - name: Archive [Allure attachments for failed tests]
         uses: actions/upload-artifact@v4

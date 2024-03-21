@@ -32,7 +32,7 @@ public class BaseHelper extends BasePage {
     public static boolean DEVTOOL = Boolean.parseBoolean(System.getProperty("devtools", String.valueOf(false))); // ? DevTools
     public static int SLOWDOWN = Integer.parseInt(System.getProperty("slowdown", String.valueOf(0))); // ? Slowdown steps
 
-    public static boolean ENABLE_ALL_FILES = Boolean.parseBoolean(System.getProperty("allure_report", String.valueOf(true))); // ! Add files to ALLURE-report only for FAILED tests
+    public static boolean ENABLE_ALL_FILES = Boolean.parseBoolean(System.getProperty("allure_report", String.valueOf(false))); // ! Add files to ALLURE-report only for FAILED tests
     public static boolean TRACE = Boolean.parseBoolean(System.getProperty("trace", String.valueOf(ENABLE_ALL_FILES))); // !!! Adding a trace to a report requires large resources and does not support WebKit browser
     public static boolean SCREENSHOT = Boolean.parseBoolean(System.getProperty("screenshot", String.valueOf(ENABLE_ALL_FILES))); // ? Add screenshots to the report (a screenshot will always be created in the folder)
     public static boolean VIDEO = Boolean.parseBoolean(System.getProperty("video", String.valueOf(ENABLE_ALL_FILES))); // ? Add video to report
