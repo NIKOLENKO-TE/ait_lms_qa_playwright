@@ -1,9 +1,12 @@
 package lms_pages;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.TimeoutError;
 import io.qameta.allure.Allure;
 import org.testng.Assert;
+
+import java.util.List;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -55,5 +58,10 @@ public class BasePage {
             });
         });
     }
-
+    public void listAllButtonsOnPage() {
+        List<Locator> buttons = page.locator("button").all();
+        for (Locator button : buttons) {
+            System.out.println(button.innerText());
+        }
+    }
 }

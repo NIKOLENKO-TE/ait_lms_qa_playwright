@@ -30,7 +30,7 @@ dependencies {
     implementation 'com.microsoft.playwright:playwright:1.42.0'
     implementation group: 'org.testng', name: 'testng', version: '7.9.0'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.3'
-    testImplementation 'io.qameta.allure:allure-testng:2.25.0'
+    implementation group: 'io.qameta.allure', name: 'allure-testng', version: '2.26.0'
 }
 
 test {

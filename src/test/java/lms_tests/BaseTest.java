@@ -17,10 +17,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
 import java.io.IOException;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -82,7 +79,6 @@ public class BaseTest {
         HAR(result, ERROR_DIR, ERROR_DIR.resolve("Har.har"));
         DELETING_UNUSED_VIDEO_AND_HAR(result, ERROR_DIR.resolve("Har.har"), page);
         LOG_END(result, PARAMS, Duration.between(TEST_START_TIME, Instant.now()).toMillis());
-
         page.close();
     }
 
@@ -118,7 +114,7 @@ public class BaseTest {
                 context.close();
             }
             browser.close();
-           // GENERATE_OFFLINE_ALLURE_REPORT(page);
+            // GENERATE_OFFLINE_ALLURE_REPORT(page);
         }
     }
 

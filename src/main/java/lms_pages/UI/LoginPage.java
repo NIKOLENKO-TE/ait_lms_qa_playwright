@@ -28,37 +28,31 @@ public class LoginPage {
     }
 
     public void login(String username, String password, boolean expectedLoginStatus) {
-        login(new UserCredentials(username, password), expectedLoginStatus);
+        baseHelper.loginVariables();
+        baseHelper.checkIfUserIsLoggedIn(baseHelper.signOutButton);
+        homePage.navigateToHomePage();
+        baseHelper.fillEmail(username, baseHelper.methodName);
+        baseHelper.fillPassword(password, baseHelper.methodName);
+        baseHelper.clickSignInButton(username, password, baseHelper.methodName);
+        baseHelper.checkLoginAvailability(baseHelper.errorLocator, baseHelper.isErrorPresent, username, password, expectedLoginStatus, baseHelper.methodName);
     }
 
-//    public void login(Object credentials, boolean expectedLoginStatus) {
-//        if (credentials instanceof UserCredentials userCredentials) {
-//            loginMethod(userCredentials.getUser_email(), userCredentials.getUser_password(), expectedLoginStatus);
-//        } else if (credentials instanceof String[] loginInfo) {
-//            if (loginInfo.length >= 2) {
-//                loginMethod(loginInfo[0], loginInfo[1], expectedLoginStatus);
-//            } else {
-//                logger.error("Insufficient login information provided.");
-//            }
-//        } else {
-//            logger.error("Unsupported credential type.");
-//        }
-//    }
-public void login(Object credentials, boolean expectedLoginStatus) {
-    if (credentials instanceof UserCredentials) {
-        UserCredentials userCredentials = (UserCredentials) credentials;
-        loginMethod(userCredentials.getUser_email(), userCredentials.getUser_password(), expectedLoginStatus);
-    } else if (credentials instanceof String[]) {
-        String[] loginInfo = (String[]) credentials;
-        if (loginInfo.length >= 2) {
-            loginMethod(loginInfo[0], loginInfo[1], expectedLoginStatus);
+    public void login(Object credentials, boolean expectedLoginStatus) {
+        if (credentials instanceof UserCredentials) {
+            UserCredentials userCredentials = (UserCredentials) credentials;
+            loginMethod(userCredentials.getUser_email(), userCredentials.getUser_password(), expectedLoginStatus);
+        } else if (credentials instanceof String[]) {
+            String[] loginInfo = (String[]) credentials;
+            if (loginInfo.length >= 2) {
+                loginMethod(loginInfo[0], loginInfo[1], expectedLoginStatus);
+            } else {
+                logger.error("Insufficient login information provided.");
+            }
         } else {
-            logger.error("Insufficient login information provided.");
+            logger.error("Unsupported credential type.");
         }
-    } else {
-        logger.error("Unsupported credential type.");
     }
-}
+
     public void loginMethod(String username, String password, boolean expectedLoginStatus) {
         baseHelper.loginVariables();
         baseHelper.checkIfUserIsLoggedIn(baseHelper.signOutButton);
@@ -66,23 +60,22 @@ public void login(Object credentials, boolean expectedLoginStatus) {
         baseHelper.fillEmail(username, baseHelper.methodName);
         baseHelper.fillPassword(password, baseHelper.methodName);
         baseHelper.clickSignInButton(username, password, baseHelper.methodName);
-        baseHelper.checkLoginStatus(baseHelper.errorLocator, baseHelper.isErrorPresent, username, password, expectedLoginStatus, baseHelper.methodName);
+        baseHelper.checkLoginAvailability(baseHelper.errorLocator, baseHelper.isErrorPresent, username, password, expectedLoginStatus, baseHelper.methodName);
     }
-
     public void isUserLoggedIn(boolean expectedLoginStatus) {
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         Allure.step("Check if user is logged in", () -> {
-            Locator loginButton = page.locator("button:has-text('Login')");
-            Locator signOutButton = page.locator("button:has-text('SignOut')");
-            boolean userIsLoggedIn = signOutButton.count() > 0;
             try {
-                if (loginButton.count() > 0) {
-                    userIsLoggedIn = false; // "LOGIN" button found if user is not logged in
+                boolean userIsLoggedIn = false; // По умолчанию считаем, что пользователь не авторизован
+                if (isLoginButtonPresent(100)) {
+                    logger.warn("[{}]: Login button is found.", methodName);
+                } else if (isSignOutButtonPresent(100)) {
+                    logger.warn("[{}]: SignOut button is found.", methodName);
+                    userIsLoggedIn = true; // "SignOut" кнопка найдена, значит пользователь авторизован
+                } else {
+                    logger.warn("[{}]: Both Login and SignOut buttons are not found.", methodName);
                 }
-                if (signOutButton.count() > 0) {
-                    userIsLoggedIn = true; // "USER" button found if user is logged in
-                }
-                logger.error("[{}]: {}", methodName, userIsLoggedIn ? "User is logged in." : "User is not logged in.");
+                logger.warn("[{}]: {}", methodName, userIsLoggedIn ? "User is logged in successfully ." : "User is not logged in.");
                 if (userIsLoggedIn != expectedLoginStatus) {
                     Assert.fail("\nUser logged in status is not expected.\nExpected logged in status: [" + expectedLoginStatus + "]\nActual logged in status: [" + userIsLoggedIn + "]");
                 }
@@ -94,5 +87,25 @@ public void login(Object credentials, boolean expectedLoginStatus) {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+
+
+    public boolean isSignOutButtonPresent(int timeoutMillis) {
+        Locator signOutButton = page.locator("button:has-text('SignOut')");
+        try {
+            return signOutButton.isEnabled(new Locator.IsEnabledOptions().setTimeout(timeoutMillis));
+        } catch (TimeoutError e) {
+            return false;
+        }
+    }
+
+    public boolean isLoginButtonPresent(int timeoutMillis) {
+        Locator loginButton = page.locator("button:has-text('Login')");
+        try {
+            return loginButton.isEnabled(new Locator.IsEnabledOptions().setTimeout(timeoutMillis));
+        } catch (TimeoutError e) {
+            return false;
+        }
     }
 }

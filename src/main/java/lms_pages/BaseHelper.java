@@ -2,7 +2,7 @@ package lms_pages;
 
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.AriaRole;
-import com.microsoft.playwright.options.WaitForSelectorState;
+import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Allure;
 import lms_pages.UI.LoginPage;
 import org.slf4j.Logger;
@@ -11,7 +11,6 @@ import org.testng.Assert;
 import org.testng.ITestResult;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,13 +31,12 @@ public class BaseHelper extends BasePage {
     public static boolean DEVTOOL = Boolean.parseBoolean(System.getProperty("devtools", String.valueOf(false))); // ? DevTools
     public static int SLOWDOWN = Integer.parseInt(System.getProperty("slowdown", String.valueOf(0))); // ? Slowdown steps
 
-    public static boolean ENABLE_ALL_FILES = Boolean.parseBoolean(System.getProperty("allure_report", String.valueOf(false))); // ! Add files to ALLURE-report only for FAILED tests
+    public static boolean ENABLE_ALL_FILES = Boolean.parseBoolean(System.getProperty("allure_report", String.valueOf(true))); // ! Add files to ALLURE-report only for FAILED tests
     public static boolean TRACE = Boolean.parseBoolean(System.getProperty("trace", String.valueOf(ENABLE_ALL_FILES))); // !!! Adding a trace to a report requires large resources and does not support WebKit browser
     public static boolean SCREENSHOT = Boolean.parseBoolean(System.getProperty("screenshot", String.valueOf(ENABLE_ALL_FILES))); // ? Add screenshots to the report (a screenshot will always be created in the folder)
     public static boolean VIDEO = Boolean.parseBoolean(System.getProperty("video", String.valueOf(ENABLE_ALL_FILES))); // ? Add video to report
     public static boolean PAGE = Boolean.parseBoolean(System.getProperty("page", String.valueOf(ENABLE_ALL_FILES))); // ? Add page source code to report
     public static boolean HAR = Boolean.parseBoolean(System.getProperty("har", String.valueOf(ENABLE_ALL_FILES))); // ? Add a HAR file to the report
-    public static boolean ENABLE_OFFLINE_REPORT = Boolean.parseBoolean(System.getProperty("allure_report_offline", String.valueOf(true)));
 
     public BaseHelper(Page page) {
         super(page);
@@ -82,11 +80,7 @@ public class BaseHelper extends BasePage {
         String browserType = System.getProperty("browserType", "CHROME");
 
         Browser browser;
-        BrowserType.LaunchOptions launchOptions = new BrowserType
-                .LaunchOptions()
-                .setDevtools(DEVTOOL)
-                .setSlowMo(SLOWDOWN)
-                .setHeadless(HEADLESS);
+        BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setDevtools(DEVTOOL).setSlowMo(SLOWDOWN).setHeadless(HEADLESS);
         switch (browserType.toUpperCase()) {
             case "CHROME":
                 browser = Playwright.create().chromium().launch(launchOptions.setChannel("chrome"));
@@ -208,6 +202,7 @@ public class BaseHelper extends BasePage {
             }
         }
     }
+
     public static void createInternetShortcut(String url, Path shortcutPath) {
         String shortcut = "[InternetShortcut]\nURL=" + url + "\n";
         try {
@@ -216,6 +211,7 @@ public class BaseHelper extends BasePage {
             logger.error("Error while creating internet shortcut: ", e);
         }
     }
+
     public static void HAR(ITestResult result, Path errorDirPath, Path harFilePath) {
         try {
             if (HAR && !result.isSuccess()) {
@@ -267,7 +263,7 @@ public class BaseHelper extends BasePage {
     }
 
     public void checkIfUserIsLoggedIn(Locator signOutButton) {
-        Allure.step("Check if user is already logged in", () -> {
+        Allure.step("Check if user is logged in", () -> {
             boolean userIsLoggedIn = signOutButton.count() > 0;
             if (userIsLoggedIn) {
                 signOutButton.first().click();
@@ -275,6 +271,43 @@ public class BaseHelper extends BasePage {
         });
     }
 
+    //    public void fillEmail(String username, String methodName) {
+//        Allure.step("Fill in Email address", () -> {
+//            if (page.isClosed()) {
+//                logger.error("Page is closed before email could be filled.");
+//                return;
+//            }
+//            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
+//            page.getByPlaceholder("Email address").click();
+//            if (username == null || username.isEmpty()) {
+//                logger.error("[{}]: Email address is empty.", methodName);
+//            } else {
+//                page.fill("//input[@id='email-login-page']", username);
+//            }
+//            if (page.locator("text=Invalid email format").count() > 0) {
+//                logger.error("[{}]: Invalid email format error occurred", methodName);
+//            }
+//            page.waitForSelector("text=Invalid email format", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(200));
+//        });
+//    }
+//    public void fillPassword(String password, String methodName) {
+//        Allure.step("Fill in Password", () -> {
+//            if (page.isClosed()) {
+//                logger.error("Page is closed before password could be filled.");
+//                return;
+//            }
+//            page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Password")).click();
+//            if (password == null || password.isEmpty()) {
+//                logger.error("[{}]: Password is empty.", methodName);
+//            } else {
+//                page.fill("input[type='password']", password);
+//            }
+//            if (page.locator("text=The password must be at least").count() > 0) {
+//                logger.error("[{}]: Invalid password format error occurred", methodName);
+//            }
+//            page.waitForSelector("text=The password must be at least", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(200));
+//        });
+//    }
     public void fillEmail(String username, String methodName) {
         Allure.step("Fill in Email address", () -> {
             if (page.isClosed()) {
@@ -284,14 +317,18 @@ public class BaseHelper extends BasePage {
             page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
             page.getByPlaceholder("Email address").click();
             if (username == null || username.isEmpty()) {
-                logger.error("[{}]: Email address is empty.", methodName);
+                logger.warn("[{}]: Email address is empty.", methodName);
             } else {
                 page.fill("//input[@id='email-login-page']", username);
             }
-            if (page.locator("text=Invalid email format").count() > 0) {
-                logger.error("[{}]: Invalid email format error occurred", methodName);
+            boolean isInvalidFormatMessageVisible = page.locator("text=Invalid email format").isVisible();
+            if (isInvalidFormatMessageVisible) {
+                logger.warn("[{}]: Invalid email format error occur", methodName);
             }
-            page.waitForSelector("text=Invalid email format", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(200));
+            boolean isFieldRequiredMessageVisible = page.locator("text='This field is required'").isVisible();
+            if (isFieldRequiredMessageVisible) {
+                logger.warn("[{}]: 'This field is required' error occur", methodName);
+            }
         });
     }
 
@@ -303,25 +340,29 @@ public class BaseHelper extends BasePage {
             }
             page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Password")).click();
             if (password == null || password.isEmpty()) {
-                logger.error("[{}]: Password is empty.", methodName);
+                logger.warn("[{}]: Password is empty.", methodName);
             } else {
                 page.fill("input[type='password']", password);
             }
-            if (page.locator("text=The password must be at least").count() > 0) {
-                logger.error("[{}]: Invalid password format error occurred", methodName);
+            boolean isInvalidFormatMessageVisible = page.locator("text=The password must be at least").isVisible();
+            if (isInvalidFormatMessageVisible) {
+                logger.warn("[{}]: Invalid password format error occur", methodName);
             }
-            page.waitForSelector("text=The password must be at least", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(200));
+            boolean isFieldRequiredMessageVisible = page.locator("text='This field is required'").isVisible();
+            if (isFieldRequiredMessageVisible) {
+                logger.warn("[{}]: 'This field is required' error occur", methodName);
+            }
         });
     }
 
-    public void clickSignInButton(String username, String password, String methodName) { //String methodName
+    public void clickSignInButton(String username, String password, String methodName) {
         Allure.step("Click on Sign In button", () -> {
             try {
                 ElementHandle signInButton = page.querySelector("button[label='Sign In']");
                 if (signInButton != null && signInButton.isEnabled()) {
                     signInButton.press("Enter");
                 } else {
-                    logger.error("[{}]: Sign In button not found or not enabled.", methodName);
+                    logger.warn("[{}]: Sign In button not found or not enabled.", methodName);
                     if ((password == null || password.isEmpty()) || (username == null || username.isEmpty())) {
                         isErrorPresent.set(true);
                     }
@@ -329,10 +370,12 @@ public class BaseHelper extends BasePage {
             } catch (PlaywrightException e) {
                 logger.error("[{}]: Error occurred: {}", methodName, e.getMessage());
             }
+            page.waitForLoadState(LoadState.DOMCONTENTLOADED, new Page.WaitForLoadStateOptions().setTimeout(2000));
         });
+
     }
 
-    public void checkLoginStatus(Locator errorLocator, AtomicBoolean isErrorPresent, String username, String password, boolean expectedLoginStatus, String methodName) {
+     public void checkLoginAvailability(Locator errorLocator, AtomicBoolean isErrorPresent, String username, String password, boolean expectedLoginStatus, String methodName) {
         Allure.step("Check login status", () -> {
             try {
                 page.waitForSelector("div:has-text('ErrorInvalid login or password')", new Page.WaitForSelectorOptions().setTimeout(1000));
@@ -346,29 +389,93 @@ public class BaseHelper extends BasePage {
             boolean actualLoginStatus = !isErrorPresent.get();
             if (actualLoginStatus != expectedLoginStatus) {
                 logger.error("[{}]: Login status is not as expected. Expected login status: [{}]. Error is present on Login Page?: [{}]. User [{}]. Password [{}]", methodName, expectedLoginStatus, !actualLoginStatus, username, password);
-                Assert.fail("Login status is not as expected.\nExpected login status: [" + expectedLoginStatus + "]\nError is present on Login Page?: [" + !actualLoginStatus + "]\nUser [" + username + "]\nPassword [" + password + "]");
+                Assert.fail("\nLogin status is not as expected.\nExpected login status: [" + expectedLoginStatus + "]\nError is present on Login Page?: [" + !actualLoginStatus + "]\nUser [" + username + "]\nPassword [" + password + "]");
             }
         });
     }
 
-    public static void GENERATE_OFFLINE_ALLURE_REPORT(Page page) {
-        Allure.step("Generating offline Allure report", () -> {
-            if (ENABLE_OFFLINE_REPORT) {
+    public void checkLoginAvailability2(Locator errorLocator, AtomicBoolean isErrorPresent, String username, String password, boolean expectedLoginStatus, String methodName) {
+        Allure.step("Check errors on the Login page", () -> {
+            boolean errorLogin = false; // новая переменная
+            try {
+                // Проверяем, есть ли сообщение об ошибке "Invalid login or password" или errorLocator содержит элементы
                 try {
-                    String command = "node_modules/.bin/allure.cmd generate build/allure-results -o src/test_logs/ALLURE_REPORT_OFFLINE --clean";
-                    ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
-                    processBuilder.directory(new File(System.getProperty("user.dir")));
-                    Process process = processBuilder.start();
-                    int exitCode = process.waitFor();
-                    if (exitCode == 0) {
-                        logger.info("Offline report generated successfully");
-                    } else {
-                        logger.error("Failed to generate offline report. Exit code: {}", exitCode);
+                    page.waitForSelector("div:has-text('ErrorInvalid login or password')", new Page.WaitForSelectorOptions().setTimeout(1000));
+                    if (errorLocator.count() > 0) {
+                        isErrorPresent.set(true);
+                        errorLogin = true; // устанавливаем errorLogin в true, если есть сообщение "Invalid login or password"
+                        logger.error("[{}]: USER [{}] and PASSWORD [{}] is not logged in because login or password is invalid, user not exist or not confirmed yet.", methodName, username, password);
+                        throw new AssertionError("\nUSER [" + username + "] and PASSWORD [" + password + "] is not logged in because login or password is invalid, user not exist or not confirmed yet.");
                     }
-                } catch (IOException | InterruptedException e) {
-                    logger.error("Error while generating offline report: ", e);
+                } catch (TimeoutError e) {
+                    // logger.error("[{}]: An error occurred while checking for 'Invalid login or password' error: {}", methodName, e.getMessage());
                 }
+                // Проверяем, есть ли сообщение 'Login has been successful'
+                try {
+                    if (page.locator("text='Login has been successful'").isVisible()) {
+                        isErrorPresent.set(false);
+                        logger.warn("[{}]: USER [{}] and PASSWORD [{}] successfully logged in.", methodName, username, password);
+                    }
+                } catch (Exception e) {
+                    logger.error("[{}]: An error occurred while checking for 'Login has been successful' message: {}", methodName, e.getMessage());
+                }
+                // Проверяем, есть ли сообщение об ошибке "The password must be at least"
+                try {
+                    if (page.locator("text='The password must be at least'").isVisible()) {
+                        isErrorPresent.set(true);
+                        logger.warn("[{}]: USER [{}] is not logged in because the password is empty.", methodName, username);
+                        throw new AssertionError("The password must be at least");
+                    }
+                } catch (Exception e) {
+                    logger.error("[{}]: An error occurred while checking for 'The password must be at least' error: {}", methodName, e.getMessage());
+                }
+                // Проверяем, есть ли сообщение об ошибке "This field is required"
+                try {
+                    if (page.locator("text='This field is required'").isVisible()) {
+                        isErrorPresent.set(true);
+                        logger.warn("[{}]: USER [{}] is not logged in because a required field is empty.", methodName, username);
+                        throw new AssertionError("This field is required");
+                    }
+                } catch (Exception e) {
+                    logger.error("[{}]: An error occurred while checking for 'This field is required' error: {}", methodName, e.getMessage());
+                }
+                // Проверяем, есть ли сообщение об ошибке "Invalid email format"
+                try {
+                    if (page.locator("text='Invalid email format'").isVisible()) {
+                        isErrorPresent.set(true);
+                        logger.warn("[{}]: USER [{}] is not logged in because Invalid email format.", methodName, username);
+                        throw new AssertionError("Invalid email format");
+                    }
+                } catch (Exception e) {
+                    logger.error("[{}]: An error occurred while checking for 'Invalid email format' error: {}", methodName, e.getMessage());
+                }
+            } catch (Exception e) {
+                logger.error("[{}]: An unexpected error occurred: {}", methodName, e.getMessage());
+                throw new RuntimeException(e);
             }
+            try {
+                // Проверяем соответствие фактического статуса логина ожидаемому
+                if (expectedLoginStatus && isErrorPresent.get()) {
+                    // Если успешный вход, но ошибка присутствует
+                    throw new AssertionError("\nLogin status is not as expected. \nExpected login status: [" + expectedLoginStatus + "]. \nUser [" + username + "]. \nPassword [" + password + "]");
+                } else if (!expectedLoginStatus && isErrorPresent.get()) {
+                    // Если неудачный вход, и ошибка присутствует
+                    logger.info("[{}]: Login status is as expected. Expected login status: [{}]. User [{}]. Password [{}]", methodName, expectedLoginStatus, username, password);
+                } else if (!isErrorPresent.get() && errorLogin) {
+                    // Если ошибок на странице нет, но есть сообщение "Invalid login or password"
+                    throw new AssertionError("\nLogin status is not as expected. \nExpected login status: [" + expectedLoginStatus + "]. \nUser [" + username + "]. \nPassword [" + password + "]");
+                } else if (expectedLoginStatus != isErrorPresent.get()) {
+                    // Если статус входа не соответствует ожидаемому
+                    throw new AssertionError("\nLogin status is not as expected. \nExpected login status: [" + expectedLoginStatus + "]. \nUser [" + username + "]. \nPassword [" + password + "]");
+                } else if (!expectedLoginStatus && !isErrorPresent.get()) {
+                    // Если ошибка ожидается, но пользователь все равно успешно проходит логин
+                    throw new AssertionError("\nLogin status is not as expected. \nExpected login status: [" + expectedLoginStatus + "]. \nUser [" + username + "]. \nPassword [" + password + "]");
+                }
+            } catch (AssertionError e) {
+                logger.error("[{}]: Login status is not as expected. Expected login status: [{}]. User [{}]. Password [{}]", methodName, expectedLoginStatus, username, password);
+                Assert.fail(e.getMessage() + "\nError is present on Login Page?: [" + isErrorPresent.get() + "]\nUser can logged in?: [" + !isErrorPresent.get() + "]");
+            }
+           // page.pause();
         });
     }
 }
