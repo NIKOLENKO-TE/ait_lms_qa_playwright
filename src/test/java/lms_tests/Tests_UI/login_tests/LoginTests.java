@@ -26,7 +26,7 @@ public class LoginTests extends BaseTest {
         basePage = new BasePage(page);
     }
 
-    @Test
+    @Test(priority = 1)
     @Feature("Login tests") // * Заголовок в отчете Allure
     @Story("Test Case #01") // * Подзаголовок в отчете Allure
     @TmsLink("LMS-211") // * Ссылка на задачу в Jira
@@ -37,7 +37,7 @@ public class LoginTests extends BaseTest {
         basePage.isCurrentPage(lessonsPageURL(), true); // * true
     }
 
-    @Test
+    @Test(priority = 2)
     @Feature("Login tests")
     @Story("Test Case #02")
     @TestType(NEGATIVE)
@@ -46,7 +46,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(false);
     }
 
-    @Test
+    @Test(priority = 3)
     @Feature("Login tests")
     @Story("Test Case #03")
     @TestType(NEGATIVE)
@@ -55,7 +55,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(false);
     }
 
-    @Test
+    @Test(priority = 4)
     @Feature("Login tests")
     @Story("Test Case #04")
     @TestType(NEGATIVE)
@@ -64,7 +64,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(false);
     }
 
-    @Test
+    @Test(priority = 5)
     @Feature("Login tests")
     @Story("Test Case #05")
     @TestType(NEGATIVE)
@@ -73,7 +73,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(false);
     }
 
-    @Test
+    @Test(priority = 6)
     @Feature("Login tests")
     @Story("Test Case #06")
     @TestType(NEGATIVE)
@@ -82,7 +82,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(false);
     }
 
-    @Test
+    @Test(priority = 7)
     @Feature("Login tests")
     @Story("Test Case #07")
     @TestType(POSITIVE)
@@ -91,7 +91,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(true);
     }
 
-    @Test
+    @Test(priority = 8)
     @Feature("Login tests")
     @Story("Test Case #08")
     @TestType(POSITIVE)
@@ -100,7 +100,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(true);
     }
 
-    @Test
+    @Test(priority = 9)
     @Feature("Login tests")
     @Story("Test Case #09")
     @TestType(NEGATIVE)
@@ -109,7 +109,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(false);
     }
 
-    @Test
+    @Test(priority = 10)
     @Feature("Login tests")
     @Story("Test Case #10")
     @TestType(POSITIVE)
@@ -118,7 +118,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(true);
     }
 
-    @Test
+    @Test(priority = 11)
     @Feature("Login tests")
     @Story("Test Case #11")
     @TestType(NEGATIVE)
@@ -127,7 +127,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(false);
     }
 
-    @Test
+    @Test(priority = 12)
     @Feature("Login tests")
     @Story("Test Case #12")
     @TestType(NEGATIVE)
@@ -136,7 +136,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(false);
     }
 
-    @Test
+    @Test(priority = 13)
     @Feature("Login tests")
     @Story("Test Case #13")
     @TestType(NEGATIVE)
@@ -145,7 +145,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(false);
     }
 
-    @Test
+    @Test(priority = 14)
     @Feature("Login tests")
     @Story("Test Case #14")
     @TestType(POSITIVE)
@@ -154,7 +154,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(true);
     }
 
-    @Test
+    @Test(priority = 15)
     @Feature("Login tests")
     @Story("Test Case #15")
     @TestType(POSITIVE)
@@ -163,7 +163,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(true);
     }
 
-    @Test
+    @Test(priority = 16)
     @Feature("Login tests")
     @Story("Test Case #16")
     @TestType(NEGATIVE)
@@ -172,7 +172,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(false);
     }
 
-    @Test
+    @Test(priority = 17)
     @Feature("Login tests")
     @Story("Test Case #17")
     @TestType(NEGATIVE)
@@ -181,7 +181,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(false);
     }
 
-    @Test
+    @Test(priority = 18)
     @Feature("Login tests")
     @Story("Test Case #18")
     @TestType(POSITIVE)
@@ -190,7 +190,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(true);
     }
 
-    @Test
+    @Test(priority = 19)
     @Feature("Login tests")
     @Story("Test Case #19")
     @TestType(POSITIVE)
@@ -199,7 +199,7 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(true);
     }
 
-    @Test
+    @Test(priority = 20)
     @Feature("Login tests")
     @Story("Test Case #20")
     @TestType(NEGATIVE)
@@ -207,12 +207,11 @@ public class LoginTests extends BaseTest {
         loginPage.login(UserCredentials.NON_EXISTENT_ACCOUNT, false); // ! false
         loginPage.isUserLoggedIn(false);
     }
-    @Test(dataProvider = "invalidLoginData", dataProviderClass = DataProviderClass.class)
+    @Test(priority = 21, dataProvider = "invalidLoginData", dataProviderClass = DataProviderClass.class)
     @Feature("Login tests")
     @Story("Test Case #21")
     @TestType(NEGATIVE)
     public void LOGIN_DATA_PROVIDER(String username, String password) {
         loginPage.login(username, password, false);
     }
-
 }
