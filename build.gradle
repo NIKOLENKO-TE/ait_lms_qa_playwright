@@ -31,6 +31,7 @@ dependencies {
     implementation group: 'org.testng', name: 'testng', version: '7.9.0'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.3'
     implementation group: 'io.qameta.allure', name: 'allure-testng', version: '2.26.0'
+    implementation group: 'org.webjars.npm', name: 'debug', version: '4.3.4'
 }
 
 test {

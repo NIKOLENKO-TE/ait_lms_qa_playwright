@@ -8,9 +8,11 @@
   "devDependencies": {
     "@playwright/test": "^1.42.1",
     "@types/node": "^20.11.25",
-    "allure-commandline": "^2.27.0"
+    "allure-commandline": "^2.27.0",
+    "eslint": "^7.32.0"
   },
   "scripts": {
-    "test": "gradlew test"
+    "test": "gradlew test",
+    "lint": "eslint ."
   }
 }
