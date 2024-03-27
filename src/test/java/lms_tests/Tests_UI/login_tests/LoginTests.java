@@ -207,7 +207,7 @@ public class LoginTests extends BaseTest {
         loginPage.login(UserCredentials.NON_EXISTENT_ACCOUNT, false); // ! false
         loginPage.isUserLoggedIn(false);
     }
-    @Test(priority = 21, dataProvider = "invalidLoginData", dataProviderClass = DataProviderClass.class)
+    @Test(priority = 21, dataProvider = "invalidLoginDataWithError", dataProviderClass = DataProviderClass.class)
     @Feature("Login tests")
     @Story("Test Case #21")
     @TestType(NEGATIVE)

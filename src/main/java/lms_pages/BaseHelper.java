@@ -1,7 +1,6 @@
 package lms_pages;
 
 import com.microsoft.playwright.*;
-import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Allure;
 import lms_pages.UI.LoginPage;
@@ -29,7 +28,7 @@ public class BaseHelper extends BasePage {
 
     public static boolean HEADLESS = Boolean.parseBoolean(System.getProperty("headless", String.valueOf(false))); // ? Headless mode
     public static boolean DEVTOOL = Boolean.parseBoolean(System.getProperty("devtools", String.valueOf(false))); // ? DevTools
-    public static int SLOWDOWN = Integer.parseInt(System.getProperty("slowdown", String.valueOf(0))); // ? Slowdown steps
+    public static int SLOWDOWN = Integer.parseInt(System.getProperty("slowdown", String.valueOf(1000))); // ? Slowdown steps
 
     public static boolean ENABLE_ALL_FILES = Boolean.parseBoolean(System.getProperty("allure_report", String.valueOf(true))); // ! Add files to ALLURE-report only for FAILED tests
     public static boolean TRACE = Boolean.parseBoolean(System.getProperty("trace", String.valueOf(ENABLE_ALL_FILES))); // !!! Adding a trace to a report requires large resources and does not support WebKit browser
@@ -271,85 +270,53 @@ public class BaseHelper extends BasePage {
         });
     }
 
-    //    public void fillEmail(String username, String methodName) {
-//        Allure.step("Fill in Email address", () -> {
-//            if (page.isClosed()) {
-//                logger.error("Page is closed before email could be filled.");
-//                return;
-//            }
-//            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
-//            page.getByPlaceholder("Email address").click();
-//            if (username == null || username.isEmpty()) {
-//                logger.error("[{}]: Email address is empty.", methodName);
-//            } else {
-//                page.fill("//input[@id='email-login-page']", username);
-//            }
-//            if (page.locator("text=Invalid email format").count() > 0) {
-//                logger.error("[{}]: Invalid email format error occurred", methodName);
-//            }
-//            page.waitForSelector("text=Invalid email format", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(200));
-//        });
-//    }
-//    public void fillPassword(String password, String methodName) {
-//        Allure.step("Fill in Password", () -> {
-//            if (page.isClosed()) {
-//                logger.error("Page is closed before password could be filled.");
-//                return;
-//            }
-//            page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Password")).click();
-//            if (password == null || password.isEmpty()) {
-//                logger.error("[{}]: Password is empty.", methodName);
-//            } else {
-//                page.fill("input[type='password']", password);
-//            }
-//            if (page.locator("text=The password must be at least").count() > 0) {
-//                logger.error("[{}]: Invalid password format error occurred", methodName);
-//            }
-//            page.waitForSelector("text=The password must be at least", new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN).setTimeout(200));
-//        });
-//    }
+    public void clickLoginButton() {
+        //isLoginButtonPresent(100);
+        page.locator("button:has-text('Login')").dispatchEvent("click");
+    }
+    public boolean isSignOutButtonPresent(int timeoutMillis) {
+        Locator signOutButton = page.locator("button:has-text('SignOut')");
+        try {
+            return signOutButton.isEnabled(new Locator.IsEnabledOptions().setTimeout(timeoutMillis));
+        } catch (TimeoutError e) {
+            return false;
+        }
+    }
+
+    public boolean isLoginButtonPresent(int timeoutMillis) {
+        Locator loginButton = page.locator("button:has-text('Login')");
+        try {
+            return loginButton.isEnabled(new Locator.IsEnabledOptions().setTimeout(timeoutMillis));
+        } catch (TimeoutError e) {
+            return false;
+        }
+    }
     public void fillEmail(String username, String methodName) {
         Allure.step("Fill in Email address", () -> {
-            if (page.isClosed()) {
-                logger.error("Page is closed before email could be filled.");
-                return;
-            }
-            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
-            page.getByPlaceholder("Email address").click();
+            page.pause();
+            page.locator("input[placeholder='Email address']").click();
+            page.locator("input[placeholder='Email address']").pressSequentially(username);
             if (username == null || username.isEmpty()) {
                 logger.warn("[{}]: Email address is empty.", methodName);
-            } else {
-                page.fill("//input[@id='email-login-page']", username);
             }
-            boolean isInvalidFormatMessageVisible = page.locator("text=Invalid email format").isVisible();
-            if (isInvalidFormatMessageVisible) {
+            if (page.locator("text=Invalid email format").isVisible()) {
                 logger.warn("[{}]: Invalid email format error occur", methodName);
             }
-            boolean isFieldRequiredMessageVisible = page.locator("text='This field is required'").isVisible();
-            if (isFieldRequiredMessageVisible) {
+            if (page.locator("text='This field is required'").isVisible()) {
                 logger.warn("[{}]: 'This field is required' error occur", methodName);
             }
         });
     }
-
     public void fillPassword(String password, String methodName) {
         Allure.step("Fill in Password", () -> {
-            if (page.isClosed()) {
-                logger.error("Page is closed before password could be filled.");
-                return;
-            }
-            page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Password")).click();
+            page.locator("input.p-password-input").fill(password);
             if (password == null || password.isEmpty()) {
                 logger.warn("[{}]: Password is empty.", methodName);
-            } else {
-                page.fill("input[type='password']", password);
             }
-            boolean isInvalidFormatMessageVisible = page.locator("text=The password must be at least").isVisible();
-            if (isInvalidFormatMessageVisible) {
+            if (page.locator("text='Invalid password format'").isVisible()) {
                 logger.warn("[{}]: Invalid password format error occur", methodName);
             }
-            boolean isFieldRequiredMessageVisible = page.locator("text='This field is required'").isVisible();
-            if (isFieldRequiredMessageVisible) {
+            if (page.locator("text='This field is required'").isVisible()) {
                 logger.warn("[{}]: 'This field is required' error occur", methodName);
             }
         });
@@ -384,7 +351,16 @@ public class BaseHelper extends BasePage {
                     logger.error("[{}]: USER [{}] and PASSWORD [{}] is not logged in because login or password is invalid, user not exist or not confirmed yet.", methodName, username, password);
                 }
             } catch (TimeoutError e) {
-                // System.out.println("USER [" + credentials.getUser_email() + "] is logged in");
+                logger.error("[{}]: An error occurred while checking for 'Invalid login or password' error: {}", methodName, e.getMessage());
+            }
+            try {
+                if (page.locator("text='Invalid email format'").isVisible()) {
+                    isErrorPresent.set(true);
+                    logger.warn("[{}]: USER [{}] is not logged in because Invalid email format.", methodName, username);
+                    throw new AssertionError("Invalid email format");
+                }
+            } catch (TimeoutError e) {
+                logger.error("[{}]: An error occurred while checking for 'Invalid email format' error: {}", methodName, e.getMessage());
             }
             boolean actualLoginStatus = !isErrorPresent.get();
             if (actualLoginStatus != expectedLoginStatus) {

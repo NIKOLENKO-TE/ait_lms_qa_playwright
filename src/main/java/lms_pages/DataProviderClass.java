@@ -34,8 +34,8 @@ public class DataProviderClass {
         return result;
     }
 
-    @DataProvider(name = "invalidLoginData")
-    public Object[][] getInvalidLoginData() {
-        return readDataFromCSV("email_password_invalid.csv");
+    @DataProvider(name = "invalidLoginDataWithError")
+    public Object[][] getInvalidLoginDataWithError() {
+        return readDataFromCSV("email_password_invalid_with_error.csv");
     }
 }
