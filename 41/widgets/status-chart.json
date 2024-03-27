@@ -1,1 +1,0 @@
-[{"uid":"aab453de57fbf3c2","name":"logoAvailabilityTest","time":{"start":1711549127567,"stop":1711549157581,"duration":30014},"status":"broken","severity":"normal"},{"uid":"8e4a9f5409116577","name":"fillManyTextBoxes","time":{"start":1711548991277,"stop":1711549125238,"duration":133961},"status":"passed","severity":"normal"}]
