@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'io.qameta.allure' version '2.11.2'
+    id 'checkstyle'
 }
 
 group 'org.example'
@@ -34,6 +35,13 @@ dependencies {
     implementation group: 'org.webjars.npm', name: 'debug', version: '4.3.4'
 }
 
+checkstyle {
+    toolVersion = '8.45'
+    configFile = file("${project.rootDir}/checkstyle.xml")
+}
+
+check.dependsOn checkstyleMain, checkstyleTest
+
 test {
     useTestNG()
     systemProperty 'allure.results.directory', 'build/allure-results'
@@ -61,6 +69,7 @@ sourceSets {
 processTestResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
 ext {
 // !  ADD DEFAULT VALUES FOR VARIABLES HERE
     browserType = project.hasProperty('browserType') ? project.getProperty('browserType') : 'chrome'

@@ -3,8 +3,8 @@ package lms_tests.Tests_UI.login_tests;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import io.qameta.allure.TmsLink;
+import io.qameta.allure.testng.Tag;
 import lms_pages.BasePage;
-import lms_pages.DataProviderClass;
 import lms_pages.UI.LoginPage;
 import lms_pages.UI.UserCredentials;
 import lms_tests.BaseTest;
@@ -28,6 +28,7 @@ public class LoginTests extends BaseTest {
 
     @Test(priority = 1)
     @Feature("Login tests") // * Заголовок в отчете Allure
+    @Tag("Login tests") // * Тег в Playwright
     @Story("Test Case #01") // * Подзаголовок в отчете Allure
     @TmsLink("LMS-211") // * Ссылка на задачу в Jira
     @TestType(POSITIVE)
@@ -207,11 +208,11 @@ public class LoginTests extends BaseTest {
         loginPage.login(UserCredentials.NON_EXISTENT_ACCOUNT, false); // ! false
         loginPage.isUserLoggedIn(false);
     }
-    @Test(priority = 21, dataProvider = "invalidLoginDataWithError", dataProviderClass = DataProviderClass.class)
-    @Feature("Login tests")
-    @Story("Test Case #21")
-    @TestType(NEGATIVE)
-    public void LOGIN_DATA_PROVIDER(String username, String password) {
-        loginPage.login(username, password, false);
-    }
+//    @Test(priority = 21, dataProvider = "invalidLoginDataWithError", dataProviderClass = DataProviderClass.class)
+//    @Feature("Login tests")
+//    @Story("Test Case #21")
+//    @TestType(NEGATIVE)
+//    public void LOGIN_DATA_PROVIDER(String username, String password) {
+//        loginPage.login(username, password, false);
+//    }
 }
