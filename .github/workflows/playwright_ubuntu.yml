@@ -44,6 +44,8 @@ jobs:
       - name: Check Node version
         run: node --version
       #// !  Установка Gradle
+      - name: List files in project root
+        run: ls -la
       - name: Build with Gradle
         run: ./gradlew build -x test --no-build-cache
       - name: Check Gradle version
