@@ -37,7 +37,7 @@ dependencies {
 
 checkstyle {
     toolVersion = '8.6'
-    configFile = file("resources/checkstyle.xml")
+    configFile = file("${project.rootDir}/src/test/resources/checkstyle.xml")
 }
 
 check.dependsOn checkstyleMain, checkstyleTest
