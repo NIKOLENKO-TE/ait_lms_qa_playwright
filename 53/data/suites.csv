@@ -1,3 +1,0 @@
-"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"broken","Fri Mar 29 22:55:48 GMT 2024","Fri Mar 29 22:56:18 GMT 2024","30012","Gradle suite","Gradle test","lms_tests.Tests_UI.logo_tests.LogoTests","lms_tests.Tests_UI.logo_tests.LogoTests","logoAvailabilityTest","logoAvailabilityTest",""
-"passed","Fri Mar 29 22:55:28 GMT 2024","Fri Mar 29 22:55:47 GMT 2024","18883","Gradle suite","Gradle test","lms_tests.Tests_UI.TempUITests","lms_tests.Tests_UI.TempUITests","fillManyTextBoxes","fillManyTextBoxes",""
