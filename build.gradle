@@ -36,8 +36,10 @@ dependencies {
 }
 
 checkstyle {
-    toolVersion = '8.45'
-    configFile = file("${project.rootDir}/src/test/resources/checkstyle.xml")
+    toolVersion '10.7.0'
+    configFile file("${rootDir}/codestyle/google_checks.xml")
+    ignoreFailures false
+    //./gradlew checkstyleTest --stacktrace
 }
 
 check.dependsOn checkstyleMain, checkstyleTest
