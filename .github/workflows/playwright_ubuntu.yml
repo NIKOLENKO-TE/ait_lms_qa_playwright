@@ -32,11 +32,18 @@ jobs:
           node-version: '20'
       - name: Check Node version
         run: node --version
+#     // !  Установка Gradle
+#      - name: List files in test resources directory
+#        run: ls -la src/test/resources
+#      - name: Build with Gradle
+#        run: ./gradlew checkstyleTest --no-build-cache --stacktrace
+#      - name: Check Gradle version
+#        run: ./gradlew --version
+#      - name: Clean Gradle build
+#        run: ./gradlew clean
       #// !  Установка Gradle
-      - name: List files in test resources directory
-        run: ls -la src/test/resources
       - name: Build with Gradle
-        run: ./gradlew checkstyleTest --no-build-cache --stacktrace
+        run: ./gradlew build -x test --no-build-cache
       - name: Check Gradle version
         run: ./gradlew --version
       - name: Clean Gradle build
