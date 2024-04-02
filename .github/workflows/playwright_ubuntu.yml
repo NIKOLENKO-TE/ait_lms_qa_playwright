@@ -71,7 +71,7 @@ jobs:
         if: always()
         run: ls -R
       - name: ~~~~~~~ Run tests ~~~~~~~
-        run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew test
+        run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" $GITHUB_WORKSPACE/gradlew test
       - name: List Directories after tests
         if: always()
         run: ls -R
