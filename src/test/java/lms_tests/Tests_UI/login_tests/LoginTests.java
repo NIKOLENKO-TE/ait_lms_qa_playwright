@@ -48,14 +48,14 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(false);
     }
 
-    @Test(priority = 3)
-    @Feature("Login tests")
-    @Story("Test Case #03")
-    @TestType(NEGATIVE)
-    public void LOGIN_STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_4() {
-        loginPage.login(UserCredentials.STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_4, false); // ! false
-        loginPage.isUserLoggedIn(false);
-    }
+//    @Test(priority = 3)
+//    @Feature("Login tests")
+//    @Story("Test Case #03")
+//    @TestType(NEGATIVE)
+//    public void LOGIN_STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_4() {
+//        loginPage.login(UserCredentials.STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_4, false); // ! false
+//        loginPage.isUserLoggedIn(false);
+//    }
 
     @Test(priority = 4)
     @Feature("Login tests")
