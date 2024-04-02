@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build with Gradle
-        run: $GITHUB_WORKSPACE/gradlew build -x test --no-build-cache
+        run: sudo $GITHUB_WORKSPACE/gradlew build -x test --no-build-cache
         shell: bash
       - name: Check Gradle version
         run: ./gradlew --version
