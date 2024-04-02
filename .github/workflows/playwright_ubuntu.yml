@@ -54,7 +54,7 @@ jobs:
         run: npx playwright install chrome
 
   run_tests:
-    needs: [install_gradle, install_playwright]
+    needs: [install_gradle, install_playwright, install_dependencies]
     runs-on: ubuntu-latest
     steps:
       - name: List Directories before tests
