@@ -29,6 +29,10 @@ jobs:
       - name: Check Java Core version
         run: javac -version
       #// !  Installation Node.js
+  install_node_js:
+    needs: checking_java_versions
+    runs-on: ubuntu-latest
+    steps:
       - name: Install Node version "20"
         uses: actions/setup-node@v4
         with:
