@@ -292,6 +292,8 @@ public class BaseHelper extends BasePage {
         }
     }
     public void fillEmail(String username, String methodName) {
+        final String finalPassword = (username == null) ? "" : username;
+        //page.pause();
         Allure.step("Fill in Email address", () -> {
             page.locator("input[placeholder='Email address']").click();
             page.locator("input[placeholder='Email address']").pressSequentially(username);
@@ -307,19 +309,22 @@ public class BaseHelper extends BasePage {
         });
     }
     public void fillPassword(String password, String methodName) {
+        final String finalPassword = (password == null) ? "" : password;
         Allure.step("Fill in Password", () -> {
-            page.locator("input.p-password-input").fill(password);
-            if (password == null || password.isEmpty()) {
+            //page.pause();
+            page.locator("input.p-password-input").fill(finalPassword);
+            if (finalPassword.isEmpty()) {
                 logger.warn("[{}]: Password is empty.", methodName);
             }
             if (page.locator("text='Invalid password format'").isVisible()) {
-                logger.warn("[{}]: Invalid password format error occur", methodName);
+                logger.warn("[{}]: Invalid password format error occurred", methodName);
             }
             if (page.locator("text='This field is required'").isVisible()) {
-                logger.warn("[{}]: 'This field is required' error occur", methodName);
+                logger.warn("[{}]: 'This field is required' error occurred", methodName);
             }
         });
     }
+
 
     public void clickSignInButton(String username, String password, String methodName) {
         Allure.step("Click on Sign In button", () -> {
@@ -350,7 +355,7 @@ public class BaseHelper extends BasePage {
                     logger.error("[{}]: USER [{}] and PASSWORD [{}] is not logged in because login or password is invalid, user not exist or not confirmed yet.", methodName, username, password);
                 }
             } catch (TimeoutError e) {
-                logger.error("[{}]: An error occurred while checking for 'Invalid login or password' error: {}", methodName, e.getMessage());
+               //logger.error("[{}]: An error occurred while checking for 'Invalid login or password' error: {}", methodName, e.getMessage());
             }
             try {
                 if (page.locator("text='Invalid email format'").isVisible()) {
@@ -359,7 +364,7 @@ public class BaseHelper extends BasePage {
                     throw new AssertionError("Invalid email format");
                 }
             } catch (TimeoutError e) {
-                logger.error("[{}]: An error occurred while checking for 'Invalid email format' error: {}", methodName, e.getMessage());
+                //logger.error("[{}]: An error occurred while checking for 'Invalid email format' error: {}", methodName, e.getMessage());
             }
             boolean actualLoginStatus = !isErrorPresent.get();
             if (actualLoginStatus != expectedLoginStatus) {

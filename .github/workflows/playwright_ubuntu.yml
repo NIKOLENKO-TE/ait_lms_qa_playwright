@@ -13,11 +13,11 @@ jobs:
       #// !  Установка Java
       - name: Set execute permission for gradlew
         run: chmod +x gradlew
-      - name: Install Java version "17"
+      - name: Install Java version "18"
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '18'
       #// !  Проверка версий Java, JVM, Java Core
       - name: Check Java version
         run: java -version
@@ -32,15 +32,6 @@ jobs:
           node-version: '20'
       - name: Check Node version
         run: node --version
-#     // !  Установка Gradle
-#      - name: List files in test resources directory
-#        run: ls -la src/test/resources
-#      - name: Build with Gradle
-#        run: ./gradlew checkstyleTest --no-build-cache --stacktrace
-#      - name: Check Gradle version
-#        run: ./gradlew --version
-#      - name: Clean Gradle build
-#        run: ./gradlew clean
       #// !  Установка Gradle
       - name: Build with Gradle
         run: ./gradlew build -x test --no-build-cache
