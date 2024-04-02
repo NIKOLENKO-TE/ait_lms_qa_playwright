@@ -64,6 +64,7 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install chrome
       - name: Check installed Playwright browsers versions
+        run: npx playwright --version
 
   install_allure:
     needs: install_playwright
