@@ -30,7 +30,7 @@ jobs:
         run: javac -version
       #// !  Installation Node.js
   install_node_js:
-    needs: checking_java_versions
+    needs: [checking_java_versions, installation_java]
     runs-on: ubuntu-latest
     steps:
       - name: Install Node version "20"
