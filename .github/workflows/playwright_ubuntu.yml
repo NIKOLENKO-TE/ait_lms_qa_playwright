@@ -18,10 +18,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       #// !  Checking versions Java, JVM, Java Core
-  checking_java_versions:
-    needs: installation_java
-    runs-on: ubuntu-latest
-    steps:
       - name: Check Java version
         run: java -version
       - name: Check JVM version
@@ -30,7 +26,7 @@ jobs:
         run: javac -version
       #// !  Installation Node.js
   install_node_js:
-    needs: [checking_java_versions, installation_java]
+    needs: installation_java
     runs-on: ubuntu-latest
     steps:
       - name: Install Node version "20"
