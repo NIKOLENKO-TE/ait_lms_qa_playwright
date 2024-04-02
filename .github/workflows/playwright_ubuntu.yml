@@ -97,8 +97,11 @@ jobs:
       - name: List Directories before tests (optional)
         if: always()
         run: ls -R
+      - name: Set execute permission for gradlew
+        run: chmod +x gradlew
 
       - name: ~~~~~~~ Run tests ~~~~~~~
+
         run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew test
 
       - name: List Directories after tests (optional)
