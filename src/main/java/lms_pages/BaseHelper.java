@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.ITestResult;
 
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -274,6 +276,7 @@ public class BaseHelper extends BasePage {
         //isLoginButtonPresent(100);
         page.locator("button:has-text('Login')").dispatchEvent("click");
     }
+
     public boolean isSignOutButtonPresent(int timeoutMillis) {
         Locator signOutButton = page.locator("button:has-text('SignOut')");
         try {
@@ -291,7 +294,8 @@ public class BaseHelper extends BasePage {
             return false;
         }
     }
-//    public void fillEmail(String username, String methodName) {
+
+    //    public void fillEmail(String username, String methodName) {
 //        final String finalPassword = (username == null) ? "" : username;
 //        //page.pause();
 //        Allure.step("Fill in Email address", () -> {
@@ -311,10 +315,12 @@ public class BaseHelper extends BasePage {
     public void fillEmail(String username, String methodName) {
         final String finalUsername = (username == null) ? "" : username;
         Allure.step("Fill in Email address", () -> {
-           //page.pause();
+            // Копирование finalUsername в буфер обмена
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(finalUsername), null);
             page.locator("input[placeholder='Email address']").click();
-            page.locator("input[placeholder='Email address']").pressSequentially(username); // Заполнение поля с адресом электронной почты
-            if (username == null || username.isEmpty()) {
+            // Вставка finalUsername из буфера обмена
+            page.keyboard().press("Control+V");
+            if (finalUsername.isEmpty()) {
                 logger.warn("[{}]: Email address is empty.", methodName);
             } else {
                 // Проверка наличия ошибки "Invalid email format" после ввода текста в поле
@@ -327,6 +333,7 @@ public class BaseHelper extends BasePage {
             }
         });
     }
+
     public void fillPassword(String password, String methodName) {
         final String finalPassword = (password == null) ? "" : password;
         Allure.step("Fill in Password", () -> {
@@ -365,7 +372,7 @@ public class BaseHelper extends BasePage {
 
     }
 
-     public void checkLoginAvailability(Locator errorLocator, AtomicBoolean isErrorPresent, String username, String password, boolean expectedLoginStatus, String methodName) {
+    public void checkLoginAvailability(Locator errorLocator, AtomicBoolean isErrorPresent, String username, String password, boolean expectedLoginStatus, String methodName) {
         Allure.step("Check login status", () -> {
             try {
                 page.waitForSelector("div:has-text('ErrorInvalid login or password')", new Page.WaitForSelectorOptions().setTimeout(1000));
@@ -374,7 +381,7 @@ public class BaseHelper extends BasePage {
                     logger.error("[{}]: USER [{}] and PASSWORD [{}] is not logged in because login or password is invalid, user not exist or not confirmed yet.", methodName, username, password);
                 }
             } catch (TimeoutError e) {
-               //logger.error("[{}]: An error occurred while checking for 'Invalid login or password' error: {}", methodName, e.getMessage());
+                //logger.error("[{}]: An error occurred while checking for 'Invalid login or password' error: {}", methodName, e.getMessage());
             }
             try {
                 if (page.locator("text='Invalid email format'").isVisible()) {
@@ -474,7 +481,7 @@ public class BaseHelper extends BasePage {
                 logger.error("[{}]: Login status is not as expected. Expected login status: [{}]. User [{}]. Password [{}]", methodName, expectedLoginStatus, username, password);
                 Assert.fail(e.getMessage() + "\nError is present on Login Page?: [" + isErrorPresent.get() + "]\nUser can logged in?: [" + !isErrorPresent.get() + "]");
             }
-           // page.pause();
+            // page.pause();
         });
     }
 }
