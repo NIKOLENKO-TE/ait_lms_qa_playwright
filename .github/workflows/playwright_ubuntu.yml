@@ -78,6 +78,7 @@ jobs:
         if: always()
         run: ls -R
   generate_report:
+    if: success()
     runs-on: ubuntu-latest
     steps:
       #// ! Creating a Gradle Report
