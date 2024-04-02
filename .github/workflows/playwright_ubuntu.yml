@@ -41,7 +41,7 @@ jobs:
           wget -q https://services.gradle.org/distributions/gradle-7.3-bin.zip
           unzip -q gradle-7.3-bin.zip
       - name: Build with Gradle
-        run: ./gradle-7.3/bin/gradle build -x test --no-build-cache
+        run: <path-to-build.gradle>/gradle-7.3/bin/gradle build -x test --no-build-cache
 
   install_playwright:
     needs: setup_environment
