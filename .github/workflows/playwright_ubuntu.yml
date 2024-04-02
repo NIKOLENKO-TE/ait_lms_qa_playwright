@@ -46,7 +46,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build with Gradle
-        run: ./gradlew build -x test --no-build-cache
+        run: $GITHUB_WORKSPACE/gradlew build -x test --no-build-cache
+        shell: bash
       - name: Check Gradle version
         run: ./gradlew --version
       - name: Clean Gradle build
@@ -85,7 +86,8 @@ jobs:
         if: always()
         run: ls -R
       - name: ~~~~~~~ Run tests ~~~~~~~
-        run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew test
+        run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" $GITHUB_WORKSPACE/gradlew test
+        shell: bash
       - name: List Directories after tests
         if: always()
         run: ls -R
