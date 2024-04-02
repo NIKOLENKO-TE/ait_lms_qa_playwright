@@ -62,7 +62,6 @@ jobs:
         run: npm install -g allure-commandline
       - name: Check Allure version
         run: allure --version
-
   run_tests:
     needs: install_dependencies
     runs-on: ubuntu-latest
@@ -78,6 +77,7 @@ jobs:
         run: ls -R
 
   archive_test_results:
+    needs: run_tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -89,7 +89,7 @@ jobs:
           path: |
             build/reports/tests/test/*
   archive_failed_tests:
-    needs: archive_test_results
+    needs: run_tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
