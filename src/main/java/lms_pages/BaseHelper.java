@@ -293,7 +293,6 @@ public class BaseHelper extends BasePage {
     }
     public void fillEmail(String username, String methodName) {
         Allure.step("Fill in Email address", () -> {
-            page.pause();
             page.locator("input[placeholder='Email address']").click();
             page.locator("input[placeholder='Email address']").pressSequentially(username);
             if (username == null || username.isEmpty()) {
