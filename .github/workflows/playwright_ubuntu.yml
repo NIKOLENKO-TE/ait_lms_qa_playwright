@@ -12,7 +12,7 @@ jobs:
       - name: Set execute permission for gradlew
         run: |
           cd $GITHUB_WORKSPACE
-          chmod +x gradlew
+          chmod +x $GITHUB_WORKSPACE/gradlew
       - name: Install Java version "17"
         uses: actions/setup-java@v4
         with:
