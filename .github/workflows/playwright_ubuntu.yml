@@ -4,6 +4,13 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+permissions:
+  contents: read
+  issues: write
+  actions: write
+  packages: write
+  deployments: write
+  id-token: write
 jobs:
   #// !  Checking code for compliance with standards
   test:
@@ -79,6 +86,7 @@ jobs:
         run: ls -R
   generate_report:
     needs: test # добавлено 'needs: test'
+    if: always() # изменено с 'success()' на 'always()'
     runs-on: ubuntu-latest
     steps:
       #// ! Creating a Gradle Report
