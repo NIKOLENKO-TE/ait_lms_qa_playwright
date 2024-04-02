@@ -76,7 +76,7 @@ public class BaseHelper extends BasePage {
     }
 
     public static Browser setupBrowser() {
-        String browserType = System.getProperty("browserType", "CHROME");
+        String browserType = System.getProperty("browserType", "FIREFOX");
 
         Browser browser;
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setDevtools(DEVTOOL).setSlowMo(SLOWDOWN).setHeadless(HEADLESS);
@@ -291,17 +291,36 @@ public class BaseHelper extends BasePage {
             return false;
         }
     }
+//    public void fillEmail(String username, String methodName) {
+//        final String finalPassword = (username == null) ? "" : username;
+//        //page.pause();
+//        Allure.step("Fill in Email address", () -> {
+//            page.locator("input[placeholder='Email address']").click();
+//            page.locator("input[placeholder='Email address']").pressSequentially(username);
+//            if (username == null || username.isEmpty()) {
+//                logger.warn("[{}]: Email address is empty.", methodName);
+//            }
+//            if (page.locator("text=Invalid email format").isVisible()) {
+//                logger.warn("[{}]: Invalid email format error occur", methodName);
+//            }
+//            if (page.locator("text='This field is required'").isVisible()) {
+//                logger.warn("[{}]: 'This field is required' error occur", methodName);
+//            }
+//        });
+//    }
     public void fillEmail(String username, String methodName) {
-        final String finalPassword = (username == null) ? "" : username;
-        //page.pause();
+        final String finalUsername = (username == null) ? "" : username;
         Allure.step("Fill in Email address", () -> {
+           //page.pause();
             page.locator("input[placeholder='Email address']").click();
-            page.locator("input[placeholder='Email address']").pressSequentially(username);
+            page.locator("input[placeholder='Email address']").pressSequentially(username); // Заполнение поля с адресом электронной почты
             if (username == null || username.isEmpty()) {
                 logger.warn("[{}]: Email address is empty.", methodName);
-            }
-            if (page.locator("text=Invalid email format").isVisible()) {
-                logger.warn("[{}]: Invalid email format error occur", methodName);
+            } else {
+                // Проверка наличия ошибки "Invalid email format" после ввода текста в поле
+                if (page.locator("text=Invalid email format").isVisible()) {
+                    logger.warn("[{}]: Invalid email format error occur", methodName);
+                }
             }
             if (page.locator("text='This field is required'").isVisible()) {
                 logger.warn("[{}]: 'This field is required' error occur", methodName);

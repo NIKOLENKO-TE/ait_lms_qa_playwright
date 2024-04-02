@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'io.qameta.allure' version '2.11.2'
     id 'checkstyle'
-    id 'com.diffplug.spotless' version '5.13.0'
 }
 
 group 'org.example'
@@ -42,15 +41,7 @@ checkstyle {
     ignoreFailures false
     //./gradlew checkstyleTest --stacktrace
 }
-spotless {
-    java {
-        googleJavaFormat()
-        // Автоматическая коррекция
-        target 'src/**/*.java'
-        removeUnusedImports()
-        trimTrailingWhitespace()
-    }
-}
+
 check.dependsOn checkstyleMain, checkstyleTest
 
 test {
@@ -58,13 +49,10 @@ test {
     systemProperty 'allure.results.directory', 'build/allure-results'
 }
 
-tasks.withType(Test).configureEach {
+tasks.withType(Test) {
     finalizedBy 'allureReport'
-    finalizedBy 'spotlessApply'
 }
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-}
+
 allureReport {
     reportDir = file('build/allure-report')
 }
