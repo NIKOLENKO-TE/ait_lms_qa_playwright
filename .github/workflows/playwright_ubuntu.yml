@@ -5,11 +5,12 @@ on:
   pull_request:
     branches: [ main, master ]
 jobs:
-  #// !  Installation Java
-  installation_java:
+  #// !  Checking code for compliance with standards
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      #// !  Installation Java
       - name: Set execute permission for gradlew
         run: chmod +x gradlew
       - name: Install Java version "17"
@@ -25,10 +26,6 @@ jobs:
       - name: Check Java Core version
         run: javac -version
       #// !  Installation Node.js
-  install_node_js:
-    needs: installation_java
-    runs-on: ubuntu-latest
-    steps:
       - name: Install Node version "20"
         uses: actions/setup-node@v4
         with:
@@ -37,7 +34,7 @@ jobs:
         run: node --version
       #// !  Installation Gradle
       - name: Build with Gradle
-        run: ./gradlew build -x test --no-build-cache
+        run: ./gradlew build -x test --no-build-cache --stacktrace
       - name: Check Gradle version
         run: ./gradlew --version
       - name: Clean Gradle build
