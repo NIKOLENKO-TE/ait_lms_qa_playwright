@@ -4,7 +4,6 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-
 jobs:
   setup_environment:
     runs-on: ubuntu-latest
@@ -37,10 +36,12 @@ jobs:
     needs: setup_environment
     runs-on: ubuntu-latest
     steps:
-      - name: Set working directory
-        run: cd $GITHUB_WORKSPACE
+      - name: Download and extract Gradle
+        run: |
+          wget -q https://services.gradle.org/distributions/gradle-7.3-bin.zip
+          unzip -q gradle-7.3-bin.zip
       - name: Build with Gradle
-        run: ./gradlew build -x test --no-build-cache
+        run: ./gradle-7.3/bin/gradle build -x test --no-build-cache
 
   install_playwright:
     needs: setup_environment
@@ -62,7 +63,7 @@ jobs:
       - name: List Directories before tests
         run: ls -R
       - name: ~~~~~~~ Run tests ~~~~~~~
-        run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew test
+        run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradle-7.3/bin/gradle test
       - name: List Directories after tests
         run: ls -R
 
