@@ -12,8 +12,8 @@ on:
         default: 'login_users'
         type: choice
         options:
-          - '▶️ 🐞 all_tests'
-          - '▶️ 🐞 login_users'
+          - 'all_tests'
+          - 'login_users'
 jobs:
   # !  Checking code for compliance with standards
   test:
@@ -82,34 +82,39 @@ jobs:
         run: ls -R
       # !  Running tests
       - name: ▶️ 🐞 all_tests
+        if: ${{ github.event.inputs.test_suite == 'all_tests' }}
         run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew test
       - name: ▶️ 🐞 login_users
+        if: ${{ github.event.inputs.test_suite == 'login_users' }}
         run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew ${{ github.event.inputs.test_suite }} --tests "lms_tests.Tests_UI.login_tests.LoginTests"
       # !  List of folders after tests
       - name: ✅ 📂 List Directories after tests
         if: always()
         run: ls -R
       # !  Upload Gradle build log
+      - name: ✅ 📦 Upload Gradle build log
+        if: always()
+        run: echo "::set-output name=logfile::build.log"
       - name: ✅ 📦 Archive [Gradle build log]
         uses: actions/upload-artifact@v2
         if: always()
         with:
           name: gradle-build-log
-          path: build.log
-      # ! Creating a Gradle Report
+          path: ${{ steps.upload.outputs.logfile }}
+      # ! Upload Gradle Report
       - name: ✅ 📦 Archive [test results]
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: gradle-results
+          name: gradle-results.zip
           path: |
             build/reports/tests/test/*
-      # !  Creating an archive with TEST_logs files of failed tests
+      # !  Upload archive with TEST_logs files of failed tests
       - name: ✅ 📦 Archive [Allure attachments for failed tests]
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: allure-attachments for failed tests
+          name: allure-attachments for failed tests.zip
           path: |
             src/test_logs/*
       # *  Load test report history (remove this step if you need a clean history)
