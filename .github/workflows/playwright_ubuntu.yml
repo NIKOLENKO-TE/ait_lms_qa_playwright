@@ -118,8 +118,5 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v1.2.9
         if: always()
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          artifact_name: allure-results
 
 
