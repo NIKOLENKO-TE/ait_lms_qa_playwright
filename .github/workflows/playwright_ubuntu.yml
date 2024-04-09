@@ -103,19 +103,23 @@ jobs:
             path: |
                 src/test_logs/*
 
-        #// !  Save Allure results for history
+              #// !  Save Allure results for history
       - name: Save Allure results
         uses: actions/upload-artifact@v4
         if: always()
         with:
-            name: allure-results
-            path: |
-                build/allure-results
-            retention-days: 30  # Примерно указывает, сколько дней хранить артефакты
+          name: allure-results
+          path: |
+            build/allure-results
+          retention-days: 30  # Примерно указывает, сколько дней хранить артефакты
+
       #// !  Publish test report 2
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1.2.9
         if: always()
-        artifact_name: allure-results
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          artifact_name: allure-results
+
 
