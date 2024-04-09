@@ -4,6 +4,16 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        description: 'Choose test suite'
+        required: true
+        default: 'login_users'
+        type: choice
+        options:
+          - '▶️ 🐞 all_tests'
+          - '▶️ 🐞 login_users'
 jobs:
   # !  Checking code for compliance with standards
   test:
@@ -34,7 +44,7 @@ jobs:
         run: node --version
       # !  Installation Gradle
       - name: ✅ ⚙️ Build with Gradle
-        run: ./gradlew build -x test --no-build-cache
+        run: ./gradlew build -x test --no-build-cache > build.log 2>&1 || true
       - name: ❎ ⌛️ Check Gradle version
         run: ./gradlew --version
       - name: ✅ 🚿 Clean Gradle build
@@ -71,8 +81,10 @@ jobs:
         if: always()
         run: ls -R
       # !  Running tests
-      - name: ▶️ 🐞🐞🐞🐞🐞 RUN TESTS 🐞🐞🐞🐞🐞
+      - name: ▶️ 🐞 all_tests
         run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew test
+      - name: ▶️ 🐞 login_users
+        run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew ${{ github.event.inputs.test_suite }} --tests "lms_tests.Tests_UI.login_tests.LoginTests"
       # !  List of folders after tests
       - name: ✅ 📂 List Directories after tests
         if: always()
