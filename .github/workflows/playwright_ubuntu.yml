@@ -4,6 +4,13 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+permissions:
+    contents: read
+    pages: write
+    issues: write
+    actions: write
+    packages: write
+    deployments: write
 jobs:
   #// !  Checking code for compliance with standards
   test:
