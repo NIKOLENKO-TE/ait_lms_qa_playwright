@@ -114,6 +114,10 @@ jobs:
           retention-days: 30  # Примерно указывает, сколько дней хранить артефакты
 
       #// !  Publish test report 2
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v3
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v2
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1.2.9
