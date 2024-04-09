@@ -4,6 +4,13 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+permissions:
+  contents: read
+  issues: write
+  actions: write
+  packages: write
+  deployments: write
+  id-token: write
 jobs:
   #// !  Checking code for compliance with standards
   test:
@@ -34,7 +41,7 @@ jobs:
         run: node --version
       #// !  Installation Gradle
       - name: Build with Gradle
-        run: ./gradlew build -x test --no-build-cache
+        run: ./gradlew build -x test --no-build-cache --stacktrace
       - name: Check Gradle version
         run: ./gradlew --version
       - name: Clean Gradle build
@@ -77,6 +84,11 @@ jobs:
       - name: List Directories after tests
         if: always()
         run: ls -R
+  generate_report:
+    needs: test # добавлено 'needs: test'
+    if: always() # изменено с 'success()' на 'always()'
+    runs-on: ubuntu-latest
+    steps:
       #// ! Creating a Gradle Report
       - name: Archive [test results]
         uses: actions/upload-artifact@v4
@@ -93,38 +105,19 @@ jobs:
           name: allure-attachments for failed tests
           path: |
             src/test_logs/*
-        #// !  Creating a Gradle Report
-      - name: Archive [test results]
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-            name: gradle-results-${{ github.run_id }} # Добавляем идентификатор текущего билда к имени артефакта
-            path: |
-                build/reports/tests/test/*
-
-        #// !  Creating an archive with files of failed tests
-      - name: Archive [Allure attachments for failed tests]
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-            name: allure-attachments-${{ github.run_id }} # Добавляем идентификатор текущего билда к имени артефакта
-            path: |
-                src/test_logs/*
-
-        #// !  Build allure report on gh-pages
+      #// !  Build allure report on gh-pages
       - name: Build allure report on gh-pages
         uses: simple-elf/allure-report-action@v1.7
         if: always()
         with:
-            gh_pages: gh-pages
-            allure_history: allure-history
-            allure_results: build/allure-results-${{ github.run_id }} # Добавляем идентификатор текущего билда к имени директории с результатами тестов
-
-        #// !  Publish test report
+          gh_pages: gh-pages
+          allure_history: allure-history
+          allure_results: build/allure-results
+      #// !  Publish test report
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
         if: always()
         with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_branch: gh-pages
-            publish_dir: allure-history
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
