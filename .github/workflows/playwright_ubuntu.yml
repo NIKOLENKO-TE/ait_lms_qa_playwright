@@ -123,5 +123,5 @@ jobs:
             github_token: ${{ secrets.GITHUB_TOKEN }}
             publish_branch: gh-pages
             publish_dir: allure-history
-            keep_files: false
+            keep_files: true
 
