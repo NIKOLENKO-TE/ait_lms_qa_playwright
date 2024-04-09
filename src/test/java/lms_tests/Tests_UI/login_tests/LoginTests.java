@@ -200,14 +200,14 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(true);
     }
 
-//    @Test(priority = 20)
-//    @Feature("Login tests")
-//    @Story("Test Case #20")
-//    @TestType(NEGATIVE)
-//    public void LOGIN_NON_EXISTENT_ACCOUNT() {
-//        loginPage.login(UserCredentials.NON_EXISTENT_ACCOUNT, false); // ! false
-//        loginPage.isUserLoggedIn(false);
-//    }
+    @Test(priority = 20)
+    @Feature("Login tests")
+    @Story("Test Case #20")
+    @TestType(NEGATIVE)
+    public void LOGIN_NON_EXISTENT_ACCOUNT() {
+        loginPage.login(UserCredentials.NON_EXISTENT_ACCOUNT, false); // ! false
+        loginPage.isUserLoggedIn(false);
+    }
 //    @Test(priority = 21, dataProvider = "invalidLoginDataWithError", dataProviderClass = DataProviderClass.class)
 //    @Feature("Login tests")
 //    @Story("Test Case #21")
