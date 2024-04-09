@@ -78,7 +78,7 @@ public class BaseHelper extends BasePage {
     }
 
     public static Browser setupBrowser() {
-        String browserType = System.getProperty("browserType", "FIREFOX");
+        String browserType = System.getProperty("browserType", "CHROME");
 
         Browser browser;
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setDevtools(DEVTOOL).setSlowMo(SLOWDOWN).setHeadless(HEADLESS);
