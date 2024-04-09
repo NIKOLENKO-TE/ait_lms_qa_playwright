@@ -11,74 +11,74 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # !  Installation Java
-      - name: 🔽 ⚙️ Set execute permission for gradlew
+      - name: ✅ ⚙️ Set execute permission for gradlew
         run: chmod +x gradlew
-      - name: 🔽 ⚙️ Install Java version "17"
+      - name: ✅ ⚙️ Install Java version "17"
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
       # !  Checking versions Java, JVM, Java Core
-      - name: ⏺️ Check Java version
+      - name: ❎ ⌛️ Check Java version
         run: java -version
-      - name: ⏺️ Check JVM version
+      - name: ❎ ⌛️ Check JVM version
         run: echo $JAVA_HOME
-      - name: ⏺️ Check Java Core version
+      - name: ❎ ⌛️ Check Java Core version
         run: javac -version
       # !  Installation Node.js
-      - name: 🔽 ⚙️ Install Node version "20"
+      - name: ✅ ⚙️ Install Node version "20"
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: ⏺️ Check Node version
+      - name: ❎ ⌛️ Check Node version
         run: node --version
       # !  Installation Gradle
-      - name: 🔽 ⚙️ Build with Gradle
+      - name: ✅ ⚙️ Build with Gradle
         run: ./gradlew build -x test --no-build-cache
-      - name: ⏺️ Check Gradle version
+      - name: ❎ ⌛️ Check Gradle version
         run: ./gradlew --version
-      - name: Clean Gradle build
+      - name: ✅ 🚿 Clean Gradle build
         run: ./gradlew clean
       # ! Installing dependencies forPlaywright
-      - name: 🔽 ⚙️ Install Playwright dependencies
+      - name: ✅ ⚙️ Install Playwright dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libevent-2.1-7 libopus0 libharfbuzz-icu0 libgstreamer-plugins-base1.0-0 libgstreamer1.0-0 libgstreamer-gl1.0-0 libgstreamer-plugins-bad1.0-0 libhyphen0 libmanette-0.2-0 libflite1 libgles2 libwoff1 libvpx7 gstreamer1.0-libav
       # !  Installation Debug
-      - name: 🔽 ⚙️ Uninstall old Debug
+      - name: ✅ ⚙️ Uninstall old Debug
         run: npm uninstall debug
-      - name: Install Debug "4.3.1"
+      - name: ✅ ⚙️ Install Debug "4.3.1"
         run: npm install debug@4.3.1
-      - name: ⏺️ Check Debug version
+      - name: ❎ ⌛️ Check Debug version
         run: npm list debug
       # !  Installation Playwright
-      - name: 🔽 ⚙️ Install Playwright version "1.42.0"
+      - name: ✅ ⚙️ Install Playwright version "1.42.0"
         run: npm install playwright@1.42.0
-      - name: ⏺️ Check Playwright version
+      - name: ❎ ⌛️ Check Playwright version
         run: npx playwright --version
       # !  Installing browsers for Playwright
-      - name: 🔽 ⚙️ Install Playwright browsers
+      - name: ✅ ⚙️ Install Playwright browsers
         run: npx playwright install chrome
-      - name: ⏺️ Check installed Playwright browsers versions
+      - name: ❎ ⌛️️ Check installed Playwright browsers versions
         run: npx playwright --version
       # !  Installation Allure
-      - name: 🔽 ⚙️ Install Allure
+      - name: ✅ ⚙️ Install Allure
         run: npm install -g allure-commandline
-      - name: ⏺️ Check Allure version
+      - name: ❎ ⌛️ Check Allure version
         run: allure --version
       # !  List of folders before tests
-      - name: 🔽 📂 List Directories before tests
+      - name: ✅ 📂 List Directories before tests
         if: always()
         run: ls -R
       # !  Running tests
       - name: ▶️ 🐞🐞🐞🐞🐞 RUN TESTS 🐞🐞🐞🐞🐞
         run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew test
       # !  List of folders after tests
-      - name: 🔽 📂 List Directories after tests
+      - name: ✅ 📂 List Directories after tests
         if: always()
         run: ls -R
       # ! Creating a Gradle Report
-      - name: 🔽 📦 Archive [test results]
+      - name: ✅ 📦 Archive [test results]
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -86,15 +86,15 @@ jobs:
           path: |
             build/reports/tests/test/*
       # !  Creating an archive with TEST_logs files of failed tests
-      - name: 🔽 📦 Archive [Allure attachments for failed tests]
+      - name: ✅ 📦 Archive [Allure attachments for failed tests]
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: allure-attachments for failed tests
           path: |
             src/test_logs/*
-      # *  Load test report history
-      - name: 🔽 💾 Load previous test report history
+      # *  Load test report history (remove this step if you need a clean history)
+      - name: ✅ 💾 Load previous test report history
         uses: actions/checkout@v3
         if: always()
         continue-on-error: true
@@ -102,7 +102,7 @@ jobs:
           ref: gh-pages
           path: gh-pages
       # *  Build allure report
-      - name: 🔽 🤖 Build allure report on gh-pages
+      - name: ✅ 🤖 Build allure report on gh-pages
         uses: simple-elf/allure-report-action@v1.7
         if: always()
         with:
@@ -110,7 +110,7 @@ jobs:
           allure_history: allure-history
           allure_results: build/allure-results
       # *  Publish test report on gh-pages
-      - name: 🔽 💻 Publish test report
+      - name: ✅ 💻 Publish test report
         uses: peaceiris/actions-gh-pages@v3
         if: always()
         with:
