@@ -83,11 +83,15 @@ jobs:
       # !  Running tests
       - name: ▶️ 🐞 Run tests
         run: |
-          if [ "${{ github.event.inputs.deployment_target }}" == "all_tests" ]; then
+          if [ "${{ github.event.inputs.test_suite }}" == "all_tests" ]; then
               xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew test
-          elif [ "${{ github.event.inputs.deployment_target }}" == "login_users" ]; then
+          elif [ "${{ github.event.inputs.test_suite }}" == "login_users" ]; then
               xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew login_users --tests "lms_tests.Tests_UI.login_tests.LoginTests"
           fi
+        shell: /usr/bin/bash -e {0}
+        env:
+          JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.10-7/x64
+          JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.10-7/x64
       # !  List of folders after tests
       - name: ✅ 📂 List Directories after tests
         if: always()
