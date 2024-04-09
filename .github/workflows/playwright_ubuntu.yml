@@ -85,7 +85,7 @@ jobs:
           name: gradle-results
           path: |
             build/reports/tests/test/*
-      #// !  Creating an archive with files of failed tests
+      #// !  Creating an archive with TEST_logs files of failed tests
       - name: Archive [Allure attachments for failed tests]
         uses: actions/upload-artifact@v4
         if: always()
@@ -93,6 +93,17 @@ jobs:
           name: allure-attachments for failed tests
           path: |
             src/test_logs/*
+            #// !  Fetch previous history
+      - name: Fetch previous history
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+          path: ./.history
+
+      #// !  Copy previous history to new report directory
+      - name: Copy previous history to new report directory
+        run: cp -r ./.history/allure-history ./build/allure-results/history
+
       #// !  Build allure report on gh-pages
       - name: Build allure report on gh-pages
         uses: simple-elf/allure-report-action@v1.7
@@ -101,6 +112,7 @@ jobs:
           gh_pages: gh-pages
           allure_history: allure-history
           allure_results: build/allure-results
+
       #// !  Publish test report
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
