@@ -4,14 +4,6 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-permissions:
-    contents: read
-    pages: write
-    id-token: write
-    issues: write
-    actions: write
-    packages: write
-    deployments: write
 jobs:
   #// !  Checking code for compliance with standards
   test:
@@ -85,42 +77,35 @@ jobs:
       - name: List Directories after tests
         if: always()
         run: ls -R
-        #// ! Creating a Gradle Report
+      #// ! Creating a Gradle Report
       - name: Archive [test results]
         uses: actions/upload-artifact@v4
         if: always()
         with:
-            name: gradle-results
-            path: |
-                build/reports/tests/test/*
-
-        #// !  Creating an archive with files of failed tests
+          name: gradle-results
+          path: |
+            build/reports/tests/test/*
+      #// !  Creating an archive with files of failed tests
       - name: Archive [Allure attachments for failed tests]
         uses: actions/upload-artifact@v4
         if: always()
         with:
-            name: allure-attachments for failed tests
-            path: |
-                src/test_logs/*
-
-              #// !  Save Allure results for history
-      - name: Save Allure results
-        uses: actions/upload-artifact@v4
+          name: allure-attachments for failed tests
+          path: |
+            src/test_logs/*
+      #// !  Build allure report on gh-pages
+      - name: Build allure report on gh-pages
+        uses: simple-elf/allure-report-action@v1.7
         if: always()
         with:
-          name: allure-results
-          path: |
-            build/allure-results
-          retention-days: 30  # Примерно указывает, сколько дней хранить артефакты
-
-      #// !  Publish test report 2
-      - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v3
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v2
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1.2.9
+          gh_pages: gh-pages
+          allure_history: allure-history
+          allure_results: build/allure-results
+      #// !  Publish test report
+      - name: Publish test report
+        uses: peaceiris/actions-gh-pages@v3
         if: always()
-
-
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
