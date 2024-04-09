@@ -82,10 +82,10 @@ jobs:
         run: ls -R
       # !  Running tests
       - name: ▶️ 🐞 all_tests
-        if: ${{ github.event.inputs.test_suite == 'all_tests' }}
+        if: "github.event.inputs.deployment_target == 'all_tests'"
         run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew test
       - name: ▶️ 🐞 login_users
-        if: ${{ github.event.inputs.test_suite == 'login_users' }}
+        if: "github.event.inputs.deployment_target == 'login_users'"
         run: xvfb-run --auto-servernum --server-args="-screen 0 2000x1000x24" ./gradlew ${{ github.event.inputs.test_suite }} --tests "lms_tests.Tests_UI.login_tests.LoginTests"
       # !  List of folders after tests
       - name: ✅ 📂 List Directories after tests
