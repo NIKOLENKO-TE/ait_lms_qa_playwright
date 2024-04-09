@@ -96,12 +96,14 @@ jobs:
             #// !  Fetch previous history
       - name: Fetch previous history
         uses: actions/checkout@v2
+        if: always()
         with:
           ref: gh-pages
           path: ./.history
 
       #// !  Copy previous history to new report directory
       - name: Copy previous history to new report directory
+        if: always()
         run: cp -r ./.history/allure-history ./build/allure-results/history
 
       #// !  Build allure report on gh-pages
