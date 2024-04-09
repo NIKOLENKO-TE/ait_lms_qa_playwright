@@ -101,11 +101,19 @@ jobs:
           gh_pages: gh-pages
           allure_history: allure-history
           allure_results: build/allure-results
-      #// !  Publish test report
+      #// ! Добавляем новый шаг после шага "Publish test report"
+      - name: Archive last-history
+        uses: actions/upload-artifact@v4
+        with:
+            name: last-history
+            path: allure-history/last-history
+
+      #// ! Обновляем шаг "Publish test report" чтобы использовать последнюю версию last-history
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
         if: always()
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: allure-history
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_branch: gh-pages
+            publish_dir: allure-history
+            keep_files: true
