@@ -108,6 +108,13 @@ jobs:
             name: last-history
             path: allure-history/last-history
 
+      #// ! Добавляем новый шаг после шага "Archive last-history"
+      - name: Copy last-history to latest build folder
+        run: |
+            latest_build=$(ls -d */ | grep -E '^[0-9]+/' | sort -nr | head -n 1)
+            cp -r allure-history/last-history/* $latest_build/history/
+        working-directory: allure-history
+
       #// ! Обновляем шаг "Publish test report" чтобы использовать последнюю версию last-history
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
@@ -116,4 +123,5 @@ jobs:
             github_token: ${{ secrets.GITHUB_TOKEN }}
             publish_branch: gh-pages
             publish_dir: allure-history
-            keep_files: true
+            keep_files: false
+
