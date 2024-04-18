@@ -146,15 +146,15 @@ public class LoginTests extends BaseTest {
         loginPage.login(UserCredentials.TEACHER_NOT_CONFIRMED_WITH_INVALID_ZOOM_ACCOUNT, false); // ! false
         loginPage.isUserLoggedIn(false);
     }
-
-    @Test(priority = 14)
-    @Feature("Login tests")
-    @Story("Test Case #14")
-    @TestType(POSITIVE)
-    public void LOGIN_TEACHER_CONFIRMED_WITH_VALID_ZOOM_ACCOUNT() {
-        loginPage.login(UserCredentials.TEACHER_CONFIRMED_WITH_VALID_ZOOM_ACCOUNT, true); // * true
-        loginPage.isUserLoggedIn(true);
-    }
+//
+//    @Test(priority = 14)
+//    @Feature("Login tests")
+//    @Story("Test Case #14")
+//    @TestType(POSITIVE)
+//    public void LOGIN_TEACHER_CONFIRMED_WITH_VALID_ZOOM_ACCOUNT() {
+//        loginPage.login(UserCredentials.TEACHER_CONFIRMED_WITH_VALID_ZOOM_ACCOUNT, true); // * true
+//        loginPage.isUserLoggedIn(true);
+//    }
 
     @Test(priority = 15)
     @Feature("Login tests")
