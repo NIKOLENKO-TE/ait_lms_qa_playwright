@@ -3,7 +3,7 @@ package lms_pages.UI;
 public class UserCredentials {
     private final String user_email;
     private final String user_password;
-    private static final String DEFAULT_PASSWORD = "lms-dev-pass-2024";
+    private static final String DEFAULT_PASSWORD = "LMS-dev-pass-2024";
     private static final String DOMAIN = "@dev-lms.de";
     public static final UserCredentials STUDENT_NOT_CONFIRMED_WITHOUT_EMAIL = new UserCredentials("", DEFAULT_PASSWORD);
     public static final UserCredentials STUDENT_NOT_CONFIRMED_WITHOUT_PASS = new UserCredentials("s12" + DOMAIN, null);

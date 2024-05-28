@@ -33,6 +33,8 @@ dependencies {
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.3'
     implementation group: 'io.qameta.allure', name: 'allure-testng', version: '2.26.0'
     implementation group: 'org.webjars.npm', name: 'debug', version: '4.3.4'
+    implementation 'io.qameta.allure:allure-kotlin-commons:2.4.0'
+    implementation 'com.github.spotbugs:spotbugs-annotations:4.0.1'
 }
 
 checkstyle {

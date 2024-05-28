@@ -34,11 +34,10 @@ public class LoginTests extends BaseTest {
     @TmsLink("LMS-211") // * Ссылка на задачу в Jira
     @TestType(POSITIVE)
     public void LOGIN_STUDENT_CONFIRMED_WITH_NAME_PASSWORD_BY_USERNAME_PASSWORD() {
-        loginPage.login("s01@dev-lms.de", "lms-dev-pass-2024", true); // * true
+        loginPage.login("s01@dev-lms.de", "LMS-dev-pass-2024", true); // * true
         loginPage.isUserLoggedIn(true);
         basePage.isCurrentPage(lessonsPageURL(), true); // * true
     }
-
     @Test(priority = 2)
     @Feature("Login tests")
     @Story("Test Case #02")
@@ -48,23 +47,23 @@ public class LoginTests extends BaseTest {
         loginPage.isUserLoggedIn(false);
     }
 
-    @Test(priority = 3)
-    @Feature("Login tests")
-    @Story("Test Case #03")
-    @TestType(NEGATIVE)
-    public void LOGIN_STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_4() {
-        loginPage.login(UserCredentials.STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_4, false); // ! false
-        loginPage.isUserLoggedIn(false);
-    }
-
-//    @Test(priority = 4)
+//    @Test(priority = 3)
 //    @Feature("Login tests")
-//    @Story("Test Case #04")
+//    @Story("Test Case #03")
 //    @TestType(NEGATIVE)
-//    public void LOGIN_STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_NONE() {
-//        loginPage.login(UserCredentials.STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_NONE, false); // ! false
+//    public void LOGIN_STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_4() {
+//        loginPage.login(UserCredentials.STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_4, false); // ! false
 //        loginPage.isUserLoggedIn(false);
 //    }
+
+    @Test(priority = 4)
+    @Feature("Login tests")
+    @Story("Test Case #04")
+    @TestType(NEGATIVE)
+    public void LOGIN_STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_NONE() {
+        loginPage.login(UserCredentials.STUDENT_CONFIRMED_WITHOUT_PASS_PRIMARY_COHORT_NONE, false); // ! false
+        loginPage.isUserLoggedIn(false);
+    }
 
     @Test(priority = 5)
     @Feature("Login tests")

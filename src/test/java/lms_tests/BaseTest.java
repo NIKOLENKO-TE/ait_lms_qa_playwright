@@ -73,7 +73,6 @@ public class BaseTest {
         FOLDER_CREATE_IF_ERROR(result, ERROR_DIR);
         ZIP(result, ERROR_DIR.resolve("Trace.zip"), context);PAGE_SOURCE(result, ERROR_DIR.resolve("Page Source.html"), page);
         SCREENSHOT(result, ERROR_DIR.resolve("Screenshot.png"), page);
-
         CLOSE_BROWSER_CONTEXT();
         VIDEO(result, ERROR_DIR.resolve("Video.webm"), page);
         HAR(result, ERROR_DIR, ERROR_DIR.resolve("Har.har"));

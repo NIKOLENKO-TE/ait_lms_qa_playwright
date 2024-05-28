@@ -10,8 +10,7 @@ import org.testng.Assert;
 
 public class LoginPage {
 
-    private final Page page;
-    BaseHelper baseHelper;
+  BaseHelper baseHelper;
     HomePage homePage;
 
     public static String loginPageURL() {
@@ -21,8 +20,7 @@ public class LoginPage {
     Logger logger = LoggerFactory.getLogger(LoginPage.class);
 
     public LoginPage(Page page) {
-        this.page = page;
-        this.baseHelper = new BaseHelper(page);
+      this.baseHelper = new BaseHelper(page);
         this.homePage = new HomePage(page);
     }
 
